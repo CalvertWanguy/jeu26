@@ -8,7 +8,7 @@ import MiniGameModal from '../components/MiniGameModal';
 import TutorialModal from '../components/TutorialModal';
 import PrivateChatModal from '../components/PrivateChatModal';
 import ProximityChat from '../components/ProximityChat';
-import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink } from 'lucide-react';
+import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink, Volume2, VolumeX } from 'lucide-react';
 
 export default function HomePage() {
   const [localPlayer, setLocalPlayer] = useState(null);
@@ -34,7 +34,33 @@ export default function HomePage() {
   const [busyNotification, setBusyNotification] = useState(null);
   const [chatBubbles, setChatBubbles] = useState({});
 
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
   const playerIdRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      audioRef.current = new Audio('/bgm.mp3');
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.30;
+    }
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    if (isMuted) {
+      audioRef.current.play().catch(() => {});
+      setIsMuted(false);
+    } else {
+      audioRef.current.pause();
+      setIsMuted(true);
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -206,6 +232,10 @@ export default function HomePage() {
   const handleJoin = (userData) => {
     setLocalPlayer(userData);
 
+    if (audioRef.current && !isMuted) {
+      audioRef.current.play().catch(e => console.log("[Audio Autoplay]", e));
+    }
+
     if (typeof window !== 'undefined') {
       const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
       if (!hasSeenTutorial) {
@@ -344,6 +374,15 @@ export default function HomePage() {
             <span className="hidden xs:inline">{villageInfo.roomName}</span>
             <span className="text-emerald-400 font-extrabold">({otherPlayers.length + 1}/5)</span>
           </div>
+
+          {/* Bouton Musique ON/OFF */}
+          <button
+            onClick={toggleAudio}
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-white rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center text-sm sm:text-base"
+            title={isMuted ? "Activer la musique de fond" : "Couper la musique"}
+          >
+            {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />}
+          </button>
 
           <button
             onClick={() => setShowTutorialModal(true)}
