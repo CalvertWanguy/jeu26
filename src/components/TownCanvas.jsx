@@ -378,7 +378,7 @@ export default function TownCanvas({
     const shirtColor = gender === 'girl' ? '#db2777' : '#2563eb';
     ctx.fillStyle = shirtColor;
     ctx.beginPath();
-    ctx.roundRect(x - 9, charY - 10, 18, 15, 4);
+    drawRoundRect(ctx, x - 9, charY - 10, 18, 15, 4);
     ctx.fill();
 
     // Bras
