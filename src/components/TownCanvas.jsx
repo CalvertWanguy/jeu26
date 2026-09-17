@@ -9,6 +9,304 @@ export const HOUSES = [
   { id: 5, name: "Maison 5 : Le Grand Défi", level: 5, x: 680, y: 530, color: "#059669", roofColor: "#064e3b" },
 ];
 
+function drawCobblestoneRoad(ctx, x, y, width, height) {
+  ctx.fillStyle = '#cbd5e1';
+  ctx.fillRect(x - 4, y - 4, width + 8, height + 8);
+  ctx.fillStyle = '#64748b';
+  ctx.fillRect(x, y, width, height);
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(x, y, width, height);
+}
+
+function drawStreetLamp(ctx, x, y) {
+  ctx.beginPath();
+  ctx.arc(x, y - 20, 22, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(253, 224, 71, 0.25)';
+  ctx.fill();
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(x - 2, y - 20, 4, 20);
+  ctx.beginPath();
+  ctx.arc(x, y - 20, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#fde047';
+  ctx.fill();
+}
+
+function drawSignPost(ctx, x, y, text) {
+  ctx.fillStyle = '#78350f';
+  ctx.fillRect(x - 2, y, 4, 18);
+  ctx.fillStyle = '#92400e';
+  ctx.fillRect(x - 30, y - 14, 60, 14);
+  ctx.strokeStyle = '#451a03';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x - 30, y - 14, 60, 14);
+  ctx.fillStyle = '#fef3c7';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y - 3);
+}
+
+function drawWoodenBench(ctx, x, y) {
+  ctx.fillStyle = '#78350f';
+  ctx.fillRect(x - 12, y - 6, 24, 12);
+  ctx.fillStyle = '#451a03';
+  ctx.fillRect(x - 12, y - 8, 24, 3);
+}
+
+function drawRoundRect(ctx, x, y, width, height, radius) {
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, width, height, radius);
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  }
+}
+
+function drawEllipse(ctx, cx, cy, rx, ry) {
+  if (typeof ctx.ellipse === 'function') {
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, Math.max(0.1, rx), Math.max(0.1, ry), 0, 0, Math.PI * 2);
+  } else {
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(cx, cy);
+    ctx.scale(rx, ry);
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.restore();
+  }
+}
+
+function drawRealisticTree(ctx, x, y) {
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  drawEllipse(ctx, x, y + 18, 18, 8);
+  ctx.fill();
+  ctx.fillStyle = '#78350f';
+  ctx.fillRect(x - 5, y, 10, 18);
+  ctx.fillStyle = '#15803d';
+  ctx.beginPath();
+  ctx.arc(x, y - 10, 24, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#22c55e';
+  ctx.beginPath();
+  ctx.arc(x - 6, y - 16, 16, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#4ade80';
+  ctx.beginPath();
+  ctx.arc(x + 5, y - 20, 12, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawRealisticHouse(ctx, house, isUnlocked) {
+  const { x, y, color, roofColor, name, level } = house;
+
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fillRect(x - 54, y - 26, 108, 76);
+  ctx.fillStyle = color;
+  ctx.fillRect(x - 50, y - 30, 100, 70);
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x - 50, y - 30, 100, 70);
+
+  ctx.beginPath();
+  ctx.moveTo(house.x - 60, house.y - 30);
+  ctx.lineTo(house.x, house.y - 75);
+  ctx.lineTo(house.x + 60, house.y - 30);
+  ctx.closePath();
+  ctx.fillStyle = roofColor;
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#475569';
+  ctx.fillRect(x + 25, y - 70, 10, 20);
+
+  ctx.fillStyle = '#fde047';
+  ctx.fillRect(x - 35, y - 15, 18, 18);
+  ctx.fillRect(x + 17, y - 15, 18, 18);
+
+  ctx.strokeStyle = '#78350f';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(x - 35, y - 15, 18, 18);
+  ctx.strokeRect(x + 17, y - 15, 18, 18);
+
+  ctx.fillStyle = '#78350f';
+  ctx.fillRect(x - 14, y + 10, 28, 30);
+  ctx.strokeRect(x - 14, y + 10, 28, 30);
+
+  ctx.beginPath();
+  ctx.arc(x + 7, y + 26, 2, 0, Math.PI * 2);
+  ctx.fillStyle = '#fef08a';
+  ctx.fill();
+
+  ctx.fillStyle = isUnlocked ? '#10b981' : '#64748b';
+  ctx.beginPath();
+  ctx.arc(x, y - 42, 18, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(isUnlocked ? `Niv ${level}` : '🔒', x, y - 38);
+
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(0,0,0,0.9)';
+  ctx.shadowBlur = 6;
+  ctx.fillText(name, x, y + 56);
+  ctx.shadowBlur = 0;
+}
+
+function drawRealisticCharacter(ctx, x, y, gender, nickname, level, isLocal, isMoving, chatMsg) {
+  const time = Date.now();
+  const stepOffset = isMoving ? Math.sin(time * 0.016) * 6 : 0;
+  const bob = isMoving ? Math.abs(Math.sin(time * 0.016)) * 3 : Math.sin(time * 0.003) * 1.5;
+
+  const charY = y - bob;
+
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  drawEllipse(ctx, x, y + 16, 14, 6);
+  ctx.fill();
+
+  if (isLocal) {
+    ctx.strokeStyle = '#4f46e5';
+    ctx.lineWidth = 2.5;
+    drawEllipse(ctx, x, y + 16, 18, 8);
+    ctx.stroke();
+  }
+
+  // Pieds
+  ctx.fillStyle = '#1e293b';
+  drawEllipse(ctx, x - 5, charY + 12 + stepOffset, 4.5, 3.5);
+  ctx.fill();
+  drawEllipse(ctx, x + 5, charY + 12 - stepOffset, 4.5, 3.5);
+  ctx.fill();
+
+  // Pantalon
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(x - 6, charY + 3, 4, 10);
+  ctx.fillRect(x + 2, charY + 3, 4, 10);
+
+  // Torse
+  const shirtColor = gender === 'girl' ? '#db2777' : '#2563eb';
+  ctx.fillStyle = shirtColor;
+  ctx.beginPath();
+  drawRoundRect(ctx, x - 9, charY - 10, 18, 15, 4);
+  ctx.fill();
+
+  // Bras
+  ctx.fillStyle = shirtColor;
+  ctx.fillRect(x - 12, charY - 8 - stepOffset * 0.4, 3, 10);
+  ctx.fillRect(x + 9, charY - 8 + stepOffset * 0.4, 3, 10);
+
+  // Mains
+  ctx.fillStyle = '#fde047';
+  ctx.beginPath();
+  ctx.arc(x - 10.5, charY + 3 - stepOffset * 0.4, 2.5, 0, Math.PI * 2);
+  ctx.arc(x + 10.5, charY + 3 + stepOffset * 0.4, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Tête
+  ctx.fillStyle = '#fef08a';
+  ctx.beginPath();
+  ctx.arc(x, charY - 20, 11, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Cheveux
+  ctx.fillStyle = gender === 'girl' ? '#be185d' : '#1e1b4b';
+  if (gender === 'girl') {
+    ctx.beginPath();
+    ctx.arc(x, charY - 22, 12, Math.PI, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x - 10, charY - 16, 4.5, 0, Math.PI * 2);
+    ctx.arc(x + 10, charY - 16, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.beginPath();
+    ctx.arc(x, charY - 22, 12, Math.PI * 0.8, Math.PI * 2.2);
+    ctx.fill();
+  }
+
+  // Yeux
+  ctx.fillStyle = '#0f172a';
+  ctx.beginPath();
+  ctx.arc(x - 4, charY - 20, 2, 0, Math.PI * 2);
+  ctx.arc(x + 4, charY - 20, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(x - 4.5, charY - 21, 0.8, 0, Math.PI * 2);
+  ctx.arc(x + 3.5, charY - 21, 0.8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Sourire
+  ctx.strokeStyle = '#090d16';
+  ctx.lineWidth = 1.3;
+  ctx.beginPath();
+  ctx.arc(x, charY - 17.5, 3.5, 0.1 * Math.PI, 0.9 * Math.PI);
+  ctx.stroke();
+
+  // Etiquette Pseudo & BULLE DE NIVEAU Lumineuse à côté !
+  ctx.font = 'bold 13px sans-serif';
+  const textW = ctx.measureText(nickname).width;
+
+  ctx.fillStyle = isLocal ? '#fef08a' : '#ffffff';
+  ctx.shadowColor = 'rgba(0,0,0,0.9)';
+  ctx.shadowBlur = 6;
+  ctx.textAlign = 'center';
+  ctx.fillText(nickname, x - 10, charY - 38);
+  ctx.shadowBlur = 0;
+
+  // Petite Bulle de Niveau (ex: [Niv 2])
+  const badgeX = x + textW / 2 - 2;
+  const badgeY = charY - 48;
+  ctx.fillStyle = '#4f46e5';
+  ctx.beginPath();
+  drawRoundRect(ctx, badgeX, badgeY, 24, 14, 7);
+  ctx.fill();
+  ctx.strokeStyle = '#818cf8';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'extrabold 9px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`${level}`, badgeX + 12, badgeY + 10);
+
+  // Bulle de dialogue
+  if (chatMsg) {
+    ctx.save();
+    ctx.font = '12px sans-serif';
+    const textWidth = ctx.measureText(chatMsg).width;
+    const bubbleW = textWidth + 16;
+    const bubbleH = 24;
+    const bubbleX = x - bubbleW / 2;
+    const bubbleY = charY - 70;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    drawRoundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 8);
+    ctx.fill();
+
+    ctx.fillStyle = '#0f172a';
+    ctx.textAlign = 'center';
+    ctx.fillText(chatMsg, x, bubbleY + 16);
+    ctx.restore();
+  }
+}
+
 export default function TownCanvas({
   socket,
   localPlayer,
@@ -44,11 +342,13 @@ export default function TownCanvas({
       }
     }
 
-    for (const p of otherPlayers) {
-      const dist = Math.hypot(clickX - p.x, clickY - p.y);
-      if (dist < 40) {
-        onSelectPlayer(p);
-        return;
+    if (Array.isArray(otherPlayers)) {
+      for (const p of otherPlayers) {
+        const dist = Math.hypot(clickX - p.x, clickY - p.y);
+        if (dist < 40) {
+          onSelectPlayer(p);
+          return;
+        }
       }
     }
 
@@ -220,311 +520,14 @@ export default function TownCanvas({
       animationFrameId = requestAnimationFrame(render);
     };
 
+    render();
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', updateCanvasDimensions);
       window.removeEventListener('orientationchange', updateCanvasDimensions);
     };
   }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket]);
-
-  const drawCobblestoneRoad = (ctx, x, y, width, height) => {
-    ctx.fillStyle = '#cbd5e1';
-    ctx.fillRect(x - 4, y - 4, width + 8, height + 8);
-    ctx.fillStyle = '#64748b';
-    ctx.fillRect(x, y, width, height);
-    ctx.strokeStyle = '#475569';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(x, y, width, height);
-  };
-
-  const drawStreetLamp = (ctx, x, y) => {
-    ctx.beginPath();
-    ctx.arc(x, y - 20, 22, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(253, 224, 71, 0.25)';
-    ctx.fill();
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(x - 2, y - 20, 4, 20);
-    ctx.beginPath();
-    ctx.arc(x, y - 20, 5, 0, Math.PI * 2);
-    ctx.fillStyle = '#fde047';
-    ctx.fill();
-  };
-
-  const drawSignPost = (ctx, x, y, text) => {
-    ctx.fillStyle = '#78350f';
-    ctx.fillRect(x - 2, y, 4, 18);
-    ctx.fillStyle = '#92400e';
-    ctx.fillRect(x - 30, y - 14, 60, 14);
-    ctx.strokeStyle = '#451a03';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x - 30, y - 14, 60, 14);
-    ctx.fillStyle = '#fef3c7';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(text, x, y - 3);
-  };
-
-  const drawWoodenBench = (ctx, x, y) => {
-    ctx.fillStyle = '#78350f';
-    ctx.fillRect(x - 12, y - 6, 24, 12);
-    ctx.fillStyle = '#451a03';
-    ctx.fillRect(x - 12, y - 8, 24, 3);
-  };
-
-  const drawRealisticTree = (ctx, x, y) => {
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    drawEllipse(ctx, x, y + 18, 18, 8);
-    ctx.fill();
-    ctx.fillStyle = '#78350f';
-    ctx.fillRect(x - 5, y, 10, 18);
-    ctx.fillStyle = '#15803d';
-    ctx.beginPath();
-    ctx.arc(x, y - 10, 24, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#22c55e';
-    ctx.beginPath();
-    ctx.arc(x - 6, y - 16, 16, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#4ade80';
-    ctx.beginPath();
-    ctx.arc(x + 5, y - 20, 12, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  const drawRealisticHouse = (ctx, house, isUnlocked) => {
-    const { x, y, color, roofColor, name, level } = house;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(x - 54, y - 26, 108, 76);
-    ctx.fillStyle = color;
-    ctx.fillRect(x - 50, y - 30, 100, 70);
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x - 50, y - 30, 100, 70);
-
-    ctx.beginPath();
-    ctx.moveTo(house.x - 60, house.y - 30);
-    ctx.lineTo(house.x, house.y - 75);
-    ctx.lineTo(house.x + 60, house.y - 30);
-    ctx.closePath();
-    ctx.fillStyle = roofColor;
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle = '#475569';
-    ctx.fillRect(x + 25, y - 70, 10, 20);
-
-    ctx.fillStyle = '#fde047';
-    ctx.fillRect(x - 35, y - 15, 18, 18);
-    ctx.fillRect(x + 17, y - 15, 18, 18);
-
-    ctx.strokeStyle = '#78350f';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(x - 35, y - 15, 18, 18);
-    ctx.strokeRect(x + 17, y - 15, 18, 18);
-
-    ctx.fillStyle = '#78350f';
-    ctx.fillRect(x - 14, y + 10, 28, 30);
-    ctx.strokeRect(x - 14, y + 10, 28, 30);
-
-    ctx.beginPath();
-    ctx.arc(x + 7, y + 26, 2, 0, Math.PI * 2);
-    ctx.fillStyle = '#fef08a';
-    ctx.fill();
-
-    ctx.fillStyle = isUnlocked ? '#10b981' : '#64748b';
-    ctx.beginPath();
-    ctx.arc(x, y - 42, 18, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(isUnlocked ? `Niv ${level}` : '🔒', x, y - 38);
-
-    ctx.font = 'bold 13px sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = 'rgba(0,0,0,0.9)';
-    ctx.shadowBlur = 6;
-    ctx.fillText(name, x, y + 56);
-    ctx.shadowBlur = 0;
-  };
-
-  // Dessin de l'avatar avec la BULLE DE NIVEAU à côté du pseudo
-  const drawRealisticCharacter = (ctx, x, y, gender, nickname, level, isLocal, isMoving, chatMsg) => {
-    const time = Date.now();
-    const stepOffset = isMoving ? Math.sin(time * 0.016) * 6 : 0;
-    const bob = isMoving ? Math.abs(Math.sin(time * 0.016)) * 3 : Math.sin(time * 0.003) * 1.5;
-
-    const charY = y - bob;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    drawEllipse(ctx, x, y + 16, 14, 6);
-    ctx.fill();
-
-    if (isLocal) {
-      ctx.strokeStyle = '#4f46e5';
-      ctx.lineWidth = 2.5;
-      drawEllipse(ctx, x, y + 16, 18, 8);
-      ctx.stroke();
-    }
-
-    // Pieds
-    ctx.fillStyle = '#1e293b';
-    drawEllipse(ctx, x - 5, charY + 12 + stepOffset, 4.5, 3.5);
-    ctx.fill();
-    drawEllipse(ctx, x + 5, charY + 12 - stepOffset, 4.5, 3.5);
-    ctx.fill();
-
-    // Pantalon
-    ctx.fillStyle = '#334155';
-    ctx.fillRect(x - 6, charY + 3, 4, 10);
-    ctx.fillRect(x + 2, charY + 3, 4, 10);
-
-    // Torse
-    const shirtColor = gender === 'girl' ? '#db2777' : '#2563eb';
-    ctx.fillStyle = shirtColor;
-    ctx.beginPath();
-    drawRoundRect(ctx, x - 9, charY - 10, 18, 15, 4);
-    ctx.fill();
-
-    // Bras
-    ctx.fillStyle = shirtColor;
-    ctx.fillRect(x - 12, charY - 8 - stepOffset * 0.4, 3, 10);
-    ctx.fillRect(x + 9, charY - 8 + stepOffset * 0.4, 3, 10);
-
-    // Mains
-    ctx.fillStyle = '#fde047';
-    ctx.beginPath();
-    ctx.arc(x - 10.5, charY + 3 - stepOffset * 0.4, 2.5, 0, Math.PI * 2);
-    ctx.arc(x + 10.5, charY + 3 + stepOffset * 0.4, 2.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Tête
-    ctx.fillStyle = '#fef08a';
-    ctx.beginPath();
-    ctx.arc(x, charY - 20, 11, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Cheveux
-    ctx.fillStyle = gender === 'girl' ? '#be185d' : '#1e1b4b';
-    if (gender === 'girl') {
-      ctx.beginPath();
-      ctx.arc(x, charY - 22, 12, Math.PI, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(x - 10, charY - 16, 4.5, 0, Math.PI * 2);
-      ctx.arc(x + 10, charY - 16, 4.5, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      ctx.beginPath();
-      ctx.arc(x, charY - 22, 12, Math.PI * 0.8, Math.PI * 2.2);
-      ctx.fill();
-    }
-
-    // Yeux
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.arc(x - 4, charY - 20, 2, 0, Math.PI * 2);
-    ctx.arc(x + 4, charY - 20, 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(x - 4.5, charY - 21, 0.8, 0, Math.PI * 2);
-    ctx.arc(x + 3.5, charY - 21, 0.8, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Sourire
-    ctx.strokeStyle = '#090d16';
-    ctx.lineWidth = 1.3;
-    ctx.beginPath();
-    ctx.arc(x, charY - 17.5, 3.5, 0.1 * Math.PI, 0.9 * Math.PI);
-    ctx.stroke();
-
-    // Etiquette Pseudo & BULLE DE NIVEAU Lumineuse à côté !
-    ctx.font = 'bold 13px sans-serif';
-    const textW = ctx.measureText(nickname).width;
-
-    ctx.fillStyle = isLocal ? '#fef08a' : '#ffffff';
-    ctx.shadowColor = 'rgba(0,0,0,0.9)';
-    ctx.shadowBlur = 6;
-    ctx.textAlign = 'center';
-    ctx.fillText(nickname, x - 10, charY - 38);
-    ctx.shadowBlur = 0;
-
-    // Petite Bulle de Niveau (ex: [Niv 2])
-    const badgeX = x + textW / 2 - 2;
-    const badgeY = charY - 48;
-    ctx.fillStyle = '#4f46e5';
-    ctx.beginPath();
-    drawRoundRect(ctx, badgeX, badgeY, 24, 14, 7);
-    ctx.fill();
-    ctx.strokeStyle = '#818cf8';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'extrabold 9px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(`${level}`, badgeX + 12, badgeY + 10);
-
-    // Bulle de dialogue
-    if (chatMsg) {
-      ctx.save();
-      ctx.font = '12px sans-serif';
-      const textWidth = ctx.measureText(chatMsg).width;
-      const bubbleW = textWidth + 16;
-      const bubbleH = 24;
-      const bubbleX = x - bubbleW / 2;
-      const bubbleY = charY - 70;
-
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      drawRoundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 8);
-      ctx.fill();
-
-      ctx.fillStyle = '#0f172a';
-      ctx.textAlign = 'center';
-      ctx.fillText(chatMsg, x, bubbleY + 16);
-      ctx.restore();
-    }
-  };
-
-  const drawRoundRect = (ctx, x, y, width, height, radius) => {
-    if (typeof ctx.roundRect === 'function') {
-      ctx.roundRect(x, y, width, height, radius);
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
-  };
-
-  const drawEllipse = (ctx, cx, cy, rx, ry) => {
-    if (typeof ctx.ellipse === 'function') {
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, Math.max(0.1, rx), Math.max(0.1, ry), 0, 0, Math.PI * 2);
-    } else {
-      ctx.save();
-      ctx.beginPath();
-      ctx.translate(cx, cy);
-      ctx.scale(rx, ry);
-      ctx.arc(0, 0, 1, 0, Math.PI * 2);
-      ctx.restore();
-    }
-  };
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-slate-950 p-2 sm:p-4 overflow-hidden">
