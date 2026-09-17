@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from 'react';
-import { User, Sparkles, LogIn, ArrowRight } from 'lucide-react';
+import { User, Sparkles, LogIn, ArrowRight, UserCheck, Shield } from 'lucide-react';
 
 export default function AuthModal({ onJoin }) {
   const [nickname, setNickname] = useState('');
-  const [gender, setGender] = useState('boy'); // 'boy' ou 'girl'
-  const [authMode, setAuthMode] = useState('guest'); // 'guest' ou 'google'
+  const [gender, setGender] = useState('boy');
+  const [authMode, setAuthMode] = useState('guest');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,18 +15,15 @@ export default function AuthModal({ onJoin }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden animate-float">
+      <div className="w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden animate-float">
         
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6 text-center">
-          <div className="inline-flex p-3 bg-white/10 rounded-full mb-3 backdrop-blur-sm">
-            <Sparkles className="w-8 h-8 text-yellow-300" />
-          </div>
           <h1 className="text-2xl font-extrabold text-white tracking-wide">
             TOWN RIDDLES ONLINE
           </h1>
           <p className="text-xs text-blue-100 mt-1">
-            Entrez dans la ville virtuelle, rencontrez des joueurs et résolvez 5 niveaux de devinettes !
+            Rejoignez la ville virtuelle, découvrez les énigmes et jouez en ligne !
           </p>
         </div>
 
@@ -46,10 +43,10 @@ export default function AuthModal({ onJoin }) {
             </button>
             <button
               type="button"
-              onClick={() => alert("La connexion Google OAuth sera activée prochainement ! Pour l'instant, profitez du mode Invité.")}
+              onClick={() => alert("La connexion Google OAuth sera activée très bientôt !")}
               className="py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-700/50"
             >
-              <LogIn className="w-4 h-4 text-red-400" /> Compte Google (Bientôt)
+              <LogIn className="w-4 h-4 text-rose-400" /> Compte Google (Bientôt)
             </button>
           </div>
 
@@ -69,35 +66,41 @@ export default function AuthModal({ onJoin }) {
             />
           </div>
 
-          {/* Choix de l'Avatar / Genre */}
+          {/* Choix de l'Avatar (Garçon / Fille) sans emoji */}
           <div>
             <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-              Choisissez votre Personnage
+              Choisissez votre Avatar
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setGender('boy')}
-                className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${
                   gender === 'boy'
                     ? 'border-blue-500 bg-blue-500/10 text-white shadow-lg shadow-blue-500/20'
                     : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
                 }`}
               >
-                <span className="text-4xl">👦</span>
+                {/* Visual Avatar Boy Icon */}
+                <div className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 flex items-center justify-center text-blue-300 font-extrabold text-lg">
+                  M
+                </div>
                 <span className="text-xs font-bold">Garçon</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setGender('girl')}
-                className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-3 ${
                   gender === 'girl'
                     ? 'border-pink-500 bg-pink-500/10 text-white shadow-lg shadow-pink-500/20'
                     : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-600'
                 }`}
               >
-                <span className="text-4xl">👧</span>
+                {/* Visual Avatar Girl Icon */}
+                <div className="w-12 h-12 rounded-full bg-pink-600/30 border border-pink-400 flex items-center justify-center text-pink-300 font-extrabold text-lg">
+                  F
+                </div>
                 <span className="text-xs font-bold">Fille</span>
               </button>
             </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Lock, CheckCircle2, Trophy, X, HelpCircle, ArrowRight } from 'lucide-react';
+import { Lock, CheckCircle2, X, HelpCircle, ArrowRight, Building2, Landmark, Castle, Home, Award, Sparkles, AlertCircle } from 'lucide-react';
 
 export const RIDDLES_DATA = {
   1: {
@@ -53,12 +53,12 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
     if (selectedOption === null) return;
 
     if (selectedOption === riddleInfo.correctIndex) {
-      setFeedbackMsg({ type: 'success', text: " Bravo ! Vous avez trouvé la bonne réponse !" });
+      setFeedbackMsg({ type: 'success', text: "Bravo ! Vous avez trouvé la bonne réponse !" });
       setTimeout(() => {
         onSolveRiddle(house.level);
       }, 1200);
     } else {
-      setFeedbackMsg({ type: 'error', text: "❌ Mauvaise réponse... Réessayez !" });
+      setFeedbackMsg({ type: 'error', text: "Mauvaise réponse... Réessayez !" });
     }
   };
 
@@ -69,7 +69,9 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
         {/* Header */}
         <div className="bg-slate-800 p-4 px-6 border-b border-slate-700 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{house.icon}</span>
+            <div className="p-2 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400">
+              <Building2 className="w-6 h-6" />
+            </div>
             <div>
               <h2 className="text-lg font-extrabold text-white">{riddleInfo.title}</h2>
               <p className="text-xs text-slate-400">Niveau {house.level} / 5</p>
@@ -86,29 +88,26 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
         {/* Content */}
         <div className="p-6 space-y-6">
           {!isUnlocked ? (
-            /* Maison Verrouillée */
             <div className="py-8 text-center space-y-4">
               <div className="inline-flex p-4 bg-red-500/10 rounded-full border border-red-500/20 text-red-400 mb-2">
                 <Lock className="w-10 h-10" />
               </div>
-              <h3 className="text-lg font-bold text-white">Maison Verrouillée !</h3>
+              <h3 className="text-lg font-bold text-white">Maison Verrouillée</h3>
               <p className="text-xs text-slate-400 max-w-xs mx-auto">
                 Vous devez résoudre le niveau {house.level - 1} dans la maison précédente pour débloquer celle-ci !
               </p>
             </div>
           ) : isAlreadySolved ? (
-            /* Maison Déjà Résolue */
             <div className="py-8 text-center space-y-4">
               <div className="inline-flex p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400 mb-2">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h3 className="text-lg font-bold text-white">Niveau Déjà Réussi !</h3>
+              <h3 className="text-lg font-bold text-white">Niveau Déjà Réussi</h3>
               <p className="text-xs text-slate-300">
                 Vous avez déjà résolu l'énigme de cette maison. Passez à la maison suivante !
               </p>
             </div>
           ) : (
-            /* Énigme active */
             <>
               <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/80">
                 <p className="text-sm font-semibold text-slate-100 leading-relaxed">
@@ -116,7 +115,7 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
                 </p>
               </div>
 
-              {/* Choix d'options */}
+              {/* Options */}
               <div className="grid grid-cols-2 gap-3">
                 {riddleInfo.options.map((option, idx) => (
                   <button
@@ -133,20 +132,21 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
                 ))}
               </div>
 
-              {/* Message de feedback */}
+              {/* Feedback Message */}
               {feedbackMsg && (
                 <div
-                  className={`p-3 rounded-xl text-xs font-bold text-center ${
+                  className={`p-3 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2 ${
                     feedbackMsg.type === 'success'
                       ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                      : 'bg-red-500/20 text-red-300 border border-red-500/30'
+                      : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                   }`}
                 >
+                  {feedbackMsg.type === 'success' ? <Sparkles className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                   {feedbackMsg.text}
                 </div>
               )}
 
-              {/* Indices et actions */}
+              {/* Hints & Action */}
               <div className="flex items-center justify-between pt-2">
                 <button
                   onClick={() => setShowHint(!showHint)}
@@ -166,7 +166,7 @@ export default function HouseRiddleModal({ house, unlockedLevel, onSolveRiddle, 
 
               {showHint && (
                 <p className="text-xs text-amber-300/90 italic bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
-                  💡 Indice : {riddleInfo.hint}
+                  Indice : {riddleInfo.hint}
                 </p>
               )}
             </>

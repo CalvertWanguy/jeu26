@@ -1,34 +1,28 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import AuthModal from '../components/AuthModal';
 import TownCanvas from '../components/TownCanvas';
 import ProximityChat from '../components/ProximityChat';
 import HouseRiddleModal from '../components/HouseRiddleModal';
 import MiniGameModal from '../components/MiniGameModal';
-import { Users, Lock, Unlock, Swords, Shield, Trophy } from 'lucide-react';
+import { Users, Trophy, Swords, User } from 'lucide-react';
 
 export default function HomePage() {
   const [localPlayer, setLocalPlayer] = useState(null);
   const [socket, setSocket] = useState(null);
 
-  // Joueurs en ligne (excluant le joueur local)
   const [otherPlayers, setOtherPlayers] = useState([]);
-
-  // Niveau débloqué (1 à 5)
   const [unlockedLevel, setUnlockedLevel] = useState(1);
 
-  // Modales actives
   const [activeHouse, setActiveHouse] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [incomingChallenge, setIncomingChallenge] = useState(null);
   const [activeMiniGame, setActiveMiniGame] = useState(null);
 
-  // Messages de chat de proximité
   const [chatMessages, setChatMessages] = useState([]);
-  const [chatBubbles, setChatBubbles] = useState({}); // key: socketId => text
+  const [chatBubbles, setChatBubbles] = useState({});
 
-  // Charger la progression sauvegardée
   useEffect(() => {
     const savedLevel = localStorage.getItem('town_riddles_unlocked_level');
     if (savedLevel) {
@@ -36,7 +30,6 @@ export default function HomePage() {
     }
   }, []);
 
-  // Connexion au serveur Socket.io lors de la création du joueur
   const handleJoin = (userData) => {
     setLocalPlayer(userData);
 
@@ -45,7 +38,6 @@ export default function HomePage() {
     });
 
     newSocket.on('connect', () => {
-      console.log("[Socket Client] Connecté au serveur avec id:", newSocket.id);
       newSocket.emit('join_game', userData);
     });
 
@@ -67,11 +59,9 @@ export default function HomePage() {
       setOtherPlayers(prev => prev.filter(p => p.id !== disconnectedId));
     });
 
-    // Événement Chat de proximité
     newSocket.on('receive_chat_message', (msgObj) => {
       setChatMessages(prev => [...prev.slice(-15), msgObj]);
 
-      // Affichage de la bulle au-dessus du joueur pendant 4s
       setChatBubbles(prev => ({ ...prev, [msgObj.senderId]: msgObj.text }));
       setTimeout(() => {
         setChatBubbles(prev => {
@@ -82,7 +72,6 @@ export default function HomePage() {
       }, 4000);
     });
 
-    // Événements Défis Mini-jeux
     newSocket.on('received_game_challenge', (challengeData) => {
       setIncomingChallenge(challengeData);
     });
@@ -96,14 +85,12 @@ export default function HomePage() {
     setSocket(newSocket);
   };
 
-  // Envoi d'un message dans le chat de proximité
   const handleSendChatMessage = (text) => {
     if (socket) {
       socket.emit('send_chat_message', text);
     }
   };
 
-  // Résolution réussie d'une énigme dans une maison
   const handleSolveRiddle = (currentHouseLevel) => {
     if (currentHouseLevel === unlockedLevel && unlockedLevel < 5) {
       const nextLevel = unlockedLevel + 1;
@@ -113,14 +100,13 @@ export default function HomePage() {
     setActiveHouse(null);
   };
 
-  // Envoi d'un défi mini-jeu à un autre joueur
   const handleSendChallenge = (gameType) => {
     if (socket && selectedPlayer) {
       socket.emit('send_game_challenge', {
         targetPlayerId: selectedPlayer.id,
         gameType
       });
-      alert(`Défis (${gameType.toUpperCase()}) envoyé à ${selectedPlayer.nickname} ! En attente de réponse...`);
+      alert(`Défi envoyé à ${selectedPlayer.nickname} !`);
     }
   };
 
@@ -143,17 +129,19 @@ export default function HomePage() {
 
   return (
     <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
-      {/* HUD Supérieur : Info Profil & En Ligne */}
+      {/* HUD Supérieur */}
       <div className="absolute top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
         {/* Fiche Joueur Local */}
         <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-3">
-          <span className="text-2xl">{localPlayer.gender === 'girl' ? '👧' : '👦'}</span>
+          <div className="w-8 h-8 rounded-full bg-blue-600/30 border border-blue-400 flex items-center justify-center text-blue-300 font-bold text-xs">
+            {localPlayer.gender === 'girl' ? 'F' : 'M'}
+          </div>
           <div>
             <div className="text-xs font-bold text-white flex items-center gap-1">
               {localPlayer.nickname} <span className="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">Guest</span>
             </div>
             <div className="text-[11px] text-amber-400 font-semibold flex items-center gap-1">
-              <Trophy className="w-3.5 h-3.5" /> Progression : Niveau {unlockedLevel} / 5
+              <Trophy className="w-3.5 h-3.5" /> Niveau {unlockedLevel} / 5
             </div>
           </div>
         </div>
@@ -176,17 +164,19 @@ export default function HomePage() {
         chatBubbles={chatBubbles}
       />
 
-      {/* Chat de Proximité en bas à gauche */}
+      {/* Chat de Proximité */}
       <ProximityChat
         onSendMessage={handleSendChatMessage}
         messages={chatMessages}
       />
 
-      {/* Popup de Sélection d'un autre Joueur (Action Défis) */}
+      {/* Popup de Sélection d'un autre Joueur */}
       {selectedPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-80 text-center space-y-4 shadow-2xl">
-            <span className="text-4xl">{selectedPlayer.gender === 'girl' ? '👧' : '👦'}</span>
+            <div className="w-12 h-12 rounded-full bg-blue-600/30 border border-blue-400 mx-auto flex items-center justify-center text-blue-300 font-bold">
+              {selectedPlayer.gender === 'girl' ? 'F' : 'M'}
+            </div>
             <div>
               <h3 className="text-base font-extrabold text-white">{selectedPlayer.nickname}</h3>
               <p className="text-xs text-slate-400">Joueur à proximité</p>
@@ -197,13 +187,13 @@ export default function HomePage() {
                 onClick={() => handleSendChallenge('rps')}
                 className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
-                <Swords className="w-4 h-4" /> Défier au Pierre-Papier-Ciseaux
+                <Swords className="w-4 h-4" /> Pierre-Papier-Ciseaux
               </button>
               <button
                 onClick={() => handleSendChallenge('ttt')}
                 className="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
-                <Swords className="w-4 h-4" /> Défier au Morpion (Tic-Tac-Toe)
+                <Swords className="w-4 h-4" /> Morpion (Tic-Tac-Toe)
               </button>
             </div>
 
@@ -220,7 +210,7 @@ export default function HomePage() {
       {/* Notification de Défi Reçu */}
       {incomingChallenge && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
-          <span className="text-3xl">⚔️</span>
+          <Swords className="w-6 h-6 text-amber-400" />
           <div>
             <p className="text-xs font-bold text-amber-300">Défi Mini-jeu Reçu !</p>
             <p className="text-xs text-white">

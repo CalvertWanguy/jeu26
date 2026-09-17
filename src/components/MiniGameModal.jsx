@@ -1,16 +1,14 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Swords, X, Trophy, RefreshCw } from 'lucide-react';
+import { Swords, X, Trophy, Shield, FileText, Scissors, UserCheck, AlertCircle } from 'lucide-react';
 
 export default function MiniGameModal({ session, socket, localPlayerId, onClose }) {
   const isP1 = session.p1.id === localPlayerId;
   const opponentName = isP1 ? session.p2.name : session.p1.name;
 
-  // État local pour Pierre-Papier-Ciseaux
   const [rpsChoice, setRpsChoice] = useState(null);
   const [rpsResult, setRpsResult] = useState(null);
 
-  // État local pour Morpion (Tic-Tac-Toe)
   const [tttBoard, setTttBoard] = useState(session.board || Array(9).fill(null));
   const [currentTurn, setCurrentTurn] = useState(session.currentTurn);
   const [tttWinner, setTttWinner] = useState(null);
@@ -18,18 +16,11 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
   useEffect(() => {
     if (!socket) return;
 
-    // Événement Résultat RPS
-    const handleRpsResult = (data) => {
-      setRpsResult(data);
-    };
-
-    // Événement Update Tic-Tac-Toe
+    const handleRpsResult = (data) => setRpsResult(data);
     const handleTttUpdate = (data) => {
       setTttBoard(data.board);
       setCurrentTurn(data.currentTurn);
     };
-
-    // Événement Game Over Tic-Tac-Toe
     const handleTttGameOver = (data) => {
       setTttBoard(data.board);
       setTttWinner(data);
@@ -46,16 +37,20 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
     };
   }, [socket]);
 
-  // Envoi du choix Pierre-Papier-Ciseaux
   const handleRpsPlay = (choice) => {
     setRpsChoice(choice);
     socket.emit('play_rps_choice', { gameId: session.gameId, choice });
   };
 
-  // Envoi du coup Morpion
   const handleTttCellClick = (index) => {
     if (currentTurn !== localPlayerId || tttBoard[index] !== null || tttWinner) return;
     socket.emit('play_ttt_move', { gameId: session.gameId, cellIndex: index });
+  };
+
+  const renderRpsIcon = (choice) => {
+    if (choice === 'rock') return <Shield className="w-8 h-8 text-blue-400" />;
+    if (choice === 'paper') return <FileText className="w-8 h-8 text-emerald-400" />;
+    return <Scissors className="w-8 h-8 text-amber-400" />;
   };
 
   return (
@@ -82,18 +77,17 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
 
         <div className="p-6">
           {session.gameType === 'rps' ? (
-            /* ================= PIERRE-PAPIER-CISEAUX ================= */
             <div className="space-y-6 text-center">
               {!rpsResult ? (
                 <>
                   <p className="text-xs text-slate-400 font-semibold">
-                    Faites votre choix ! Le résultat s'affichera dès que {opponentName} aura choisi.
+                    Faites votre choix ! Le résultat s'affichera dès que {opponentName} aura joué.
                   </p>
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { id: 'rock', icon: '🪨', label: 'Pierre' },
-                      { id: 'paper', icon: '📄', label: 'Papier' },
-                      { id: 'scissors', icon: '✂️', label: 'Ciseaux' }
+                      { id: 'rock', icon: <Shield className="w-7 h-7 text-blue-400" />, label: 'Pierre' },
+                      { id: 'paper', icon: <FileText className="w-7 h-7 text-emerald-400" />, label: 'Papier' },
+                      { id: 'scissors', icon: <Scissors className="w-7 h-7 text-amber-400" />, label: 'Ciseaux' }
                     ].map((item) => (
                       <button
                         key={item.id}
@@ -105,7 +99,7 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
                             : 'border-slate-700 bg-slate-800 text-slate-300 hover:border-slate-600'
                         }`}
                       >
-                        <span className="text-3xl">{item.icon}</span>
+                        {item.icon}
                         <span className="text-xs font-bold">{item.label}</span>
                       </button>
                     ))}
@@ -113,32 +107,30 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
 
                   {rpsChoice && (
                     <p className="text-xs text-amber-400 animate-pulse font-bold">
-                      En attente du choix de {opponentName}...
+                      En attente de la réponse de {opponentName}...
                     </p>
                   )}
                 </>
               ) : (
-                /* Résultat RPS */
                 <div className="space-y-4">
-                  <div className="text-4xl font-extrabold text-white">
-                    {rpsResult.winnerId === 'draw'
-                      ? '🤝 ÉGALITÉ !'
-                      : rpsResult.winnerId === localPlayerId
-                      ? '🎉 VICTOIRE !'
-                      : '💀 DÉFAITE'}
+                  <div className="text-2xl font-extrabold text-white flex items-center justify-center gap-2">
+                    {rpsResult.winnerId === 'draw' ? (
+                      '🤝 ÉGALITÉ'
+                    ) : rpsResult.winnerId === localPlayerId ? (
+                      <span className="text-emerald-400 flex items-center gap-2"><Trophy className="w-6 h-6" /> VICTOIRE</span>
+                    ) : (
+                      <span className="text-rose-400">DÉFAITE</span>
+                    )}
                   </div>
-                  <div className="flex justify-center gap-8 py-4 bg-slate-800/60 rounded-xl">
-                    <div>
+
+                  <div className="flex justify-center gap-12 py-4 bg-slate-800/60 rounded-xl">
+                    <div className="flex flex-col items-center gap-2">
                       <p className="text-xs text-slate-400">Vous</p>
-                      <p className="text-3xl mt-1">
-                        {rpsResult.p1Choice === 'rock' ? '🪨' : rpsResult.p1Choice === 'paper' ? '📄' : '✂️'}
-                      </p>
+                      {renderRpsIcon(rpsResult.p1Choice)}
                     </div>
-                    <div>
+                    <div className="flex flex-col items-center gap-2">
                       <p className="text-xs text-slate-400">{opponentName}</p>
-                      <p className="text-3xl mt-1">
-                        {rpsResult.p2Choice === 'rock' ? '🪨' : rpsResult.p2Choice === 'paper' ? '📄' : '✂️'}
-                      </p>
+                      {renderRpsIcon(rpsResult.p2Choice)}
                     </div>
                   </div>
                   <button
@@ -151,25 +143,26 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
               )}
             </div>
           ) : (
-            /* ================= MORPION / TIC-TAC-TOE ================= */
             <div className="space-y-4 text-center">
               {!tttWinner ? (
                 <p className="text-xs font-bold text-slate-300">
                   {currentTurn === localPlayerId
-                    ? " C'est à VOTRE tour de jouer !"
-                    : `⏳ Tour de ${opponentName}...`}
+                    ? "C'est à votre tour de jouer !"
+                    : `Tour de ${opponentName}...`}
                 </p>
               ) : (
-                <div className="text-lg font-extrabold text-amber-400">
-                  {tttWinner.isDraw
-                    ? '🤝 Égalité !'
-                    : tttWinner.winnerId === localPlayerId
-                    ? '🎉 Vous avez GAGNÉ !'
-                    : `💀 ${opponentName} a gagné !`}
+                <div className="text-base font-extrabold text-amber-400 flex items-center justify-center gap-2">
+                  {tttWinner.isDraw ? (
+                    'Match Nul !'
+                  ) : tttWinner.winnerId === localPlayerId ? (
+                    <span className="text-emerald-400 flex items-center gap-2"><Trophy className="w-5 h-5" /> Vous avez Gagné !</span>
+                  ) : (
+                    <span className="text-rose-400">{opponentName} a Gagné !</span>
+                  )}
                 </div>
               )}
 
-              {/* Grille 3x3 */}
+              {/* Grille Morpion */}
               <div className="grid grid-cols-3 gap-2 w-64 h-64 mx-auto">
                 {tttBoard.map((cell, idx) => (
                   <button

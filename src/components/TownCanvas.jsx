@@ -1,13 +1,13 @@
 "use client";
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 // Coordonnées des 5 Maisons / Niveaux dans la ville
 export const HOUSES = [
-  { id: 1, name: "Maison de la Logique", level: 1, x: 180, y: 160, color: "#ef4444", icon: "🏠" },
-  { id: 2, name: "Maison de la Nature", level: 2, x: 480, y: 160, color: "#3b82f6", icon: "🏰" },
-  { id: 3, name: "Maison des Énigmes", level: 3, x: 780, y: 160, color: "#f59e0b", icon: "🏛️" },
-  { id: 4, name: "Maison Mystère", level: 4, x: 300, y: 520, color: "#8b5cf6", icon: "🏡" },
-  { id: 5, name: "Maison du Grand Défi", level: 5, x: 650, y: 520, color: "#10b981", icon: "👑" },
+  { id: 1, name: "Maison de la Logique", level: 1, x: 180, y: 160, color: "#ef4444" },
+  { id: 2, name: "Maison de la Nature", level: 2, x: 480, y: 160, color: "#3b82f6" },
+  { id: 3, name: "Maison des Énigmes", level: 3, x: 780, y: 160, color: "#f59e0b" },
+  { id: 4, name: "Maison Mystère", level: 4, x: 300, y: 520, color: "#8b5cf6" },
+  { id: 5, name: "Maison du Grand Défi", level: 5, x: 650, y: 520, color: "#10b981" },
 ];
 
 export default function TownCanvas({
@@ -23,7 +23,6 @@ export default function TownCanvas({
   const targetPosRef = useRef({ x: localPlayer?.x || 450, y: localPlayer?.y || 450 });
   const currentPosRef = useRef({ x: localPlayer?.x || 450, y: localPlayer?.y || 450 });
 
-  // Mise à jour de la cible lors du clic
   const handleCanvasClick = (e) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -36,7 +35,6 @@ export default function TownCanvas({
     for (const house of HOUSES) {
       const dist = Math.hypot(clickX - house.x, clickY - (house.y + 40));
       if (dist < 70) {
-        // Se déplacer vers l'entrée de la maison
         targetPosRef.current = { x: house.x, y: house.y + 80 };
         onOpenHouse(house);
         return;
@@ -52,11 +50,10 @@ export default function TownCanvas({
       }
     }
 
-    // Sinon, déplacement classique
+    // Déplacement classique au clic
     targetPosRef.current = { x: clickX, y: clickY };
   };
 
-  // Boucle de rendu et d'interpolation 60 FPS
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -65,7 +62,7 @@ export default function TownCanvas({
     let animationFrameId;
 
     const render = () => {
-      // 1. Interpolation fluide du mouvement du joueur local
+      // 1. Interpolation fluide du mouvement
       const cur = currentPosRef.current;
       const target = targetPosRef.current;
 
@@ -77,7 +74,6 @@ export default function TownCanvas({
         cur.x += (dx / dist) * 3.5;
         cur.y += (dy / dist) * 3.5;
 
-        // Émettre la nouvelle position au serveur
         if (socket) {
           let facing = 'down';
           if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
@@ -87,15 +83,14 @@ export default function TownCanvas({
         }
       }
 
-      // Clear Canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 2. Dessiner le sol et les chemins de la ville
-      ctx.fillStyle = '#48bb78'; // Herbe
+      // 2. Sol de la ville (Herbe & Pavés)
+      ctx.fillStyle = '#34d399'; // Herbe moderne
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Chemins en pavés
-      ctx.fillStyle = '#cbd5e1';
+      // Chemins pavés
+      ctx.fillStyle = '#e2e8f0';
       ctx.fillRect(100, 260, 800, 40);
       ctx.fillRect(100, 620, 800, 40);
       ctx.fillRect(480, 260, 40, 400);
@@ -107,10 +102,10 @@ export default function TownCanvas({
       ctx.fill();
       ctx.beginPath();
       ctx.arc(500, 450, 40, 0, Math.PI * 2);
-      ctx.fillStyle = '#38bdf8'; // Eau fontaine
+      ctx.fillStyle = '#38bdf8';
       ctx.fill();
 
-      // 3. Dessiner les 5 Maisons de devinettes
+      // 3. Dessiner les 5 Maisons
       HOUSES.forEach((house) => {
         const isUnlocked = house.level <= unlockedLevel;
 
@@ -118,21 +113,21 @@ export default function TownCanvas({
         ctx.fillStyle = house.color;
         ctx.fillRect(house.x - 50, house.y - 30, 100, 70);
 
-        // Toit
+        // Toit vectoriel
         ctx.beginPath();
         ctx.moveTo(house.x - 60, house.y - 30);
         ctx.lineTo(house.x, house.y - 70);
         ctx.lineTo(house.x + 60, house.y - 30);
         ctx.closePath();
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#0f172a';
         ctx.fill();
 
         // Porte
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = '#334155';
         ctx.fillRect(house.x - 15, house.y + 10, 30, 30);
 
         // Badge du Niveau
-        ctx.fillStyle = isUnlocked ? '#22c55e' : '#64748b';
+        ctx.fillStyle = isUnlocked ? '#10b981' : '#64748b';
         ctx.beginPath();
         ctx.arc(house.x, house.y - 40, 18, 0, Math.PI * 2);
         ctx.fill();
@@ -140,7 +135,7 @@ export default function TownCanvas({
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(isUnlocked ? `Niv ${house.level}` : '🔒', house.x, house.y - 36);
+        ctx.fillText(isUnlocked ? `Niv ${house.level}` : 'LOCK', house.x, house.y - 36);
 
         // Nom de la maison
         ctx.font = 'bold 13px sans-serif';
@@ -151,13 +146,13 @@ export default function TownCanvas({
         ctx.shadowBlur = 0;
       });
 
-      // 4. Dessiner les Arbres de déco
+      // 4. Arbres de décoration
       const trees = [
         { x: 60, y: 100 }, { x: 940, y: 100 }, { x: 60, y: 700 }, { x: 940, y: 700 },
         { x: 330, y: 360 }, { x: 670, y: 360 }
       ];
       trees.forEach(t => {
-        ctx.fillStyle = '#166534';
+        ctx.fillStyle = '#059669';
         ctx.beginPath();
         ctx.arc(t.x, t.y, 22, 0, Math.PI * 2);
         ctx.fill();
@@ -165,13 +160,13 @@ export default function TownCanvas({
         ctx.fillRect(t.x - 4, t.y + 10, 8, 14);
       });
 
-      // 5. Dessiner les autres joueurs connectés
+      // 5. Autre joueurs
       otherPlayers.forEach((p) => {
-        drawPlayerSprite(ctx, p.x, p.y, p.gender, p.nickname, false, chatBubbles[p.id]);
+        drawVectorSprite(ctx, p.x, p.y, p.gender, p.nickname, false, chatBubbles[p.id]);
       });
 
-      // 6. Dessiner le joueur local
-      drawPlayerSprite(
+      // 6. Joueur local
+      drawVectorSprite(
         ctx,
         cur.x,
         cur.y,
@@ -189,35 +184,68 @@ export default function TownCanvas({
     return () => cancelAnimationFrame(animationFrameId);
   }, [otherPlayers, localPlayer, unlockedLevel, chatBubbles, socket]);
 
-  // Fonction utilitaire pour dessiner un avatar joueur avec son pseudo et bulle de chat
-  const drawPlayerSprite = (ctx, x, y, gender, nickname, isLocal, chatMsg) => {
-    // Ombre sous les pieds
+  // Rendu d'un avatar 2D vectoriel propre (sans emoji)
+  const drawVectorSprite = (ctx, x, y, gender, nickname, isLocal, chatMsg) => {
+    // Ombre au sol
     ctx.beginPath();
-    ctx.ellipse(x, y + 15, 14, 6, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.ellipse(x, y + 16, 14, 6, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.fill();
 
-    // Cercle lumineux si joueur local
+    // Halo bleu pour le joueur local
     if (isLocal) {
       ctx.beginPath();
-      ctx.ellipse(x, y + 15, 18, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(x, y + 16, 18, 8, 0, 0, Math.PI * 2);
       ctx.strokeStyle = '#3b82f6';
       ctx.lineWidth = 2;
       ctx.stroke();
     }
 
-    // Avatar Emoji 👦 / 👧
-    ctx.font = '28px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(gender === 'girl' ? '👧' : '👦', x, y - 5);
+    // Vêtements (Torse)
+    const shirtColor = gender === 'girl' ? '#ec4899' : '#3b82f6';
+    ctx.fillStyle = shirtColor;
+    ctx.beginPath();
+    ctx.roundRect(x - 10, y - 4, 20, 18, 5);
+    ctx.fill();
 
-    // Étiquette Pseudo au-dessus de la tête
+    // Tête (Peau)
+    ctx.fillStyle = '#fde047';
+    ctx.beginPath();
+    ctx.arc(x, y - 12, 11, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cheveux
+    ctx.fillStyle = gender === 'girl' ? '#db2777' : '#1e3a8a';
+    if (gender === 'girl') {
+      // Cheveux longs / couettes
+      ctx.beginPath();
+      ctx.arc(x, y - 15, 12, Math.PI, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x - 11, y - 8, 5, 0, Math.PI * 2);
+      ctx.arc(x + 11, y - 8, 5, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Cheveux courts
+      ctx.beginPath();
+      ctx.arc(x, y - 14, 12, Math.PI * 0.9, Math.PI * 2.1);
+      ctx.fill();
+    }
+
+    // Yeux
+    ctx.fillStyle = '#0f172a';
+    ctx.beginPath();
+    ctx.arc(x - 3.5, y - 12, 1.8, 0, Math.PI * 2);
+    ctx.arc(x + 3.5, y - 12, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Pseudo au-dessus
     ctx.font = 'bold 12px sans-serif';
-    ctx.fillStyle = isLocal ? '#fde047' : '#ffffff';
+    ctx.fillStyle = isLocal ? '#fef08a' : '#ffffff';
     ctx.shadowColor = 'rgba(0,0,0,0.8)';
     ctx.shadowBlur = 4;
-    ctx.fillText(nickname, x, y - 30);
+    ctx.textAlign = 'center';
+    ctx.fillText(nickname, x, y - 32);
     ctx.shadowBlur = 0;
 
     // Bulle de dialogue de proximité
@@ -228,7 +256,7 @@ export default function TownCanvas({
       const bubbleW = textWidth + 16;
       const bubbleH = 24;
       const bubbleX = x - bubbleW / 2;
-      const bubbleY = y - 62;
+      const bubbleY = y - 64;
 
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
