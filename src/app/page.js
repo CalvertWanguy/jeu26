@@ -37,9 +37,19 @@ export default function HomePage() {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
   const playerIdRef = useRef(null);
+  const isMutedRef = useRef(false);
+  const localPlayerRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    isMutedRef.current = isMuted;
+  }, [isMuted]);
+
+  useEffect(() => {
+    localPlayerRef.current = localPlayer;
+  }, [localPlayer]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !audioRef.current) {
       audioRef.current = new Audio('/bgm.mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.30;
@@ -57,7 +67,7 @@ export default function HomePage() {
     const handleVisibilityChange = () => {
       if (document.hidden && audioRef.current) {
         audioRef.current.pause();
-      } else if (!document.hidden && audioRef.current && localPlayer && !isMuted) {
+      } else if (!document.hidden && audioRef.current && localPlayerRef.current && !isMutedRef.current) {
         audioRef.current.play().catch(() => {});
       }
     };
@@ -72,7 +82,7 @@ export default function HomePage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       stopAudio();
     };
-  }, [localPlayer, isMuted]);
+  }, []);
 
   const toggleAudio = () => {
     if (!audioRef.current) return;
@@ -255,8 +265,14 @@ export default function HomePage() {
   const handleJoin = (userData) => {
     setLocalPlayer(userData);
 
-    if (audioRef.current && !isMuted) {
-      audioRef.current.play().catch(e => console.log("[Audio Autoplay]", e));
+    if (typeof window !== 'undefined') {
+      if (!audioRef.current) {
+        audioRef.current = new Audio('/bgm.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.30;
+      }
+      setIsMuted(false);
+      audioRef.current.play().catch(e => console.warn("[Audio Autoplay]", e));
     }
 
     if (typeof window !== 'undefined') {

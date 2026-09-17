@@ -353,31 +353,40 @@ app.prepare().then(() => {
       }
     });
 
-    // 6. Déconnexion (Retrait du village)
-    socket.on('disconnect', () => {
-      const player = players.get(socket.id);
+    const removePlayerFromGame = (socketId) => {
+      const player = players.get(socketId);
       if (player) {
         const roomName = player.villageRoom;
         if (villageRooms.has(roomName)) {
           const roomSet = villageRooms.get(roomName);
-          roomSet.delete(socket.id);
+          roomSet.delete(socketId);
           if (roomSet.size === 0) {
             villageRooms.delete(roomName);
           } else {
-            socket.to(roomName).emit('village_count_updated', { totalInVillage: roomSet.size });
+            io.to(roomName).emit('village_count_updated', { totalInVillage: roomSet.size });
           }
         }
 
-        const partnerId = activePrivateChats.get(socket.id);
+        const partnerId = activePrivateChats.get(socketId);
         if (partnerId) {
           activePrivateChats.delete(partnerId);
-          io.to(partnerId).emit('private_chat_ended', { reason: 'Le joueur s\'est déconnecté.' });
+          io.to(partnerId).emit('private_chat_ended', { reason: 'Le joueur a quitté le village.' });
         }
-        activePrivateChats.delete(socket.id);
+        activePrivateChats.delete(socketId);
 
-        players.delete(socket.id);
-        socket.to(roomName).emit('player_left', socket.id);
+        players.delete(socketId);
+        io.to(roomName).emit('player_left', socketId);
+        console.log(`[Game] Joueur ${player.nickname} (${socketId}) s'est déconnecté du ${roomName}.`);
       }
+    };
+
+    // 6. Déconnexion & Quitter le jeu
+    socket.on('leave_game', () => {
+      removePlayerFromGame(socket.id);
+    });
+
+    socket.on('disconnect', () => {
+      removePlayerFromGame(socket.id);
     });
   });
 
