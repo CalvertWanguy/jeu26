@@ -72,14 +72,24 @@ export default function HomePage() {
       }
     };
 
+    const unlockAudioOnTouch = () => {
+      if (audioRef.current && audioRef.current.paused && !isMutedRef.current && localPlayerRef.current) {
+        audioRef.current.play().catch(() => {});
+      }
+    };
+
     window.addEventListener('beforeunload', stopAudio);
     window.addEventListener('pagehide', stopAudio);
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('touchstart', unlockAudioOnTouch, { passive: true });
+    window.addEventListener('click', unlockAudioOnTouch, { passive: true });
 
     return () => {
       window.removeEventListener('beforeunload', stopAudio);
       window.removeEventListener('pagehide', stopAudio);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('touchstart', unlockAudioOnTouch);
+      window.removeEventListener('click', unlockAudioOnTouch);
       stopAudio();
     };
   }, []);
