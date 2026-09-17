@@ -33,141 +33,136 @@ export default function HomePage() {
   const [chatBubbles, setChatBubbles] = useState({});
 
   useEffect(() => {
-    const savedUnlocked = localStorage.getItem('town_riddles_unlocked_level');
-    const savedLevel = localStorage.getItem('town_riddles_player_level');
-    if (savedUnlocked) setUnlockedLevel(parseInt(savedUnlocked, 10));
-    if (savedLevel) setPlayerLevel(parseInt(savedLevel, 10));
+    if (typeof window !== 'undefined') {
+      const savedUnlocked = localStorage.getItem('town_riddles_unlocked_level');
+      const savedLevel = localStorage.getItem('town_riddles_player_level');
+      if (savedUnlocked) setUnlockedLevel(parseInt(savedUnlocked, 10));
+      if (savedLevel) setPlayerLevel(parseInt(savedLevel, 10));
+    }
   }, []);
 
   const handleJoin = (userData) => {
     const fullUserData = { ...userData, level: playerLevel };
     setLocalPlayer(fullUserData);
 
-    const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
-    if (!hasSeenTutorial) {
-      setShowTutorialModal(true);
+    if (typeof window !== 'undefined') {
+      const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
+      if (!hasSeenTutorial) {
+        setShowTutorialModal(true);
+      }
     }
 
-    const newSocket = io('http://localhost:3000', {
-      transports: ['websocket', 'polling']
-    });
+    // URL dynamique du serveur Socket.io (Render / Railway / Host Vercel avec secours)
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 
+      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
-    newSocket.on('connect', () => {
-      newSocket.emit('join_game', fullUserData);
-    });
-
-    newSocket.on('assigned_village', (info) => {
-      setVillageInfo({ roomName: info.roomName, totalInVillage: info.totalInVillage });
-    });
-
-    newSocket.on('village_count_updated', ({ totalInVillage }) => {
-      setVillageInfo(prev => ({ ...prev, totalInVillage }));
-    });
-
-    newSocket.on('current_players', (playersList) => {
-      setOtherPlayers(playersList.filter(p => p.id !== newSocket.id));
-    });
-
-    newSocket.on('player_joined', (newPlayer) => {
-      setOtherPlayers(prev => [...prev.filter(p => p.id !== newPlayer.id), newPlayer]);
-    });
-
-    newSocket.on('player_moved', (data) => {
-      setOtherPlayers(prev =>
-        prev.map(p => (p.id === data.id ? { ...p, x: data.x, y: data.y, facing: data.facing, level: data.level } : p))
-      );
-    });
-
-    newSocket.on('player_level_updated', ({ id, level }) => {
-      setOtherPlayers(prev =>
-        prev.map(p => (p.id === id ? { ...p, level } : p))
-      );
-    });
-
-    newSocket.on('player_left', (disconnectedId) => {
-      setOtherPlayers(prev => prev.filter(p => p.id !== disconnectedId));
-    });
-
-    newSocket.on('private_chat_started', (partnerInfo) => {
-      setActivePrivatePartner(partnerInfo);
-      setPrivateMessages([]);
-      setSelectedPlayer(null);
-    });
-
-    newSocket.on('receive_private_message', (msgObj) => {
-      setPrivateMessages(prev => [...prev, msgObj]);
-      setChatBubbles(prev => ({ ...prev, [msgObj.senderId]: msgObj.text }));
-      setTimeout(() => {
-        setChatBubbles(prev => {
-          const copy = { ...prev };
-          delete copy[msgObj.senderId];
-          return copy;
-        });
-      }, 4000);
-    });
-
-    newSocket.on('incoming_chat_request', (requestData) => {
-      setIncomingChatRequest(requestData);
-    });
-
-    newSocket.on('chat_request_declined_busy', ({ message }) => {
-      setBusyNotification(message);
-      setTimeout(() => setBusyNotification(null), 5000);
-    });
-
-    newSocket.on('private_chat_ended', ({ reason }) => {
-      setActivePrivatePartner(null);
-      setPrivateMessages([]);
-      alert(reason);
-    });
-
-    newSocket.on('received_game_challenge', (challengeData) => {
-      setIncomingChallenge(challengeData);
-    });
-
-    newSocket.on('mini_game_start', (sessionData) => {
-      setIncomingChallenge(null);
-      setSelectedPlayer(null);
-      setActiveMiniGame(sessionData);
-    });
-
-    setSocket(newSocket);
-  };
-
-  const handleStartPrivateChat = (targetPlayer) => {
-    if (socket && targetPlayer) {
-      socket.emit('request_private_chat', { targetPlayerId: targetPlayer.id });
-    }
-  };
-
-  const handleAcceptChatRequest = () => {
-    if (socket && incomingChatRequest) {
-      socket.emit('accept_chat_request', { requesterId: incomingChatRequest.requesterId });
-      setIncomingChatRequest(null);
-    }
-  };
-
-  const handleDeclineChatRequest = () => {
-    if (socket && incomingChatRequest) {
-      socket.emit('decline_chat_request', { requesterId: incomingChatRequest.requesterId });
-      setIncomingChatRequest(null);
-    }
-  };
-
-  const handleSendPrivateMessage = (text) => {
-    if (socket && activePrivatePartner) {
-      socket.emit('send_private_message', {
-        targetPlayerId: activePrivatePartner.partnerId,
-        text
+    try {
+      const newSocket = io(socketUrl, {
+        transports: ['websocket', 'polling'],
+        reconnectionAttempts: 5,
+        timeout: 10000
       });
+
+      newSocket.on('connect', () => {
+        newSocket.emit('join_game', fullUserData);
+      });
+
+      newSocket.on('connect_error', (err) => {
+        console.warn("[Socket Client] Impossible de se connecter au serveur temps réel:", err.message);
+      });
+
+      newSocket.on('assigned_village', (info) => {
+        setVillageInfo({ roomName: info.roomName, totalInVillage: info.totalInVillage });
+      });
+
+      newSocket.on('village_count_updated', ({ totalInVillage }) => {
+        setVillageInfo(prev => ({ ...prev, totalInVillage }));
+      });
+
+      newSocket.on('current_players', (playersList) => {
+        setOtherPlayers(playersList.filter(p => p.id !== newSocket.id));
+      });
+
+      newSocket.on('player_joined', (newPlayer) => {
+        setOtherPlayers(prev => [...prev.filter(p => p.id !== newPlayer.id), newPlayer]);
+      });
+
+      newSocket.on('player_moved', (data) => {
+        setOtherPlayers(prev =>
+          prev.map(p => (p.id === data.id ? { ...p, x: data.x, y: data.y, facing: data.facing, level: data.level } : p))
+        );
+      });
+
+      newSocket.on('player_level_updated', ({ id, level }) => {
+        setOtherPlayers(prev =>
+          prev.map(p => (p.id === id ? { ...p, level } : p))
+        );
+      });
+
+      newSocket.on('player_left', (disconnectedId) => {
+        setOtherPlayers(prev => prev.filter(p => p.id !== disconnectedId));
+      });
+
+      newSocket.on('private_chat_started', (partnerInfo) => {
+        setActivePrivatePartner(partnerInfo);
+        setPrivateMessages([]);
+        setSelectedPlayer(null);
+      });
+
+      newSocket.on('receive_private_message', (msgObj) => {
+        setPrivateMessages(prev => [...prev, msgObj]);
+        setChatBubbles(prev => ({ ...prev, [msgObj.senderId]: msgObj.text }));
+        setTimeout(() => {
+          setChatBubbles(prev => {
+            const copy = { ...prev };
+            delete copy[msgObj.senderId];
+            return copy;
+          });
+        }, 4000);
+      });
+
+      newSocket.on('incoming_chat_request', (requestData) => {
+        setIncomingChatRequest(requestData);
+      });
+
+      newSocket.on('chat_request_declined_busy', ({ message }) => {
+        setBusyNotification(message);
+        setTimeout(() => setBusyNotification(null), 5000);
+      });
+
+      newSocket.on('private_chat_ended', ({ reason }) => {
+        setActivePrivatePartner(null);
+        setPrivateMessages([]);
+        alert(reason);
+      });
+
+      newSocket.on('received_game_challenge', (challengeData) => {
+        setIncomingChallenge(challengeData);
+      });
+
+      newSocket.on('mini_game_start', (sessionData) => {
+        setIncomingChallenge(null);
+        setSelectedPlayer(null);
+        setActiveMiniGame(sessionData);
+      });
+
+      setSocket(newSocket);
+    } catch (e) {
+      console.error("[Socket Init Error]", e);
     }
   };
 
-  const handleEndPrivateChat = () => {
-    if (socket) {
-      socket.emit('end_private_chat');
+  const handleCloseTutorial = () => {
+    setShowTutorialModal(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('town_riddles_tutorial_seen', 'true');
     }
-    setActivePrivatePartner(null);
+  };
+
+  const handleSendChatMessage = (text) => {
+    if (socket) {
+      socket.emit('send_chat_message', text);
+    }
   };
 
   const handleSolveRiddle = (currentHouseLevel) => {
@@ -178,8 +173,10 @@ export default function HomePage() {
       setPlayerLevel(nextLevel);
       setUnlockedLevel(1);
 
-      localStorage.setItem('town_riddles_player_level', nextLevel.toString());
-      localStorage.setItem('town_riddles_unlocked_level', '1');
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('town_riddles_player_level', nextLevel.toString());
+        localStorage.setItem('town_riddles_unlocked_level', '1');
+      }
 
       if (socket) {
         socket.emit('player_level_up', nextLevel);
@@ -189,7 +186,9 @@ export default function HomePage() {
     } else if (currentHouseLevel === unlockedLevel && unlockedLevel < 5) {
       const nextUnlocked = unlockedLevel + 1;
       setUnlockedLevel(nextUnlocked);
-      localStorage.setItem('town_riddles_unlocked_level', nextUnlocked.toString());
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('town_riddles_unlocked_level', nextUnlocked.toString());
+      }
     }
   };
 
@@ -222,9 +221,8 @@ export default function HomePage() {
 
   return (
     <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
-      {/* HUD Supérieur : Info Profil & Village (Max 5 Joueurs) */}
+      {/* HUD Supérieur */}
       <div className="absolute top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-        {/* Fiche Joueur Local */}
         <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-3">
           <span className="text-2xl">{localPlayer.gender === 'girl' ? '👧' : '👦'}</span>
           <div>
@@ -240,7 +238,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Info Village (Max 5 personnes) & Bouton Point d'exclamation (!) */}
         <div className="pointer-events-auto flex items-center gap-3">
           <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-bold text-slate-200">
             <Home className="w-4 h-4 text-indigo-400" />
@@ -270,7 +267,7 @@ export default function HomePage() {
         chatBubbles={chatBubbles}
       />
 
-      {/* Pop-up de Notification si un Joueur est Occupé */}
+      {/* Pop-up si un Joueur est Occupé */}
       {busyNotification && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-bounce max-w-md">
           <Clock className="w-6 h-6 text-indigo-400 flex-shrink-0" />
@@ -291,7 +288,7 @@ export default function HomePage() {
         </a>
       </div>
 
-      {/* Popup d'Action sur un autre Joueur (Chat Privé & Mini-Jeux) */}
+      {/* Popup Action Joueur */}
       {selectedPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-80 text-center space-y-4 shadow-2xl">
@@ -337,7 +334,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Demande de Chat Privé */}
+      {/* Demande Chat Privé */}
       {incomingChatRequest && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
           <MessageSquare className="w-6 h-6 text-indigo-400" />
@@ -364,7 +361,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Notification de Défi Mini-jeu Reçu */}
+      {/* Notification Défi Mini-jeu */}
       {incomingChallenge && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
           <Swords className="w-6 h-6 text-amber-400" />
@@ -392,7 +389,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Chat Privé 1-sur-1 Actif */}
+      {/* Chat Privé 1-sur-1 */}
       {activePrivatePartner && (
         <PrivateChatModal
           partner={activePrivatePartner}
@@ -428,7 +425,7 @@ export default function HomePage() {
         />
       )}
 
-      {/* Modal de Victoire Ultime & Passage de Niveau */}
+      {/* Modal Victoire */}
       {showPrestigeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
           <div className="bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-8 max-w-md w-full text-center space-y-5 shadow-2xl animate-bounce">
