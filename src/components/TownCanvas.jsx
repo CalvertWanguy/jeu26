@@ -67,8 +67,10 @@ export default function TownCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    let dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
+
     const updateCanvasDimensions = () => {
-      const dpr = window.devicePixelRatio || 1;
+      dpr = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
       canvas.width = 1000 * dpr;
       canvas.height = 750 * dpr;
     };
