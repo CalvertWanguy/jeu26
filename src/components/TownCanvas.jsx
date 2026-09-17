@@ -321,6 +321,8 @@ export default function TownCanvas({
   const targetPosRef = useRef({ x: localPlayer?.x || 450, y: localPlayer?.y || 450 });
   const currentPosRef = useRef({ x: localPlayer?.x || 450, y: localPlayer?.y || 450 });
   const isMovingRef = useRef(false);
+  const smoothPositionsRef = useRef(new Map());
+  const lastEmitTimeRef = useRef(0);
 
   const handleInput = (clientX, clientY) => {
     const canvas = canvasRef.current;
@@ -358,9 +360,21 @@ export default function TownCanvas({
   const handleClick = (e) => handleInput(e.clientX, e.clientY);
   const handleTouch = (e) => {
     if (e.touches && e.touches[0]) {
+      e.preventDefault();
       handleInput(e.touches[0].clientX, e.touches[0].clientY);
     }
   };
+
+  useEffect(() => {
+    if (Array.isArray(otherPlayers)) {
+      const activeIds = new Set(otherPlayers.map(p => p.id));
+      for (const id of smoothPositionsRef.current.keys()) {
+        if (!activeIds.has(id)) {
+          smoothPositionsRef.current.delete(id);
+        }
+      }
+    }
+  }, [otherPlayers]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -404,11 +418,15 @@ export default function TownCanvas({
           }
 
           if (socket) {
-            let facing = 'down';
-            if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
-            else facing = dy > 0 ? 'down' : 'up';
+            const now = Date.now();
+            if (now - lastEmitTimeRef.current >= 45) {
+              lastEmitTimeRef.current = now;
+              let facing = 'down';
+              if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
+              else facing = dy > 0 ? 'down' : 'up';
 
-            socket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: true });
+              socket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: true });
+            }
           }
         } else {
           isMovingRef.current = false;
@@ -491,10 +509,31 @@ export default function TownCanvas({
         ];
         trees.forEach(t => drawRealisticTree(ctx, t.x, t.y));
 
-        // Joueurs autres
+        // Joueurs autres avec interpolation fluide (Lerp 60 FPS pour fluidité mobile & PC)
         if (Array.isArray(otherPlayers)) {
           otherPlayers.forEach((p) => {
-            drawRealisticCharacter(ctx, p.x, p.y, p.gender, p.nickname, p.level || 1, false, p.isMoving, chatBubbles?.[p.id]);
+            let sm = smoothPositionsRef.current.get(p.id);
+            if (!sm) {
+              sm = { x: p.x, y: p.y };
+              smoothPositionsRef.current.set(p.id, sm);
+            } else {
+              sm.x += (p.x - sm.x) * 0.22;
+              sm.y += (p.y - sm.y) * 0.22;
+            }
+
+            const isMoving = Math.hypot(p.x - sm.x, p.y - sm.y) > 0.4 || !!p.isMoving;
+
+            drawRealisticCharacter(
+              ctx,
+              sm.x,
+              sm.y,
+              p.gender,
+              p.nickname,
+              p.level || 1,
+              false,
+              isMoving,
+              chatBubbles?.[p.id]
+            );
           });
         }
 
@@ -535,6 +574,7 @@ export default function TownCanvas({
         ref={canvasRef}
         onClick={handleClick}
         onTouchStart={handleTouch}
+        style={{ touchAction: 'none' }}
         className="cursor-pointer border border-slate-800 rounded-2xl shadow-2xl bg-emerald-600 w-full max-w-[1000px] max-h-[90vh] object-contain aspect-[4/3]"
       />
     </div>

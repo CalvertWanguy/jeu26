@@ -44,12 +44,35 @@ export default function HomePage() {
       audioRef.current.loop = true;
       audioRef.current.volume = 0.30;
     }
-    return () => {
+
+    const stopAudio = () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        try {
+          audioRef.current.currentTime = 0;
+        } catch (e) {}
       }
     };
-  }, []);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden && audioRef.current) {
+        audioRef.current.pause();
+      } else if (!document.hidden && audioRef.current && localPlayer && !isMuted) {
+        audioRef.current.play().catch(() => {});
+      }
+    };
+
+    window.addEventListener('beforeunload', stopAudio);
+    window.addEventListener('pagehide', stopAudio);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', stopAudio);
+      window.removeEventListener('pagehide', stopAudio);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      stopAudio();
+    };
+  }, [localPlayer, isMuted]);
 
   const toggleAudio = () => {
     if (!audioRef.current) return;
@@ -146,7 +169,7 @@ export default function HomePage() {
             delete copy[msgObj.senderId];
             return copy;
           });
-        }, 4000);
+        }, 10000);
       });
 
       newSocket.on('receive_private_message', (msgObj) => {
@@ -158,7 +181,7 @@ export default function HomePage() {
             delete copy[msgObj.senderId];
             return copy;
           });
-        }, 4000);
+        }, 10000);
       });
 
       newSocket.on('incoming_chat_request', (requestData) => {

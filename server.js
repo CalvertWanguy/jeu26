@@ -114,6 +114,31 @@ app.prepare().then(() => {
       }
     });
 
+    // Chat de proximité (Diffusé uniquement aux joueurs à proximité < 250px dans le même village)
+    socket.on('send_chat_message', (text) => {
+      const sender = players.get(socket.id);
+      if (!sender || !text || !text.trim()) return;
+
+      const msgObj = {
+        id: Math.random().toString(36).substring(2, 9),
+        senderId: socket.id,
+        senderName: sender.nickname,
+        text: text.trim(),
+        x: sender.x,
+        y: sender.y,
+        timestamp: Date.now()
+      };
+
+      players.forEach((targetPlayer, targetSocketId) => {
+        if (targetPlayer.villageRoom === sender.villageRoom) {
+          const dist = Math.hypot(sender.x - targetPlayer.x, sender.y - targetPlayer.y);
+          if (dist <= 250) {
+            io.to(targetSocketId).emit('receive_chat_message', msgObj);
+          }
+        }
+      });
+    });
+
     // 4. Chat Privé 1-sur-1 & Demandes d'invitation
     socket.on('request_private_chat', ({ targetPlayerId }) => {
       const requester = players.get(socket.id);
