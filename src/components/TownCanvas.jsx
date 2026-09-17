@@ -82,128 +82,141 @@ export default function TownCanvas({
     let animationFrameId;
 
     const render = () => {
-      ctx.save();
-      ctx.scale(dpr, dpr);
+      try {
+        ctx.save();
+        ctx.scale(dpr, dpr);
 
-      const cur = currentPosRef.current;
-      const target = targetPosRef.current;
+        const cur = currentPosRef.current;
+        const target = targetPosRef.current;
 
-      const dx = target.x - cur.x;
-      const dy = target.y - cur.y;
-      const dist = Math.hypot(dx, dy);
+        const dx = target.x - cur.x;
+        const dy = target.y - cur.y;
+        const dist = Math.hypot(dx, dy);
 
-      if (dist > 2) {
-        isMovingRef.current = true;
-        cur.x += (dx / dist) * 3.8;
-        cur.y += (dy / dist) * 3.8;
+        if (dist > 2) {
+          isMovingRef.current = true;
+          cur.x += (dx / dist) * 3.8;
+          cur.y += (dy / dist) * 3.8;
 
-        if (socket) {
-          let facing = 'down';
-          if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
-          else facing = dy > 0 ? 'down' : 'up';
+          if (localPlayer) {
+            localPlayer.x = cur.x;
+            localPlayer.y = cur.y;
+          }
 
-          socket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: true });
+          if (socket) {
+            let facing = 'down';
+            if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
+            else facing = dy > 0 ? 'down' : 'up';
+
+            socket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: true });
+          }
+        } else {
+          isMovingRef.current = false;
         }
-      } else {
-        isMovingRef.current = false;
+
+        ctx.clearRect(0, 0, 1000, 750);
+
+        // Sol de la ville
+        ctx.fillStyle = '#10b981';
+        ctx.fillRect(0, 0, 1000, 750);
+
+        ctx.fillStyle = '#16a34a';
+        ctx.fillRect(0, 0, 1000, 120);
+        ctx.fillRect(0, 640, 1000, 110);
+
+        // Routes larges en pavés
+        drawCobblestoneRoad(ctx, 60, 260, 880, 50);
+        drawCobblestoneRoad(ctx, 60, 620, 880, 50);
+        drawCobblestoneRoad(ctx, 475, 260, 50, 410);
+
+        // Place centrale & Fontaine
+        ctx.beginPath();
+        ctx.arc(500, 465, 75, 0, Math.PI * 2);
+        ctx.fillStyle = '#64748b';
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#334155';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(500, 465, 55, 0, Math.PI * 2);
+        ctx.fillStyle = '#94a3b8';
+        ctx.fill();
+
+        const ripple = Math.sin(Date.now() * 0.005) * 3;
+        ctx.beginPath();
+        ctx.arc(500, 465, 38, 0, Math.PI * 2);
+        ctx.fillStyle = '#0284c7';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(500, 465, 22 + ripple, 0, Math.PI * 2);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#e0f2fe';
+        ctx.beginPath();
+        ctx.arc(500, 465, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Réverbères
+        const streetLamps = [
+          { x: 120, y: 240 }, { x: 440, y: 240 }, { x: 560, y: 240 }, { x: 880, y: 240 },
+          { x: 120, y: 600 }, { x: 440, y: 600 }, { x: 560, y: 600 }, { x: 880, y: 600 }
+        ];
+        streetLamps.forEach(lamp => drawStreetLamp(ctx, lamp.x, lamp.y));
+
+        // Panneaux
+        drawSignPost(ctx, 230, 240, "Niveau 1 ➔");
+        drawSignPost(ctx, 730, 240, "Niveau 3 ➔");
+        drawSignPost(ctx, 350, 600, "Niveau 4 ➔");
+
+        // Bancs
+        drawWoodenBench(ctx, 410, 465);
+        drawWoodenBench(ctx, 560, 465);
+
+        // Maisons
+        HOUSES.forEach((house) => {
+          const isUnlocked = house.level <= unlockedLevel;
+          drawRealisticHouse(ctx, house, isUnlocked);
+        });
+
+        // Arbres
+        const trees = [
+          { x: 50, y: 60 }, { x: 130, y: 50 }, { x: 920, y: 60 }, { x: 840, y: 50 },
+          { x: 50, y: 700 }, { x: 130, y: 710 }, { x: 920, y: 700 }, { x: 840, y: 710 },
+          { x: 340, y: 350 }, { x: 660, y: 350 }, { x: 260, y: 370 }, { x: 740, y: 370 },
+          { x: 430, y: 110 }, { x: 570, y: 110 }
+        ];
+        trees.forEach(t => drawRealisticTree(ctx, t.x, t.y));
+
+        // Joueurs autres
+        if (Array.isArray(otherPlayers)) {
+          otherPlayers.forEach((p) => {
+            drawRealisticCharacter(ctx, p.x, p.y, p.gender, p.nickname, p.level || 1, false, p.isMoving, chatBubbles?.[p.id]);
+          });
+        }
+
+        // Joueur local
+        if (localPlayer) {
+          drawRealisticCharacter(
+            ctx,
+            cur.x,
+            cur.y,
+            localPlayer.gender || 'boy',
+            localPlayer.nickname || 'Joueur',
+            playerLevel || 1,
+            true,
+            isMovingRef.current,
+            socket?.id ? chatBubbles?.[socket.id] : null
+          );
+        }
+
+        ctx.restore();
+      } catch (err) {
+        console.warn("[Canvas Render Loop Safe Catch]", err);
       }
-
-      ctx.clearRect(0, 0, 1000, 750);
-
-      // Sol de la ville
-      ctx.fillStyle = '#10b981';
-      ctx.fillRect(0, 0, 1000, 750);
-
-      ctx.fillStyle = '#16a34a';
-      ctx.fillRect(0, 0, 1000, 120);
-      ctx.fillRect(0, 640, 1000, 110);
-
-      // Routes larges en pavés
-      drawCobblestoneRoad(ctx, 60, 260, 880, 50);
-      drawCobblestoneRoad(ctx, 60, 620, 880, 50);
-      drawCobblestoneRoad(ctx, 475, 260, 50, 410);
-
-      // Place centrale & Fontaine
-      ctx.beginPath();
-      ctx.arc(500, 465, 75, 0, Math.PI * 2);
-      ctx.fillStyle = '#64748b';
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#334155';
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(500, 465, 55, 0, Math.PI * 2);
-      ctx.fillStyle = '#94a3b8';
-      ctx.fill();
-
-      const ripple = Math.sin(Date.now() * 0.005) * 3;
-      ctx.beginPath();
-      ctx.arc(500, 465, 38, 0, Math.PI * 2);
-      ctx.fillStyle = '#0284c7';
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(500, 465, 22 + ripple, 0, Math.PI * 2);
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = '#e0f2fe';
-      ctx.beginPath();
-      ctx.arc(500, 465, 7, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Réverbères
-      const streetLamps = [
-        { x: 120, y: 240 }, { x: 440, y: 240 }, { x: 560, y: 240 }, { x: 880, y: 240 },
-        { x: 120, y: 600 }, { x: 440, y: 600 }, { x: 560, y: 600 }, { x: 880, y: 600 }
-      ];
-      streetLamps.forEach(lamp => drawStreetLamp(ctx, lamp.x, lamp.y));
-
-      // Panneaux
-      drawSignPost(ctx, 230, 240, "Niveau 1 ➔");
-      drawSignPost(ctx, 730, 240, "Niveau 3 ➔");
-      drawSignPost(ctx, 350, 600, "Niveau 4 ➔");
-
-      // Bancs
-      drawWoodenBench(ctx, 410, 465);
-      drawWoodenBench(ctx, 560, 465);
-
-      // Maisons
-      HOUSES.forEach((house) => {
-        const isUnlocked = house.level <= unlockedLevel;
-        drawRealisticHouse(ctx, house, isUnlocked);
-      });
-
-      // Arbres
-      const trees = [
-        { x: 50, y: 60 }, { x: 130, y: 50 }, { x: 920, y: 60 }, { x: 840, y: 50 },
-        { x: 50, y: 700 }, { x: 130, y: 710 }, { x: 920, y: 700 }, { x: 840, y: 710 },
-        { x: 340, y: 350 }, { x: 660, y: 350 }, { x: 260, y: 370 }, { x: 740, y: 370 },
-        { x: 430, y: 110 }, { x: 570, y: 110 }
-      ];
-      trees.forEach(t => drawRealisticTree(ctx, t.x, t.y));
-
-      // Joueurs autres
-      otherPlayers.forEach((p) => {
-        drawRealisticCharacter(ctx, p.x, p.y, p.gender, p.nickname, p.level || 1, false, p.isMoving, chatBubbles[p.id]);
-      });
-
-      // Joueur local
-      drawRealisticCharacter(
-        ctx,
-        cur.x,
-        cur.y,
-        localPlayer.gender,
-        localPlayer.nickname,
-        playerLevel,
-        true,
-        isMovingRef.current,
-        chatBubbles[socket?.id]
-      );
-
-      ctx.restore();
       animationFrameId = requestAnimationFrame(render);
     };
 
