@@ -451,7 +451,7 @@ export default function TownCanvas({
     const badgeY = charY - 48;
     ctx.fillStyle = '#4f46e5';
     ctx.beginPath();
-    ctx.roundRect(badgeX, badgeY, 24, 14, 7);
+    drawRoundRect(ctx, badgeX, badgeY, 24, 14, 7);
     ctx.fill();
     ctx.strokeStyle = '#818cf8';
     ctx.lineWidth = 1.5;
@@ -474,13 +474,31 @@ export default function TownCanvas({
 
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.roundRect(bubbleX, bubbleY, bubbleW, bubbleH, 8);
+      drawRoundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 8);
       ctx.fill();
 
       ctx.fillStyle = '#0f172a';
       ctx.textAlign = 'center';
       ctx.fillText(chatMsg, x, bubbleY + 16);
       ctx.restore();
+    }
+  };
+
+  const drawRoundRect = (ctx, x, y, width, height, radius) => {
+    if (typeof ctx.roundRect === 'function') {
+      ctx.roundRect(x, y, width, height, radius);
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
     }
   };
 

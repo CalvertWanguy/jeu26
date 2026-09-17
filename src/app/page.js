@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import AuthModal from '../components/AuthModal';
 import TownCanvas from '../components/TownCanvas';
 import HouseRiddleModal from '../components/HouseRiddleModal';
@@ -52,13 +52,16 @@ export default function HomePage() {
     playerIdRef.current = pid;
 
     let isSocketConnected = false;
+    let newSocket = null;
 
     // Tentative de connexion WebSockets
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 
-      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    const rawUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+    const socketUrl = (rawUrl && rawUrl.trim()) 
+      ? rawUrl.trim() 
+      : (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
     try {
-      const newSocket = io(socketUrl, {
+      newSocket = io(socketUrl, {
         transports: ['websocket', 'polling'],
         reconnectionAttempts: 3,
         timeout: 4000
@@ -177,7 +180,14 @@ export default function HomePage() {
       }
     }, 1500);
 
-    return () => clearInterval(pollInterval);
+    return () => {
+      clearInterval(pollInterval);
+      if (newSocket) {
+        try {
+          newSocket.disconnect();
+        } catch (e) {}
+      }
+    };
   }, [localPlayer, playerLevel]);
 
   const handleJoin = (userData) => {
