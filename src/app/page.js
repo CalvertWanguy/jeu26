@@ -29,6 +29,7 @@ export default function HomePage() {
 
   const [activePrivatePartner, setActivePrivatePartner] = useState(null);
   const [privateMessages, setPrivateMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [incomingChatRequest, setIncomingChatRequest] = useState(null);
   const [busyNotification, setBusyNotification] = useState(null);
   const [chatBubbles, setChatBubbles] = useState({});
@@ -108,6 +109,18 @@ export default function HomePage() {
         setActivePrivatePartner(partnerInfo);
         setPrivateMessages([]);
         setSelectedPlayer(null);
+      });
+
+      newSocket.on('receive_chat_message', (msgObj) => {
+        setChatMessages(prev => [...prev.slice(-49), msgObj]);
+        setChatBubbles(prev => ({ ...prev, [msgObj.senderId]: msgObj.text }));
+        setTimeout(() => {
+          setChatBubbles(prev => {
+            const copy = { ...prev };
+            delete copy[msgObj.senderId];
+            return copy;
+          });
+        }, 4000);
       });
 
       newSocket.on('receive_private_message', (msgObj) => {
