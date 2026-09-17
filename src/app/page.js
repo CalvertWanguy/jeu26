@@ -367,10 +367,17 @@ export default function HomePage() {
         chatBubbles={chatBubbles}
       />
 
-      {/* Chat de Proximité */}
+      {/* Chat de Proximité (Ne s'affiche subtilement que lorsqu'un autre joueur est proche) */}
       <ProximityChat
         onSendMessage={handleSendChatMessage}
         messages={chatMessages}
+        hasNearbyPlayer={otherPlayers.some(p => {
+          const lx = localPlayer?.x || 450;
+          const ly = localPlayer?.y || 450;
+          const px = p.x || 450;
+          const py = p.y || 450;
+          return Math.hypot(lx - px, ly - py) < 280;
+        })}
       />
 
       {/* Badge Minimaliste Powered by WC en bas à droite (Visible sur mobile & PC) */}
