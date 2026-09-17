@@ -7,7 +7,7 @@ import ProximityChat from '../components/ProximityChat';
 import HouseRiddleModal from '../components/HouseRiddleModal';
 import MiniGameModal from '../components/MiniGameModal';
 import TutorialModal from '../components/TutorialModal';
-import { Users, Trophy, Swords, HelpCircle, ArrowRight } from 'lucide-react';
+import { Users, Trophy, Swords, HelpCircle, ArrowRight, ExternalLink } from 'lucide-react';
 
 export default function HomePage() {
   const [localPlayer, setLocalPlayer] = useState(null);
@@ -38,7 +38,6 @@ export default function HomePage() {
     const fullUserData = { ...userData, level: playerLevel };
     setLocalPlayer(fullUserData);
 
-    // Afficher la note d'explication simple au démarrage si pas encore lue ou à la première visite
     const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
     if (!hasSeenTutorial) {
       setShowTutorialModal(true);
@@ -189,7 +188,7 @@ export default function HomePage() {
             <span>{otherPlayers.length + 1} Joueur(s)</span>
           </div>
 
-          {/* Bouton Point d'Exclamation (!) pour revoir les explications du jeu */}
+          {/* Bouton Point d'Exclamation (!) */}
           <button
             onClick={() => setShowTutorialModal(true)}
             className="w-10 h-10 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-lg"
@@ -217,6 +216,20 @@ export default function HomePage() {
         onSendMessage={handleSendChatMessage}
         messages={chatMessages}
       />
+
+      {/* Badge Minimaliste "Powered by WC" en bas à droite */}
+      <div className="absolute bottom-3 right-3 z-40 pointer-events-auto">
+        <a
+          href="https://wanguycalvert.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-full shadow-lg transition-all flex items-center gap-1 hover:border-indigo-500/50 hover:shadow-indigo-500/10"
+        >
+          <span>powered by</span>
+          <span className="font-extrabold text-indigo-400">WC</span>
+          <ExternalLink className="w-3 h-3 text-slate-500 ml-0.5" />
+        </a>
+      </div>
 
       {/* Popup de Sélection d'un autre Joueur */}
       {selectedPlayer && (
@@ -286,7 +299,7 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Modal Tutoriel / Note d'explication simple */}
+      {/* Modal Tutoriel */}
       {showTutorialModal && (
         <TutorialModal onClose={handleCloseTutorial} />
       )}
