@@ -4,8 +4,8 @@ import { HelpCircle, Check, MapPin, Building2, MessageSquare, Swords, Sparkles, 
 
 export default function TutorialModal({ onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl overflow-hidden animate-float">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-md max-h-[90vh] bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl overflow-y-auto flex flex-col my-auto">
         
         {/* Header simple */}
         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-5 text-center relative">

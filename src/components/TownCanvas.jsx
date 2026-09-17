@@ -67,9 +67,15 @@ export default function TownCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = 1000 * dpr;
-    canvas.height = 750 * dpr;
+    const updateCanvasDimensions = () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = 1000 * dpr;
+      canvas.height = 750 * dpr;
+    };
+
+    updateCanvasDimensions();
+    window.addEventListener('resize', updateCanvasDimensions);
+    window.addEventListener('orientationchange', updateCanvasDimensions);
 
     let animationFrameId;
 
@@ -199,9 +205,11 @@ export default function TownCanvas({
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
-
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', updateCanvasDimensions);
+      window.removeEventListener('orientationchange', updateCanvasDimensions);
+    };
   }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket]);
 
   const drawCobblestoneRoad = (ctx, x, y, width, height) => {

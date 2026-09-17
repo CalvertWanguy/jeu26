@@ -54,8 +54,8 @@ export default function MiniGameModal({ session, socket, localPlayerId, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-md max-h-[90vh] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-y-auto flex flex-col my-auto">
         
         {/* Header */}
         <div className="bg-slate-800 p-4 border-b border-slate-700 flex items-center justify-between">

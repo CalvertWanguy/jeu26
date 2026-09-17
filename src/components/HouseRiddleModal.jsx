@@ -133,18 +133,18 @@ export default function HouseRiddleModal({ house, unlockedLevel, cycle = 1, onSo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-lg max-h-[90vh] bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col my-auto transition-all">
         
         {/* Header */}
-        <div className="bg-slate-800/90 p-5 px-6 border-b border-slate-700 flex items-center justify-between">
+        <div className="bg-slate-800/90 p-4 sm:p-5 px-5 sm:px-6 border-b border-slate-700 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-indigo-400">
-              <Building2 className="w-6 h-6" />
+            <div className="p-2 sm:p-2.5 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl text-indigo-400">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-white">{house.name}</h2>
-              <p className="text-xs text-indigo-300 font-semibold">
+              <h2 className="text-sm sm:text-base font-extrabold text-white">{house.name}</h2>
+              <p className="text-[11px] sm:text-xs text-indigo-300 font-semibold">
                 Niveau {house.level} / 5 <span className="text-slate-400">• Cycle {cycle}</span>
               </p>
             </div>
@@ -158,7 +158,7 @@ export default function HouseRiddleModal({ house, unlockedLevel, cycle = 1, onSo
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
           {!isUnlocked ? (
             <div className="py-8 text-center space-y-4">
               <div className="inline-flex p-4 bg-rose-500/10 rounded-full border border-rose-500/20 text-rose-400 mb-2">

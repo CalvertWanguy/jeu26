@@ -13,7 +13,7 @@ export default function PrivateChatModal({ partner, messages, onSendMessage, onC
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 w-80 sm:w-96 bg-slate-900 border-2 border-indigo-500/80 rounded-3xl shadow-2xl overflow-hidden animate-float">
+    <div className="fixed bottom-2 left-2 sm:bottom-4 sm:left-4 z-50 w-72 sm:w-96 max-h-[75vh] bg-slate-900 border-2 border-indigo-500/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
       {/* Header Chat Privé 1-sur-1 */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3.5 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">

@@ -14,11 +14,11 @@ export default function AuthModal({ onJoin }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden animate-float">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-md max-h-[90vh] bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-y-auto flex flex-col my-auto">
         
         {/* Header avec dégradé moderne Violet/Indigo */}
-        <div className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-7 text-center">
+        <div className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-5 sm:p-7 text-center flex-shrink-0">
           <h1 className="text-2xl font-black text-white tracking-wide uppercase">
             Town Riddles Online
           </h1>

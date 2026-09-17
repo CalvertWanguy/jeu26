@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import AuthModal from '../components/AuthModal';
 import TownCanvas from '../components/TownCanvas';
@@ -7,6 +7,7 @@ import HouseRiddleModal from '../components/HouseRiddleModal';
 import MiniGameModal from '../components/MiniGameModal';
 import TutorialModal from '../components/TutorialModal';
 import PrivateChatModal from '../components/PrivateChatModal';
+import ProximityChat from '../components/ProximityChat';
 import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink } from 'lucide-react';
 
 export default function HomePage() {
@@ -32,6 +33,8 @@ export default function HomePage() {
   const [busyNotification, setBusyNotification] = useState(null);
   const [chatBubbles, setChatBubbles] = useState({});
 
+  const playerIdRef = useRef(null);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedUnlocked = localStorage.getItem('town_riddles_unlocked_level');
@@ -41,34 +44,29 @@ export default function HomePage() {
     }
   }, []);
 
-  const handleJoin = (userData) => {
-    const fullUserData = { ...userData, level: playerLevel };
-    setLocalPlayer(fullUserData);
+  // Synchronisation Vercel HTTP Fallback si Socket.io n'est pas disponible
+  useEffect(() => {
+    if (!localPlayer) return;
 
-    if (typeof window !== 'undefined') {
-      const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
-      if (!hasSeenTutorial) {
-        setShowTutorialModal(true);
-      }
-    }
+    const pid = playerIdRef.current || `player_${Math.random().toString(36).substring(2, 9)}`;
+    playerIdRef.current = pid;
 
-    // URL dynamique du serveur Socket.io (Render / Railway / Host Vercel avec secours)
+    let isSocketConnected = false;
+
+    // Tentative de connexion WebSockets
     const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 
       (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
     try {
       const newSocket = io(socketUrl, {
         transports: ['websocket', 'polling'],
-        reconnectionAttempts: 5,
-        timeout: 10000
+        reconnectionAttempts: 3,
+        timeout: 4000
       });
 
       newSocket.on('connect', () => {
-        newSocket.emit('join_game', fullUserData);
-      });
-
-      newSocket.on('connect_error', (err) => {
-        console.warn("[Socket Client] Impossible de se connecter au serveur temps réel:", err.message);
+        isSocketConnected = true;
+        newSocket.emit('join_game', { ...localPlayer, id: pid, level: playerLevel });
       });
 
       newSocket.on('assigned_village', (info) => {
@@ -148,7 +146,48 @@ export default function HomePage() {
 
       setSocket(newSocket);
     } catch (e) {
-      console.error("[Socket Init Error]", e);
+      console.warn("[Socket Init Exception]", e);
+    }
+
+    // Fallback de synchronisation HTTP Polling pour Vercel (si Socket.io n'est pas connecté)
+    const pollInterval = setInterval(async () => {
+      if (isSocketConnected) return; // Si Socket.io est actif, pas besoin du fallback HTTP
+
+      try {
+        const res = await fetch('/api/players', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: pid,
+            nickname: localPlayer.nickname,
+            gender: localPlayer.gender,
+            level: playerLevel,
+            x: localPlayer.x || 450,
+            y: localPlayer.y || 450
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setVillageInfo({ roomName: data.villageRoom, totalInVillage: data.totalInVillage });
+          setOtherPlayers(data.players || []);
+        }
+      } catch (err) {
+        console.warn("[Vercel Sync Fallback Error]", err);
+      }
+    }, 1500);
+
+    return () => clearInterval(pollInterval);
+  }, [localPlayer, playerLevel]);
+
+  const handleJoin = (userData) => {
+    setLocalPlayer(userData);
+
+    if (typeof window !== 'undefined') {
+      const hasSeenTutorial = localStorage.getItem('town_riddles_tutorial_seen');
+      if (!hasSeenTutorial) {
+        setShowTutorialModal(true);
+      }
     }
   };
 
@@ -215,39 +254,77 @@ export default function HomePage() {
     }
   };
 
+  const handleStartPrivateChat = (targetPlayer) => {
+    if (socket && targetPlayer) {
+      socket.emit('request_private_chat', { targetPlayerId: targetPlayer.id });
+    }
+  };
+
+  const handleAcceptChatRequest = () => {
+    if (socket && incomingChatRequest) {
+      socket.emit('accept_chat_request', { requesterId: incomingChatRequest.requesterId });
+      setIncomingChatRequest(null);
+    }
+  };
+
+  const handleDeclineChatRequest = () => {
+    if (socket && incomingChatRequest) {
+      socket.emit('decline_chat_request', { requesterId: incomingChatRequest.requesterId });
+      setIncomingChatRequest(null);
+    }
+  };
+
+  const handleSendPrivateMessage = (text) => {
+    if (socket && activePrivatePartner) {
+      socket.emit('send_private_message', {
+        targetPlayerId: activePrivatePartner.partnerId,
+        text
+      });
+    }
+  };
+
+  const handleEndPrivateChat = () => {
+    if (socket) {
+      socket.emit('end_private_chat');
+    }
+    setActivePrivatePartner(null);
+  };
+
   if (!localPlayer) {
     return <AuthModal onJoin={handleJoin} />;
   }
 
   return (
     <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
-      {/* HUD Supérieur */}
-      <div className="absolute top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-3">
-          <span className="text-2xl">{localPlayer.gender === 'girl' ? '👧' : '👦'}</span>
-          <div>
-            <div className="text-xs font-extrabold text-white flex items-center gap-1.5">
-              {localPlayer.nickname} 
-              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-indigo-600 text-white rounded-full shadow-sm">
+      {/* En-tête HUD Ultra-Compact et Responsive (Aligné sur 1 ligne propre sur Mobile & PC) */}
+      <div className="absolute top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-40 flex items-center justify-between pointer-events-none">
+        {/* Fiche Joueur Local */}
+        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-xl flex items-center gap-2">
+          <span className="text-lg sm:text-2xl">{localPlayer.gender === 'girl' ? '👧' : '👦'}</span>
+          <div className="leading-tight">
+            <div className="text-[11px] sm:text-xs font-extrabold text-white flex items-center gap-1">
+              <span className="truncate max-w-[80px] sm:max-w-[120px]">{localPlayer.nickname}</span>
+              <span className="text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 bg-indigo-600 text-white rounded-full">
                 Niv. {playerLevel}
               </span>
             </div>
-            <div className="text-[11px] text-amber-400 font-bold flex items-center gap-2 mt-0.5">
-              <span className="flex items-center gap-1"><Trophy className="w-3.5 h-3.5" /> Maisons : {unlockedLevel} / 5</span>
+            <div className="text-[10px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1 mt-0.5">
+              <Trophy className="w-3 h-3 text-amber-400" /> {unlockedLevel}/5 Maisons
             </div>
           </div>
         </div>
 
-        <div className="pointer-events-auto flex items-center gap-3">
-          <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-bold text-slate-200">
-            <Home className="w-4 h-4 text-indigo-400" />
-            <span>{villageInfo.roomName}</span>
-            <span className="text-emerald-400 font-extrabold ml-1">({otherPlayers.length + 1}/5 Joueurs)</span>
+        {/* Info Village & Bouton Point d'exclamation (!) */}
+        <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-3">
+          <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-xl flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-200">
+            <Home className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="hidden xs:inline">{villageInfo.roomName}</span>
+            <span className="text-emerald-400 font-extrabold">({otherPlayers.length + 1}/5)</span>
           </div>
 
           <button
             onClick={() => setShowTutorialModal(true)}
-            className="w-10 h-10 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-lg"
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-base sm:text-lg"
             title="Comment jouer ? (Aide)"
           >
             !
@@ -267,31 +344,37 @@ export default function HomePage() {
         chatBubbles={chatBubbles}
       />
 
-      {/* Pop-up si un Joueur est Occupé */}
-      {busyNotification && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-bounce max-w-md">
-          <Clock className="w-6 h-6 text-indigo-400 flex-shrink-0" />
-          <p className="text-xs font-bold text-slate-100">{busyNotification}</p>
-        </div>
-      )}
+      {/* Chat de Proximité */}
+      <ProximityChat
+        onSendMessage={handleSendChatMessage}
+        messages={chatMessages}
+      />
 
-      {/* Badge Minimaliste Powered by WC */}
-      <div className="absolute bottom-3 right-3 z-40 pointer-events-auto">
+      {/* Badge Minimaliste Powered by WC en bas à droite (Visible sur mobile & PC) */}
+      <div className="absolute bottom-2.5 right-2.5 sm:bottom-4 sm:right-4 z-50 pointer-events-auto">
         <a
           href="https://wanguycalvert.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-full shadow-lg transition-all flex items-center gap-1 hover:border-indigo-500/50"
+          className="text-[10px] sm:text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-900/95 backdrop-blur-md border border-slate-800 px-2.5 py-1 rounded-full shadow-2xl transition-all flex items-center gap-1 hover:border-indigo-500/50"
         >
           <span>powered by</span>
           <span className="font-extrabold text-indigo-400">WC</span>
         </a>
       </div>
 
+      {/* Pop-up Joueur Occupé */}
+      {busyNotification && (
+        <div className="fixed top-14 sm:top-16 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-3.5 px-4 shadow-2xl flex items-center gap-3 max-w-xs sm:max-w-md">
+          <Clock className="w-5 h-5 text-indigo-400 flex-shrink-0" />
+          <p className="text-xs font-bold text-slate-100">{busyNotification}</p>
+        </div>
+      )}
+
       {/* Popup Action Joueur */}
       {selectedPlayer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-80 text-center space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-2 sm:p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-5 sm:p-6 w-80 max-h-[90vh] overflow-y-auto text-center space-y-4 shadow-2xl my-auto">
             <span className="text-4xl">{selectedPlayer.gender === 'girl' ? '👧' : '👦'}</span>
             <div>
               <div className="flex items-center justify-center gap-2">
@@ -336,7 +419,7 @@ export default function HomePage() {
 
       {/* Demande Chat Privé */}
       {incomingChatRequest && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
+        <div className="fixed top-14 sm:top-16 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-4">
           <MessageSquare className="w-6 h-6 text-indigo-400" />
           <div>
             <p className="text-xs font-bold text-indigo-300">Demande de Chat Privé !</p>
@@ -363,7 +446,7 @@ export default function HomePage() {
 
       {/* Notification Défi Mini-jeu */}
       {incomingChallenge && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
+        <div className="fixed top-14 sm:top-16 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl flex items-center gap-4">
           <Swords className="w-6 h-6 text-amber-400" />
           <div>
             <p className="text-xs font-bold text-amber-300">Défi Mini-jeu Reçu !</p>
@@ -425,15 +508,15 @@ export default function HomePage() {
         />
       )}
 
-      {/* Modal Victoire */}
+      {/* Modal Victoire / Passage de Niveau */}
       {showPrestigeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-          <div className="bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-8 max-w-md w-full text-center space-y-5 shadow-2xl animate-bounce">
-            <div className="w-16 h-16 bg-amber-500/20 border border-amber-400 rounded-full mx-auto flex items-center justify-center text-amber-300">
-              <Trophy className="w-8 h-8" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 overflow-y-auto">
+          <div className="bg-slate-900 border-2 border-amber-500/80 rounded-3xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto text-center space-y-5 shadow-2xl my-auto">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-amber-500/20 border border-amber-400 rounded-full mx-auto flex items-center justify-center text-amber-300">
+              <Trophy className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-amber-300 uppercase tracking-wide">
+              <h2 className="text-xl sm:text-2xl font-black text-amber-300 uppercase tracking-wide">
                 Passage au Niveau {playerLevel} !
               </h2>
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
