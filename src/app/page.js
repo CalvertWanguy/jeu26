@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import AuthModal from '../components/AuthModal';
 import TownCanvas from '../components/TownCanvas';
-import ProximityChat from '../components/ProximityChat';
 import HouseRiddleModal from '../components/HouseRiddleModal';
 import MiniGameModal from '../components/MiniGameModal';
 import TutorialModal from '../components/TutorialModal';
-import { Users, Trophy, Swords, HelpCircle, ArrowRight, ExternalLink } from 'lucide-react';
+import PrivateChatModal from '../components/PrivateChatModal';
+import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink } from 'lucide-react';
 
 export default function HomePage() {
   const [localPlayer, setLocalPlayer] = useState(null);
@@ -16,6 +16,8 @@ export default function HomePage() {
   const [otherPlayers, setOtherPlayers] = useState([]);
   const [unlockedLevel, setUnlockedLevel] = useState(1);
   const [playerLevel, setPlayerLevel] = useState(1);
+  const [villageInfo, setVillageInfo] = useState({ roomName: 'Village #1', totalInVillage: 1 });
+
   const [showPrestigeModal, setShowPrestigeModal] = useState(false);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
 
@@ -24,7 +26,10 @@ export default function HomePage() {
   const [incomingChallenge, setIncomingChallenge] = useState(null);
   const [activeMiniGame, setActiveMiniGame] = useState(null);
 
-  const [chatMessages, setChatMessages] = useState([]);
+  const [activePrivatePartner, setActivePrivatePartner] = useState(null);
+  const [privateMessages, setPrivateMessages] = useState([]);
+  const [incomingChatRequest, setIncomingChatRequest] = useState(null);
+  const [busyNotification, setBusyNotification] = useState(null);
   const [chatBubbles, setChatBubbles] = useState({});
 
   useEffect(() => {
@@ -51,6 +56,14 @@ export default function HomePage() {
       newSocket.emit('join_game', fullUserData);
     });
 
+    newSocket.on('assigned_village', (info) => {
+      setVillageInfo({ roomName: info.roomName, totalInVillage: info.totalInVillage });
+    });
+
+    newSocket.on('village_count_updated', ({ totalInVillage }) => {
+      setVillageInfo(prev => ({ ...prev, totalInVillage }));
+    });
+
     newSocket.on('current_players', (playersList) => {
       setOtherPlayers(playersList.filter(p => p.id !== newSocket.id));
     });
@@ -75,8 +88,14 @@ export default function HomePage() {
       setOtherPlayers(prev => prev.filter(p => p.id !== disconnectedId));
     });
 
-    newSocket.on('receive_chat_message', (msgObj) => {
-      setChatMessages(prev => [...prev.slice(-15), msgObj]);
+    newSocket.on('private_chat_started', (partnerInfo) => {
+      setActivePrivatePartner(partnerInfo);
+      setPrivateMessages([]);
+      setSelectedPlayer(null);
+    });
+
+    newSocket.on('receive_private_message', (msgObj) => {
+      setPrivateMessages(prev => [...prev, msgObj]);
       setChatBubbles(prev => ({ ...prev, [msgObj.senderId]: msgObj.text }));
       setTimeout(() => {
         setChatBubbles(prev => {
@@ -85,6 +104,21 @@ export default function HomePage() {
           return copy;
         });
       }, 4000);
+    });
+
+    newSocket.on('incoming_chat_request', (requestData) => {
+      setIncomingChatRequest(requestData);
+    });
+
+    newSocket.on('chat_request_declined_busy', ({ message }) => {
+      setBusyNotification(message);
+      setTimeout(() => setBusyNotification(null), 5000);
+    });
+
+    newSocket.on('private_chat_ended', ({ reason }) => {
+      setActivePrivatePartner(null);
+      setPrivateMessages([]);
+      alert(reason);
     });
 
     newSocket.on('received_game_challenge', (challengeData) => {
@@ -100,15 +134,40 @@ export default function HomePage() {
     setSocket(newSocket);
   };
 
-  const handleCloseTutorial = () => {
-    setShowTutorialModal(false);
-    localStorage.setItem('town_riddles_tutorial_seen', 'true');
+  const handleStartPrivateChat = (targetPlayer) => {
+    if (socket && targetPlayer) {
+      socket.emit('request_private_chat', { targetPlayerId: targetPlayer.id });
+    }
   };
 
-  const handleSendChatMessage = (text) => {
-    if (socket) {
-      socket.emit('send_chat_message', text);
+  const handleAcceptChatRequest = () => {
+    if (socket && incomingChatRequest) {
+      socket.emit('accept_chat_request', { requesterId: incomingChatRequest.requesterId });
+      setIncomingChatRequest(null);
     }
+  };
+
+  const handleDeclineChatRequest = () => {
+    if (socket && incomingChatRequest) {
+      socket.emit('decline_chat_request', { requesterId: incomingChatRequest.requesterId });
+      setIncomingChatRequest(null);
+    }
+  };
+
+  const handleSendPrivateMessage = (text) => {
+    if (socket && activePrivatePartner) {
+      socket.emit('send_private_message', {
+        targetPlayerId: activePrivatePartner.partnerId,
+        text
+      });
+    }
+  };
+
+  const handleEndPrivateChat = () => {
+    if (socket) {
+      socket.emit('end_private_chat');
+    }
+    setActivePrivatePartner(null);
   };
 
   const handleSolveRiddle = (currentHouseLevel) => {
@@ -163,7 +222,7 @@ export default function HomePage() {
 
   return (
     <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
-      {/* HUD Supérieur : Info Profil & Bouton d'aide (!) */}
+      {/* HUD Supérieur : Info Profil & Village (Max 5 Joueurs) */}
       <div className="absolute top-4 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
         {/* Fiche Joueur Local */}
         <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-3">
@@ -181,14 +240,14 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Bouton d'Aide (!) & Total En Ligne */}
+        {/* Info Village (Max 5 personnes) & Bouton Point d'exclamation (!) */}
         <div className="pointer-events-auto flex items-center gap-3">
           <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-bold text-slate-200">
-            <Users className="w-4 h-4 text-emerald-400" />
-            <span>{otherPlayers.length + 1} Joueur(s)</span>
+            <Home className="w-4 h-4 text-indigo-400" />
+            <span>{villageInfo.roomName}</span>
+            <span className="text-emerald-400 font-extrabold ml-1">({otherPlayers.length + 1}/5 Joueurs)</span>
           </div>
 
-          {/* Bouton Point d'Exclamation (!) */}
           <button
             onClick={() => setShowTutorialModal(true)}
             className="w-10 h-10 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-lg"
@@ -211,27 +270,28 @@ export default function HomePage() {
         chatBubbles={chatBubbles}
       />
 
-      {/* Chat de Proximité */}
-      <ProximityChat
-        onSendMessage={handleSendChatMessage}
-        messages={chatMessages}
-      />
+      {/* Pop-up de Notification si un Joueur est Occupé */}
+      {busyNotification && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-3 animate-bounce max-w-md">
+          <Clock className="w-6 h-6 text-indigo-400 flex-shrink-0" />
+          <p className="text-xs font-bold text-slate-100">{busyNotification}</p>
+        </div>
+      )}
 
-      {/* Badge Minimaliste "Powered by WC" en bas à droite */}
+      {/* Badge Minimaliste Powered by WC */}
       <div className="absolute bottom-3 right-3 z-40 pointer-events-auto">
         <a
           href="https://wanguycalvert.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-full shadow-lg transition-all flex items-center gap-1 hover:border-indigo-500/50 hover:shadow-indigo-500/10"
+          className="text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-full shadow-lg transition-all flex items-center gap-1 hover:border-indigo-500/50"
         >
           <span>powered by</span>
           <span className="font-extrabold text-indigo-400">WC</span>
-          <ExternalLink className="w-3 h-3 text-slate-500 ml-0.5" />
         </a>
       </div>
 
-      {/* Popup de Sélection d'un autre Joueur */}
+      {/* Popup d'Action sur un autre Joueur (Chat Privé & Mini-Jeux) */}
       {selectedPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-80 text-center space-y-4 shadow-2xl">
@@ -243,10 +303,16 @@ export default function HomePage() {
                   Niv. {selectedPlayer.level || 1}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-1">Joueur à proximité</p>
+              <p className="text-xs text-slate-400 mt-1">{villageInfo.roomName}</p>
             </div>
 
             <div className="space-y-2 pt-2">
+              <button
+                onClick={() => handleStartPrivateChat(selectedPlayer)}
+                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" /> Discuter en Privé (1-sur-1)
+              </button>
               <button
                 onClick={() => handleSendChallenge('rps')}
                 className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
@@ -255,7 +321,7 @@ export default function HomePage() {
               </button>
               <button
                 onClick={() => handleSendChallenge('ttt')}
-                className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
                 <Swords className="w-4 h-4" /> Morpion (Tic-Tac-Toe)
               </button>
@@ -271,7 +337,34 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Notification de Défi Reçu */}
+      {/* Demande de Chat Privé */}
+      {incomingChatRequest && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
+          <MessageSquare className="w-6 h-6 text-indigo-400" />
+          <div>
+            <p className="text-xs font-bold text-indigo-300">Demande de Chat Privé !</p>
+            <p className="text-xs text-white">
+              <strong className="text-amber-300">{incomingChatRequest.requesterName}</strong> veut discuter en privé avec vous.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handleAcceptChatRequest}
+              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg"
+            >
+              Accepter
+            </button>
+            <button
+              onClick={handleDeclineChatRequest}
+              className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold text-xs rounded-lg"
+            >
+              Refuser
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Notification de Défi Mini-jeu Reçu */}
       {incomingChallenge && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl flex items-center gap-4 animate-bounce">
           <Swords className="w-6 h-6 text-amber-400" />
@@ -297,6 +390,16 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Chat Privé 1-sur-1 Actif */}
+      {activePrivatePartner && (
+        <PrivateChatModal
+          partner={activePrivatePartner}
+          messages={privateMessages}
+          onSendMessage={handleSendPrivateMessage}
+          onClose={handleEndPrivateChat}
+        />
       )}
 
       {/* Modal Tutoriel */}

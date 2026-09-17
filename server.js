@@ -20,20 +20,48 @@ app.prepare().then(() => {
     }
   });
 
-  // Stockage de l'état des joueurs en ligne
   const players = new Map();
   const activeMiniGames = new Map();
+  const activePrivateChats = new Map();
+
+  // Gestion des Villages par tranches de 5 personnes maximum
+  // key: villageRoomName => Set of socket.id
+  const villageRooms = new Map();
+
+  // Trouver ou créer un village avec moins de 5 personnes
+  const getOrCreateAvailableVillage = () => {
+    let villageIndex = 1;
+    while (true) {
+      const roomName = `Village #${villageIndex}`;
+      const occupants = villageRooms.get(roomName) || new Set();
+
+      if (occupants.size < 5) {
+        return { roomName, villageIndex };
+      }
+      villageIndex++;
+    }
+  };
 
   io.on('connection', (socket) => {
-    console.log(`[Socket] Nouveaux joueur connecté: ${socket.id}`);
+    console.log(`[Socket] Connecté: ${socket.id}`);
 
-    // 1. Rejoindre la ville virtuelle
+    // 1. Rejoindre la ville (Assignation automatique dans un Village de 5 places max)
     socket.on('join_game', (userData) => {
+      const { roomName, villageIndex } = getOrCreateAvailableVillage();
+
+      if (!villageRooms.has(roomName)) {
+        villageRooms.set(roomName, new Set());
+      }
+      villageRooms.get(roomName).add(socket.id);
+      socket.join(roomName);
+
       const player = {
         id: socket.id,
         nickname: userData.nickname || 'Invité',
         gender: userData.gender || 'boy',
-        level: userData.level || 1, // Niveau global du joueur (1, 2, 3...)
+        level: userData.level || 1,
+        villageRoom: roomName,
+        villageNumber: villageIndex,
         x: userData.x || 400 + Math.floor(Math.random() * 100 - 50),
         y: userData.y || 450 + Math.floor(Math.random() * 100 - 50),
         facing: 'down',
@@ -42,12 +70,24 @@ app.prepare().then(() => {
 
       players.set(socket.id, player);
 
-      socket.emit('current_players', Array.from(players.values()));
-      socket.broadcast.emit('player_joined', player);
-      console.log(`[Game] ${player.nickname} (Niv. ${player.level}) a rejoint la ville.`);
+      // Récupérer les joueurs présents uniquement dans ce village
+      const currentVillageSockets = Array.from(villageRooms.get(roomName));
+      const villagePlayersList = currentVillageSockets
+        .map(sId => players.get(sId))
+        .filter(Boolean);
+
+      // Envoyer au joueur la liste de son village + son info village
+      socket.emit('current_players', villagePlayersList);
+      socket.emit('assigned_village', { roomName, villageIndex, totalInVillage: villagePlayersList.length });
+
+      // Informer les autres membres du village
+      socket.to(roomName).emit('player_joined', player);
+      socket.to(roomName).emit('village_count_updated', { totalInVillage: villagePlayersList.length });
+
+      console.log(`[Game] ${player.nickname} (Niv. ${player.level}) a rejoint le ${roomName} (${villagePlayersList.length}/5 joueurs).`);
     });
 
-    // 2. Déplacement du joueur
+    // 2. Déplacement du joueur (Isolé dans son village)
     socket.on('player_move', (moveData) => {
       const player = players.get(socket.id);
       if (player) {
@@ -55,7 +95,7 @@ app.prepare().then(() => {
         player.y = moveData.y;
         player.facing = moveData.facing || player.facing;
 
-        socket.broadcast.emit('player_moved', {
+        socket.to(player.villageRoom).emit('player_moved', {
           id: socket.id,
           x: player.x,
           y: player.y,
@@ -65,35 +105,116 @@ app.prepare().then(() => {
       }
     });
 
-    // 3. Mise à jour du niveau du joueur (Bulle de niveau)
+    // 3. Mise à jour du niveau du joueur
     socket.on('player_level_up', (newLevel) => {
       const player = players.get(socket.id);
       if (player) {
         player.level = newLevel;
-        io.emit('player_level_updated', { id: socket.id, level: newLevel });
-        console.log(`[Game] ${player.nickname} est passé au Niveau ${newLevel} !`);
+        io.to(player.villageRoom).emit('player_level_updated', { id: socket.id, level: newLevel });
       }
     });
 
-    // 4. Chat de proximité
-    socket.on('send_chat_message', (msgText) => {
-      const sender = players.get(socket.id);
-      if (!sender || !msgText.trim()) return;
+    // 4. Chat Privé 1-sur-1 & Demandes d'invitation
+    socket.on('request_private_chat', ({ targetPlayerId }) => {
+      const requester = players.get(socket.id);
+      const target = players.get(targetPlayerId);
 
-      const messageObj = {
+      if (!requester || !target) return;
+
+      const isTargetBusy = activePrivateChats.has(targetPlayerId);
+
+      if (isTargetBusy) {
+        io.to(targetPlayerId).emit('incoming_chat_request', {
+          requesterId: socket.id,
+          requesterName: requester.nickname,
+          requesterGender: requester.gender
+        });
+      } else {
+        activePrivateChats.set(socket.id, targetPlayerId);
+        activePrivateChats.set(targetPlayerId, socket.id);
+
+        io.to(socket.id).emit('private_chat_started', {
+          partnerId: targetPlayerId,
+          partnerName: target.nickname,
+          partnerGender: target.gender
+        });
+
+        io.to(targetPlayerId).emit('private_chat_started', {
+          partnerId: socket.id,
+          partnerName: requester.nickname,
+          partnerGender: requester.gender
+        });
+      }
+    });
+
+    socket.on('accept_chat_request', ({ requesterId }) => {
+      const requester = players.get(requesterId);
+      const current = players.get(socket.id);
+
+      if (!requester || !current) return;
+
+      const oldPartner1 = activePrivateChats.get(socket.id);
+      if (oldPartner1) {
+        activePrivateChats.delete(oldPartner1);
+        io.to(oldPartner1).emit('private_chat_ended', { reason: `${current.nickname} a changé de conversation.` });
+      }
+
+      const oldPartner2 = activePrivateChats.get(requesterId);
+      if (oldPartner2) {
+        activePrivateChats.delete(oldPartner2);
+        io.to(oldPartner2).emit('private_chat_ended', { reason: `${requester.nickname} a changé de conversation.` });
+      }
+
+      activePrivateChats.set(socket.id, requesterId);
+      activePrivateChats.set(requesterId, socket.id);
+
+      io.to(socket.id).emit('private_chat_started', {
+        partnerId: requesterId,
+        partnerName: requester.nickname,
+        partnerGender: requester.gender
+      });
+
+      io.to(requesterId).emit('private_chat_started', {
+        partnerId: socket.id,
+        partnerName: current.nickname,
+        partnerGender: current.gender
+      });
+    });
+
+    socket.on('decline_chat_request', ({ requesterId }) => {
+      const current = players.get(socket.id);
+      const currentName = current ? current.nickname : 'Ce joueur';
+
+      io.to(requesterId).emit('chat_request_declined_busy', {
+        busyPlayerName: currentName,
+        message: `${currentName} est actuellement en conversation privée. Veuillez patienter !`
+      });
+    });
+
+    socket.on('send_private_message', ({ targetPlayerId, text }) => {
+      const sender = players.get(socket.id);
+      if (!sender || !text.trim()) return;
+
+      const msgObj = {
         id: Math.random().toString(36).substr(2, 9),
         senderId: socket.id,
         senderName: sender.nickname,
-        text: msgText.trim(),
+        text: text.trim(),
         timestamp: Date.now()
       };
 
-      players.forEach((p, pSocketId) => {
-        const dist = Math.hypot(p.x - sender.x, p.y - sender.y);
-        if (dist <= 250) {
-          io.to(pSocketId).emit('receive_chat_message', messageObj);
-        }
-      });
+      socket.emit('receive_private_message', msgObj);
+      io.to(targetPlayerId).emit('receive_private_message', msgObj);
+    });
+
+    socket.on('end_private_chat', () => {
+      const partnerId = activePrivateChats.get(socket.id);
+      if (partnerId) {
+        activePrivateChats.delete(partnerId);
+        io.to(partnerId).emit('private_chat_ended', { reason: 'La conversation est terminée.' });
+      }
+      activePrivateChats.delete(socket.id);
+      socket.emit('private_chat_ended', { reason: 'Vous avez quitté la conversation.' });
     });
 
     // 5. Mini-jeux PvP
@@ -207,11 +328,30 @@ app.prepare().then(() => {
       }
     });
 
+    // 6. Déconnexion (Retrait du village)
     socket.on('disconnect', () => {
       const player = players.get(socket.id);
       if (player) {
+        const roomName = player.villageRoom;
+        if (villageRooms.has(roomName)) {
+          const roomSet = villageRooms.get(roomName);
+          roomSet.delete(socket.id);
+          if (roomSet.size === 0) {
+            villageRooms.delete(roomName);
+          } else {
+            socket.to(roomName).emit('village_count_updated', { totalInVillage: roomSet.size });
+          }
+        }
+
+        const partnerId = activePrivateChats.get(socket.id);
+        if (partnerId) {
+          activePrivateChats.delete(partnerId);
+          io.to(partnerId).emit('private_chat_ended', { reason: 'Le joueur s\'est déconnecté.' });
+        }
+        activePrivateChats.delete(socket.id);
+
         players.delete(socket.id);
-        io.emit('player_left', socket.id);
+        socket.to(roomName).emit('player_left', socket.id);
       }
     });
   });
