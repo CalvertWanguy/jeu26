@@ -216,7 +216,7 @@ export default function HouseRiddleModal({ house, unlockedLevel, cycle = 1, onSo
                       : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                   }`}
                 >
-                  {feedbackMsg.type === 'success' ? <Sparkles className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                  {feedbackMsg.type === 'error' && <AlertCircle className="w-4 h-4" />}
                   {feedbackMsg.text}
                 </div>
               )}
