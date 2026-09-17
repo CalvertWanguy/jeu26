@@ -272,9 +272,8 @@ export default function TownCanvas({
   };
 
   const drawRealisticTree = (ctx, x, y) => {
-    ctx.beginPath();
-    ctx.ellipse(x, y + 18, 18, 8, 0, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    drawEllipse(ctx, x, y + 18, 18, 8);
     ctx.fill();
     ctx.fillStyle = '#78350f';
     ctx.fillRect(x - 5, y, 10, 18);
@@ -362,26 +361,22 @@ export default function TownCanvas({
 
     const charY = y - bob;
 
-    ctx.beginPath();
-    ctx.ellipse(x, y + 16, 14, 6, 0, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    drawEllipse(ctx, x, y + 16, 14, 6);
     ctx.fill();
 
     if (isLocal) {
-      ctx.beginPath();
-      ctx.ellipse(x, y + 16, 18, 8, 0, 0, Math.PI * 2);
       ctx.strokeStyle = '#4f46e5';
       ctx.lineWidth = 2.5;
+      drawEllipse(ctx, x, y + 16, 18, 8);
       ctx.stroke();
     }
 
     // Pieds
     ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.ellipse(x - 5, charY + 12 + stepOffset, 4.5, 3.5, 0, 0, Math.PI * 2);
+    drawEllipse(ctx, x - 5, charY + 12 + stepOffset, 4.5, 3.5);
     ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(x + 5, charY + 12 - stepOffset, 4.5, 3.5, 0, 0, Math.PI * 2);
+    drawEllipse(ctx, x + 5, charY + 12 - stepOffset, 4.5, 3.5);
     ctx.fill();
 
     // Pantalon
@@ -514,6 +509,20 @@ export default function TownCanvas({
       ctx.lineTo(x, y + radius);
       ctx.quadraticCurveTo(x, y, x + radius, y);
       ctx.closePath();
+    }
+  };
+
+  const drawEllipse = (ctx, cx, cy, rx, ry) => {
+    if (typeof ctx.ellipse === 'function') {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, Math.max(0.1, rx), Math.max(0.1, ry), 0, 0, Math.PI * 2);
+    } else {
+      ctx.save();
+      ctx.beginPath();
+      ctx.translate(cx, cy);
+      ctx.scale(rx, ry);
+      ctx.arc(0, 0, 1, 0, Math.PI * 2);
+      ctx.restore();
     }
   };
 
