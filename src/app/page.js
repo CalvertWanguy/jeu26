@@ -10,6 +10,10 @@ import PrivateChatModal from '../components/PrivateChatModal';
 import ProximityChat from '../components/ProximityChat';
 import ToastNotification from '../components/ToastNotification';
 import GrandMasterModal from '../components/GrandMasterModal';
+import LeaderboardModal from '../components/LeaderboardModal';
+import MiniMap from '../components/MiniMap';
+import EmoteBar from '../components/EmoteBar';
+import { playClickSFX, playUnlockSFX, playVictorySFX, playChallengeSFX } from '../utils/sfx';
 import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink, Volume2, VolumeX, User } from 'lucide-react';
 
 export default function HomePage() {
@@ -25,6 +29,8 @@ export default function HomePage() {
   const [showPrestigeModal, setShowPrestigeModal] = useState(false);
   const [showGrandMasterModal, setShowGrandMasterModal] = useState(false);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
+  const [playerEmotes, setPlayerEmotes] = useState({});
 
   const [activeHouse, setActiveHouse] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
@@ -250,12 +256,35 @@ export default function HomePage() {
 
       newSocket.on('received_game_challenge', (challengeData) => {
         setIncomingChallenge(challengeData);
+        playChallengeSFX(isMutedRef.current);
+      });
+
+      newSocket.on('challenge_declined', ({ declinerName, message }) => {
+        addToast(message || `${declinerName || 'Le joueur'} a refusé votre défi.`, 'info', 4000);
+      });
+
+      newSocket.on('receive_player_emote', ({ senderId, emoji }) => {
+        setPlayerEmotes(prev => ({ ...prev, [senderId]: emoji }));
+        setTimeout(() => {
+          setPlayerEmotes(prev => {
+            const copy = { ...prev };
+            delete copy[senderId];
+            return copy;
+          });
+        }, 3500);
+      });
+
+      newSocket.on('player_status_changed', ({ id, statusBadge }) => {
+        setOtherPlayers(prev =>
+          prev.map(p => (p.id === id ? { ...p, statusBadge } : p))
+        );
       });
 
       newSocket.on('mini_game_start', (sessionData) => {
         setIncomingChallenge(null);
         setSelectedPlayer(null);
         setActiveMiniGame(sessionData);
+        playChallengeSFX(isMutedRef.current);
       });
 
       setSocket(newSocket);
@@ -335,8 +364,39 @@ export default function HomePage() {
     }
   };
 
+  const localStatusBadge = activeHouse
+    ? "🧠 En Énigme"
+    : activeMiniGame
+    ? "⚔️ En Duel"
+    : activePrivatePartner
+    ? "💬 En Privé"
+    : null;
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit('player_status_update', localStatusBadge);
+    }
+  }, [localStatusBadge, socket]);
+
+  const handleSendEmote = (emoji) => {
+    if (socket) {
+      socket.emit('send_player_emote', emoji);
+    }
+    if (socket?.id) {
+      setPlayerEmotes(prev => ({ ...prev, [socket.id]: emoji }));
+      setTimeout(() => {
+        setPlayerEmotes(prev => {
+          const copy = { ...prev };
+          delete copy[socket.id];
+          return copy;
+        });
+      }, 3500);
+    }
+  };
+
   const handleSolveRiddle = (currentHouseLevel) => {
     setActiveHouse(null);
+    playUnlockSFX(isMutedRef.current);
 
     if (currentHouseLevel === 5) {
       const nextLevel = playerLevel + 1;
@@ -353,6 +413,7 @@ export default function HomePage() {
       }
 
       if (nextLevel > 100) {
+        playVictorySFX(isMutedRef.current);
         setShowGrandMasterModal(true);
       } else {
         setShowPrestigeModal(true);
@@ -467,6 +528,15 @@ export default function HomePage() {
             <span className="text-emerald-400 font-extrabold">({otherPlayers.length + 1}/5)</span>
           </div>
 
+          {/* Bouton Leaderboard / Classement */}
+          <button
+            onClick={() => { playClickSFX(isMuted); setShowLeaderboardModal(true); }}
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-amber-400 rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center"
+            title="Classement des Joueurs (Hall of Fame)"
+          >
+            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+          </button>
+
           {/* Bouton Musique ON/OFF */}
           <button
             onClick={toggleAudio}
@@ -496,12 +566,23 @@ export default function HomePage() {
         onOpenHouse={(house) => setActiveHouse(house)}
         onSelectPlayer={(player) => setSelectedPlayer(player)}
         chatBubbles={chatBubbles}
+        playerEmotes={playerEmotes}
+        localStatusBadge={localStatusBadge}
       />
 
-      {/* Chat de Proximité (Ne s'affiche subtilement que lorsqu'un autre joueur est proche) */}
+      {/* Barre d'Émotes Rapides */}
+      <EmoteBar onSendEmote={handleSendEmote} isMuted={isMuted} />
+
+      {/* Radar / Mini-Carte de la Ville */}
+      <MiniMap
+        localPlayer={localPlayer}
+        otherPlayers={otherPlayers}
+        unlockedLevel={unlockedLevel}
+        playerLevel={playerLevel}
+      />
+
+      {/* Chat de Proximité (Badge pilule minimaliste "Joueur proche") */}
       <ProximityChat
-        onSendMessage={handleSendChatMessage}
-        messages={chatMessages}
         hasNearbyPlayer={otherPlayers.some(p => {
           const lx = localPlayer?.x || 450;
           const ly = localPlayer?.y || 450;
@@ -668,6 +749,16 @@ export default function HomePage() {
           messages={privateMessages}
           onSendMessage={handleSendPrivateMessage}
           onClose={handleEndPrivateChat}
+        />
+      )}
+
+      {/* Modal Classement des Joueurs */}
+      {showLeaderboardModal && (
+        <LeaderboardModal
+          players={[...otherPlayers, localPlayer]}
+          localPlayerId={socket?.id}
+          roomName={villageInfo.roomName}
+          onClose={() => setShowLeaderboardModal(false)}
         />
       )}
 

@@ -721,7 +721,7 @@ function drawWoodenBench(ctx, x, y) {
   ctx.fillRect(x - 12, y - 8, 24, 3);
 }
 
-function drawRealisticCharacter(ctx, x, y, gender, nickname, level, isLocal, isMoving, chatMsg) {
+function drawRealisticCharacter(ctx, x, y, gender, nickname, level, isLocal, isMoving, statusBadge, activeEmote) {
   const time = Date.now();
   const stepOffset = isMoving ? Math.sin(time * 0.016) * 6 : 0;
   const bob = isMoving ? Math.abs(Math.sin(time * 0.016)) * 3 : Math.sin(time * 0.003) * 1.5;
@@ -845,24 +845,40 @@ function drawRealisticCharacter(ctx, x, y, gender, nickname, level, isLocal, isM
   ctx.textAlign = 'center';
   ctx.fillText(`${level}`, badgeX + badgeW / 2, badgeY + 10);
 
-  // Bulle de dialogue
-  if (chatMsg) {
+  // Badge de statut du joueur ("🧠 En Énigme", "⚔️ En Duel", "💬 En Privé")
+  if (statusBadge) {
     ctx.save();
-    ctx.font = '12px sans-serif';
-    const textWidth = ctx.measureText(chatMsg).width;
-    const bubbleW = textWidth + 16;
-    const bubbleH = 24;
-    const bubbleX = x - bubbleW / 2;
-    const bubbleY = charY - 70;
+    ctx.font = 'bold 10px sans-serif';
+    const sbWidth = ctx.measureText(statusBadge).width + 12;
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.beginPath();
+    drawRoundRect(ctx, x - sbWidth / 2, charY + 22, sbWidth, 16, 8);
+    ctx.fill();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
+    ctx.fillStyle = '#38bdf8';
+    ctx.textAlign = 'center';
+    ctx.fillText(statusBadge, x, charY + 33);
+    ctx.restore();
+  }
+
+  // Bulle d'émote animée (ex: 👋 👏 🤔 🔥 🎉 👑)
+  if (activeEmote) {
+    ctx.save();
+    const floatY = charY - 65 + Math.sin(time * 0.008) * 3;
     ctx.fillStyle = '#ffffff';
     ctx.beginPath();
-    drawRoundRect(ctx, bubbleX, bubbleY, bubbleW, bubbleH, 8);
+    ctx.arc(x, floatY, 14, 0, Math.PI * 2);
     ctx.fill();
+    ctx.strokeStyle = '#6366f1';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-    ctx.fillStyle = '#0f172a';
+    ctx.font = '16px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(chatMsg, x, bubbleY + 16);
+    ctx.fillText(activeEmote, x, floatY + 5);
     ctx.restore();
   }
 }
@@ -875,7 +891,9 @@ function TownCanvas({
   playerLevel = 1,
   onOpenHouse,
   onSelectPlayer,
-  chatBubbles
+  chatBubbles,
+  playerEmotes,
+  localStatusBadge
 }) {
   const canvasRef = useRef(null);
   const initialX = Math.max(30, Math.min(970, localPlayer?.x || 450));
@@ -946,10 +964,10 @@ function TownCanvas({
     }
   };
 
-  const propsRef = useRef({ otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket });
+  const propsRef = useRef({ otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket, playerEmotes, localStatusBadge });
   useEffect(() => {
-    propsRef.current = { otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket };
-  }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket]);
+    propsRef.current = { otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket, playerEmotes, localStatusBadge };
+  }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket, playerEmotes, localStatusBadge]);
 
   useEffect(() => {
     if (Array.isArray(otherPlayers)) {
@@ -1156,7 +1174,8 @@ function TownCanvas({
               p.level || 1,
               false,
               isMoving,
-              currentChatBubbles?.[p.id]
+              p.statusBadge,
+              currentChatBubbles?.[p.id] || propsRef.current.playerEmotes?.[p.id]
             );
           });
         }
@@ -1172,7 +1191,8 @@ function TownCanvas({
             currentPlayerLevel || 1,
             true,
             isMovingRef.current,
-            currentSocket?.id ? currentChatBubbles?.[currentSocket.id] : null
+            propsRef.current.localStatusBadge,
+            currentSocket?.id ? (currentChatBubbles?.[currentSocket.id] || propsRef.current.playerEmotes?.[currentSocket.id]) : null
           );
         }
 

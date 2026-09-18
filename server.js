@@ -294,8 +294,35 @@ app.prepare().then(() => {
       io.to(p2.id).emit('mini_game_start', gameSession);
     });
 
+    socket.on('send_player_emote', (emoji) => {
+      const player = players.get(socket.id);
+      if (player && player.villageRoom) {
+        io.to(player.villageRoom).emit('receive_player_emote', {
+          senderId: socket.id,
+          emoji
+        });
+      }
+    });
+
+    socket.on('player_status_update', (statusBadge) => {
+      const player = players.get(socket.id);
+      if (player && player.villageRoom) {
+        player.statusBadge = statusBadge;
+        socket.to(player.villageRoom).emit('player_status_changed', {
+          id: socket.id,
+          statusBadge
+        });
+      }
+    });
+
     socket.on('decline_game_challenge', ({ challengerId }) => {
-      io.to(challengerId).emit('challenge_declined', { declinerId: socket.id });
+      const decliner = players.get(socket.id);
+      const declinerName = decliner ? decliner.nickname : 'Le joueur';
+      io.to(challengerId).emit('challenge_declined', {
+        declinerId: socket.id,
+        declinerName,
+        message: `${declinerName} a refusé votre défi.`
+      });
     });
 
     socket.on('play_rps_choice', ({ gameId, choice }) => {
