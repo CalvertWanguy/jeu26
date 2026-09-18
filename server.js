@@ -349,10 +349,10 @@ app.prepare().then(() => {
           result = session.p2.id;
         }
 
+        session.status = 'finished';
         const payload = { gameId, p1Choice: c1, p2Choice: c2, winnerId: result };
         io.to(session.p1.id).emit('rps_result', payload);
         io.to(session.p2.id).emit('rps_result', payload);
-        activeMiniGames.delete(gameId);
       }
     });
 
