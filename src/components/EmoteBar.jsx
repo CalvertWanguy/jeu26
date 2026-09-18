@@ -20,13 +20,13 @@ export default function EmoteBar({ onSendEmote, isMuted }) {
   };
 
   return (
-    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2 py-1.5 rounded-full shadow-2xl flex items-center gap-1.5 transition-all">
+    <div className="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-auto bg-slate-900/95 backdrop-blur-md border border-slate-700/90 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-2xl flex items-center gap-1 sm:gap-2 transition-all max-w-[95vw] justify-center">
       {EMOTES_LIST.map((e) => (
         <button
           key={e.id}
           onClick={() => handleEmoteClick(e)}
           title={e.label}
-          className="w-8 h-8 sm:w-9 sm:h-9 hover:bg-slate-800 active:scale-125 rounded-full flex items-center justify-center text-base sm:text-lg transition-transform"
+          className="w-8 h-8 sm:w-9 sm:h-9 hover:bg-slate-800 active:scale-125 rounded-full flex items-center justify-center text-base sm:text-lg transition-transform flex-shrink-0 touch-manipulation"
         >
           {e.emoji}
         </button>

@@ -496,59 +496,60 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
+    <main className="relative w-screen h-screen h-[100dvh] bg-slate-950 overflow-hidden flex flex-col justify-between select-none">
       {/* Toast Notifications Globales In-Game */}
       <ToastNotification toasts={toasts} onDismiss={removeToast} />
 
       {/* En-tête HUD Ultra-Compact et Responsive (Aligné sur 1 ligne propre sur Mobile & PC) */}
-      <div className="absolute top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-40 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-40 flex items-center justify-between gap-1 pointer-events-none max-w-full overflow-hidden">
         {/* Fiche Joueur Local */}
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-xl flex items-center gap-2">
-          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center text-indigo-400">
-            <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        <div className="pointer-events-auto flex-shrink min-w-0 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-xl flex items-center gap-1.5 sm:gap-2">
+          <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center text-indigo-400 flex-shrink-0">
+            <User className="w-3 h-3 sm:w-4 sm:h-4" />
           </div>
-          <div className="leading-tight">
-            <div className="text-[11px] sm:text-xs font-extrabold text-white flex items-center gap-1">
-              <span className="truncate max-w-[80px] sm:max-w-[120px]">{localPlayer.nickname}</span>
-              <span className="text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 bg-indigo-600 text-white rounded-full">
-                Niv. {playerLevel}
+          <div className="leading-tight min-w-0">
+            <div className="text-[10px] sm:text-xs font-extrabold text-white flex items-center gap-1">
+              <span className="truncate max-w-[60px] sm:max-w-[120px]">{localPlayer.nickname}</span>
+              <span className="text-[8px] sm:text-[10px] font-extrabold px-1 sm:px-1.5 py-0.2 bg-indigo-600 text-white rounded-full flex-shrink-0">
+                Niv.{playerLevel}
               </span>
             </div>
-            <div className="text-[10px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1 mt-0.5">
-              <Trophy className="w-3 h-3 text-amber-400" /> {unlockedLevel}/5 Maisons
+            <div className="text-[9px] sm:text-[11px] text-amber-400 font-bold flex items-center gap-1 mt-0.5 whitespace-nowrap">
+              <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400 flex-shrink-0" /> {unlockedLevel}/5
             </div>
           </div>
         </div>
 
-        {/* Info Village & Bouton Point d'exclamation (!) */}
-        <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-3">
-          <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-xl flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-200">
-            <Home className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="hidden xs:inline">{villageInfo.roomName}</span>
+        {/* Info Village & Boutons d'action */}
+        <div className="pointer-events-auto flex-shrink-0 flex items-center gap-1 sm:gap-2">
+          <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl shadow-xl flex items-center gap-1 text-[10px] sm:text-xs font-bold text-slate-200 whitespace-nowrap">
+            <Home className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-400 flex-shrink-0" />
+            <span className="hidden sm:inline">{villageInfo.roomName}</span>
             <span className="text-emerald-400 font-extrabold">({otherPlayers.length + 1}/5)</span>
           </div>
 
           {/* Bouton Leaderboard / Classement */}
           <button
             onClick={() => { playClickSFX(isMuted); setShowLeaderboardModal(true); }}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-amber-400 rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center"
+            className="w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-amber-400 rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center"
             title="Classement des Joueurs (Hall of Fame)"
           >
-            <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+            <Trophy className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 text-amber-400" />
           </button>
 
           {/* Bouton Musique ON/OFF */}
           <button
             onClick={toggleAudio}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-white rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center text-sm sm:text-base"
+            className="w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-slate-700/80 text-white rounded-xl shadow-xl transition-transform active:scale-95 flex items-center justify-center text-xs sm:text-base"
             title={isMuted ? "Activer la musique de fond" : "Couper la musique"}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-rose-400" /> : <Volume2 className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />}
           </button>
 
+          {/* Bouton Aide / Tutoriel */}
           <button
             onClick={() => setShowTutorialModal(true)}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-base sm:text-lg"
+            className="w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl shadow-xl shadow-amber-500/20 transition-transform active:scale-95 flex items-center justify-center text-xs sm:text-lg"
             title="Comment jouer ? (Aide)"
           >
             !
