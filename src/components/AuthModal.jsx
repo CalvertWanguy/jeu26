@@ -1,11 +1,22 @@
 "use client";
 import React, { useState } from 'react';
-import { User, LogIn, ArrowRight } from 'lucide-react';
+import { User, LogIn, ArrowRight, Info } from 'lucide-react';
 
-export default function AuthModal({ onJoin }) {
+export default function AuthModal({ onJoin, onToast }) {
   const [nickname, setNickname] = useState('');
   const [gender, setGender] = useState('boy');
   const [authMode, setAuthMode] = useState('guest');
+  const [notice, setNotice] = useState(null);
+
+  const handleGoogleClick = () => {
+    const msg = "La connexion Google OAuth sera disponible très bientôt !";
+    if (onToast) {
+      onToast(msg, 'info');
+    } else {
+      setNotice(msg);
+      setTimeout(() => setNotice(null), 4000);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,6 +39,13 @@ export default function AuthModal({ onJoin }) {
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {notice && (
+            <div className="p-3 rounded-xl bg-indigo-950/80 border border-indigo-500/50 text-indigo-200 text-xs flex items-center gap-2">
+              <Info className="w-4 h-4 text-indigo-400 shrink-0" />
+              <span>{notice}</span>
+            </div>
+          )}
+
           {/* Mode de connexion */}
           <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-800/80 rounded-2xl border border-slate-700/50">
             <button
@@ -43,7 +61,7 @@ export default function AuthModal({ onJoin }) {
             </button>
             <button
               type="button"
-              onClick={() => alert("La connexion Google OAuth sera activée très bientôt !")}
+              onClick={handleGoogleClick}
               className="py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white hover:bg-slate-700/50"
             >
               <LogIn className="w-4 h-4 text-rose-400" /> Compte Google (Bientôt)
@@ -66,7 +84,7 @@ export default function AuthModal({ onJoin }) {
             />
           </div>
 
-          {/* Choix de l'Avatar / Genre avec les emojis 👦 et 👧 */}
+          {/* Choix de l'Avatar / Genre */}
           <div>
             <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-2">
               Choisissez votre Personnage
@@ -81,7 +99,9 @@ export default function AuthModal({ onJoin }) {
                     : 'border-slate-800 bg-slate-800/60 text-slate-400 hover:border-slate-700'
                 }`}
               >
-                <span className="text-4xl">👦</span>
+                <div className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+                  <User className="w-5 h-5" />
+                </div>
                 <span className="text-xs font-bold">Garçon</span>
               </button>
 
@@ -94,7 +114,9 @@ export default function AuthModal({ onJoin }) {
                     : 'border-slate-800 bg-slate-800/60 text-slate-400 hover:border-slate-700'
                 }`}
               >
-                <span className="text-4xl">👧</span>
+                <div className="w-10 h-10 rounded-full bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400">
+                  <User className="w-5 h-5" />
+                </div>
                 <span className="text-xs font-bold">Fille</span>
               </button>
             </div>

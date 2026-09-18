@@ -8,18 +8,22 @@ import MiniGameModal from '../components/MiniGameModal';
 import TutorialModal from '../components/TutorialModal';
 import PrivateChatModal from '../components/PrivateChatModal';
 import ProximityChat from '../components/ProximityChat';
-import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink, Volume2, VolumeX } from 'lucide-react';
+import ToastNotification from '../components/ToastNotification';
+import GrandMasterModal from '../components/GrandMasterModal';
+import { Users, Trophy, Swords, MessageSquare, ArrowRight, Home, Clock, ExternalLink, Volume2, VolumeX, User } from 'lucide-react';
 
 export default function HomePage() {
   const [localPlayer, setLocalPlayer] = useState(null);
   const [socket, setSocket] = useState(null);
 
+  const [toasts, setToasts] = useState([]);
   const [otherPlayers, setOtherPlayers] = useState([]);
   const [unlockedLevel, setUnlockedLevel] = useState(1);
   const [playerLevel, setPlayerLevel] = useState(1);
   const [villageInfo, setVillageInfo] = useState({ roomName: 'Village #1', totalInVillage: 1 });
 
   const [showPrestigeModal, setShowPrestigeModal] = useState(false);
+  const [showGrandMasterModal, setShowGrandMasterModal] = useState(false);
   const [showTutorialModal, setShowTutorialModal] = useState(false);
 
   const [activeHouse, setActiveHouse] = useState(null);
@@ -39,6 +43,18 @@ export default function HomePage() {
   const playerIdRef = useRef(null);
   const isMutedRef = useRef(false);
   const localPlayerRef = useRef(null);
+
+  const addToast = (message, type = 'info', duration = 3500) => {
+    const id = Date.now() + Math.random().toString(36).substring(2, 6);
+    setToasts(prev => [...prev.slice(-3), { id, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    }, duration);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
 
   useEffect(() => {
     isMutedRef.current = isMuted;
@@ -142,6 +158,11 @@ export default function HomePage() {
         newSocket.emit('join_game', { ...localPlayer, id: pid, level: playerLevel });
       });
 
+      newSocket.on('join_error', (errorMsg) => {
+        addToast(errorMsg, 'warning');
+        setLocalPlayer(null);
+      });
+
       newSocket.on('assigned_village', (info) => {
         setVillageInfo({ roomName: info.roomName, totalInVillage: info.totalInVillage });
       });
@@ -156,6 +177,9 @@ export default function HomePage() {
 
       newSocket.on('player_joined', (newPlayer) => {
         setOtherPlayers(prev => [...prev.filter(p => p.id !== newPlayer.id), newPlayer]);
+        if (newPlayer && newPlayer.nickname) {
+          addToast(`${newPlayer.nickname} a rejoint la ville !`, 'info', 2500);
+        }
       });
 
       newSocket.on('player_moved', (data) => {
@@ -216,7 +240,7 @@ export default function HomePage() {
       newSocket.on('private_chat_ended', ({ reason }) => {
         setActivePrivatePartner(null);
         setPrivateMessages([]);
-        alert(reason);
+        addToast(reason, 'info');
       });
 
       newSocket.on('received_game_challenge', (challengeData) => {
@@ -323,7 +347,11 @@ export default function HomePage() {
         socket.emit('player_level_up', nextLevel);
       }
 
-      setShowPrestigeModal(true);
+      if (nextLevel > 100) {
+        setShowGrandMasterModal(true);
+      } else {
+        setShowPrestigeModal(true);
+      }
     } else if (currentHouseLevel === unlockedLevel && unlockedLevel < 5) {
       const nextUnlocked = unlockedLevel + 1;
       setUnlockedLevel(nextUnlocked);
@@ -333,13 +361,13 @@ export default function HomePage() {
     }
   };
 
-  const handleSendChallenge = (gameType) => {
-    if (socket && selectedPlayer) {
+  const handleSendChallenge = (gameType, targetPlayer = selectedPlayer) => {
+    if (socket && targetPlayer) {
       socket.emit('send_game_challenge', {
-        targetPlayerId: selectedPlayer.id,
+        targetPlayerId: targetPlayer.id,
         gameType
       });
-      alert(`Défi envoyé à ${selectedPlayer.nickname} ! En attente...`);
+      addToast(`Défi envoyé à ${targetPlayer.nickname} ! En attente...`, 'info');
     }
   };
 
@@ -393,16 +421,26 @@ export default function HomePage() {
   };
 
   if (!localPlayer) {
-    return <AuthModal onJoin={handleJoin} />;
+    return (
+      <>
+        <ToastNotification toasts={toasts} onDismiss={removeToast} />
+        <AuthModal onJoin={handleJoin} onToast={addToast} />
+      </>
+    );
   }
 
   return (
     <main className="relative w-screen h-screen bg-slate-950 overflow-hidden flex flex-col justify-between">
+      {/* Toast Notifications Globales In-Game */}
+      <ToastNotification toasts={toasts} onDismiss={removeToast} />
+
       {/* En-tête HUD Ultra-Compact et Responsive (Aligné sur 1 ligne propre sur Mobile & PC) */}
       <div className="absolute top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-40 flex items-center justify-between pointer-events-none">
         {/* Fiche Joueur Local */}
         <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl shadow-xl flex items-center gap-2">
-          <span className="text-lg sm:text-2xl">{localPlayer.gender === 'girl' ? '👧' : '👦'}</span>
+          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-indigo-600/30 border border-indigo-500/50 flex items-center justify-center text-indigo-400">
+            <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </div>
           <div className="leading-tight">
             <div className="text-[11px] sm:text-xs font-extrabold text-white flex items-center gap-1">
               <span className="truncate max-w-[80px] sm:max-w-[120px]">{localPlayer.nickname}</span>
@@ -493,7 +531,9 @@ export default function HomePage() {
       {selectedPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-2 sm:p-4 overflow-y-auto">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-5 sm:p-6 w-80 max-h-[90vh] overflow-y-auto text-center space-y-4 shadow-2xl my-auto">
-            <span className="text-4xl">{selectedPlayer.gender === 'girl' ? '👧' : '👦'}</span>
+            <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 mx-auto flex items-center justify-center text-indigo-400">
+              <User className="w-6 h-6" />
+            </div>
             <div>
               <div className="flex items-center justify-center gap-2">
                 <h3 className="text-base font-extrabold text-white">{selectedPlayer.nickname}</h3>
@@ -506,22 +546,44 @@ export default function HomePage() {
 
             <div className="space-y-2 pt-2">
               <button
-                onClick={() => handleStartPrivateChat(selectedPlayer)}
+                onClick={() => {
+                  const target = selectedPlayer;
+                  setSelectedPlayer(null);
+                  if (target) handleStartPrivateChat(target);
+                }}
                 className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-4 h-4" /> Discuter en Privé (1-sur-1)
               </button>
               <button
-                onClick={() => handleSendChallenge('rps')}
+                onClick={() => {
+                  const target = selectedPlayer;
+                  setSelectedPlayer(null);
+                  if (target) handleSendChallenge('rps', target);
+                }}
                 className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
                 <Swords className="w-4 h-4" /> Pierre-Papier-Ciseaux
               </button>
               <button
-                onClick={() => handleSendChallenge('ttt')}
+                onClick={() => {
+                  const target = selectedPlayer;
+                  setSelectedPlayer(null);
+                  if (target) handleSendChallenge('ttt', target);
+                }}
                 className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
               >
                 <Swords className="w-4 h-4" /> Morpion (Tic-Tac-Toe)
+              </button>
+              <button
+                onClick={() => {
+                  const target = selectedPlayer;
+                  setSelectedPlayer(null);
+                  if (target) handleSendChallenge('number_guess', target);
+                }}
+                className="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-2"
+              >
+                <Swords className="w-4 h-4" /> Devine le Nombre (1-100)
               </button>
             </div>
 
@@ -570,7 +632,11 @@ export default function HomePage() {
             <p className="text-xs font-bold text-amber-300">Défi Mini-jeu Reçu !</p>
             <p className="text-xs text-white">
               <strong className="text-indigo-300">{incomingChallenge.challengerName}</strong> vous défie au{' '}
-              {incomingChallenge.gameType === 'rps' ? 'Pierre-Papier-Ciseaux' : 'Morpion'} !
+              {incomingChallenge.gameType === 'rps'
+                ? 'Pierre-Papier-Ciseaux'
+                : incomingChallenge.gameType === 'ttt'
+                ? 'Morpion'
+                : 'Devine le Nombre (1-100)'} !
             </p>
           </div>
           <div className="flex gap-2">
@@ -603,6 +669,11 @@ export default function HomePage() {
       {/* Modal Tutoriel */}
       {showTutorialModal && (
         <TutorialModal onClose={handleCloseTutorial} />
+      )}
+
+      {/* Modal Grand Maître des Énigmes (Feux d'Artifice & Couronne) */}
+      {showGrandMasterModal && (
+        <GrandMasterModal onClose={() => setShowGrandMasterModal(false)} />
       )}
 
       {/* Modal Maison Énigme */}

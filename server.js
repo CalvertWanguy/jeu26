@@ -47,6 +47,16 @@ app.prepare().then(() => {
 
     // 1. Rejoindre la ville (Assignation automatique dans un Village de 5 places max)
     socket.on('join_game', (userData) => {
+      const requestedName = (userData.nickname || '').trim();
+      const isNameTaken = Array.from(players.values()).some(
+        p => p.nickname.toLowerCase() === requestedName.toLowerCase()
+      );
+
+      if (isNameTaken) {
+        socket.emit('join_error', `Le pseudo "${requestedName}" est déjà utilisé par un autre joueur. Veuillez en choisir un autre.`);
+        return;
+      }
+
       const { roomName, villageIndex } = getOrCreateAvailableVillage();
 
       if (!villageRooms.has(roomName)) {
@@ -269,8 +279,13 @@ app.prepare().then(() => {
         p1: { id: p1.id, name: p1.nickname, choice: null, symbol: 'X' },
         p2: { id: p2.id, name: p2.nickname, choice: null, symbol: 'O' },
         board: Array(9).fill(null),
+        secretNumber: Math.floor(Math.random() * 100) + 1,
+        minRange: 1,
+        maxRange: 100,
+        history: [],
         currentTurn: p1.id,
-        status: 'playing'
+        status: 'playing',
+        winnerId: null
       };
 
       activeMiniGames.set(gameId, gameSession);
@@ -344,12 +359,132 @@ app.prepare().then(() => {
         const payload = { gameId, board: session.board, winnerId: winner, isDraw };
         io.to(session.p1.id).emit('ttt_game_over', payload);
         io.to(session.p2.id).emit('ttt_game_over', payload);
-        activeMiniGames.delete(gameId);
       } else {
         session.currentTurn = socket.id === session.p1.id ? session.p2.id : session.p1.id;
-        const updatePayload = { gameId, board: session.board, currentTurn: session.currentTurn };
         io.to(session.p1.id).emit('ttt_update', updatePayload);
         io.to(session.p2.id).emit('ttt_update', updatePayload);
+      }
+    });
+
+    socket.on('play_number_guess_move', ({ gameId, guess }) => {
+      const session = activeMiniGames.get(gameId);
+      if (!session || session.gameType !== 'number_guess' || session.status !== 'playing') return;
+      if (session.currentTurn !== socket.id) return;
+
+      const player = players.get(socket.id);
+      if (!player) return;
+
+      const num = parseInt(guess, 10);
+      if (isNaN(num) || num < 1 || num > 100) return;
+
+      let feedback = 'exact';
+      if (num < session.secretNumber) {
+        feedback = 'higher';
+        session.minRange = Math.max(session.minRange, num + 1);
+      } else if (num > session.secretNumber) {
+        feedback = 'lower';
+        session.maxRange = Math.min(session.maxRange, num - 1);
+      } else {
+        feedback = 'exact';
+        session.status = 'finished';
+        session.winnerId = socket.id;
+      }
+
+      const moveLog = {
+        id: Math.random().toString(36).substring(2, 9),
+        playerId: socket.id,
+        playerName: player.nickname,
+        guess: num,
+        feedback
+      };
+
+      session.history.push(moveLog);
+
+      if (session.status !== 'finished') {
+        session.currentTurn = socket.id === session.p1.id ? session.p2.id : session.p1.id;
+      }
+
+      const updatePayload = {
+        gameId,
+        history: session.history,
+        minRange: session.minRange,
+        maxRange: session.maxRange,
+        currentTurn: session.currentTurn,
+        status: session.status,
+        winnerId: session.winnerId,
+        lastMove: moveLog
+      };
+
+      io.to(session.p1.id).emit('number_guess_update', updatePayload);
+      io.to(session.p2.id).emit('number_guess_update', updatePayload);
+    });
+
+    // 5b. Gestion Revanche & Quitter Mini-jeu
+    socket.on('request_rematch', ({ gameId }) => {
+      const session = activeMiniGames.get(gameId);
+      if (!session) return;
+
+      if (!session.rematchRequests) {
+        session.rematchRequests = new Set();
+      }
+      session.rematchRequests.add(socket.id);
+
+      const p1Id = session.p1.id;
+      const p2Id = session.p2.id;
+      const opponentId = socket.id === p1Id ? p2Id : p1Id;
+      const sender = players.get(socket.id);
+      const senderName = sender ? sender.nickname : 'Le joueur';
+
+      io.to(opponentId).emit('rematch_requested', { senderId: socket.id, senderName });
+
+      if (session.rematchRequests.has(p1Id) && session.rematchRequests.has(p2Id)) {
+        session.rematchRequests.clear();
+        session.status = 'playing';
+        session.p1.choice = null;
+        session.p2.choice = null;
+        session.board = Array(9).fill(null);
+        session.secretNumber = Math.floor(Math.random() * 100) + 1;
+        session.minRange = 1;
+        session.maxRange = 100;
+        session.history = [];
+        session.winnerId = null;
+        session.currentTurn = p1Id;
+
+        const rematchSessionPayload = {
+          gameId,
+          gameType: session.gameType,
+          p1: session.p1,
+          p2: session.p2,
+          board: session.board,
+          minRange: session.minRange,
+          maxRange: session.maxRange,
+          history: session.history,
+          currentTurn: session.currentTurn,
+          status: 'playing'
+        };
+
+        io.to(p1Id).emit('rematch_start', rematchSessionPayload);
+        io.to(p2Id).emit('rematch_start', rematchSessionPayload);
+      }
+    });
+
+    socket.on('quit_minigame', ({ gameId }) => {
+      const session = activeMiniGames.get(gameId);
+      const quitter = players.get(socket.id);
+      const quitterName = quitter ? quitter.nickname : 'Votre adversaire';
+
+      if (session) {
+        const p1Id = session.p1.id;
+        const p2Id = session.p2.id;
+        const opponentId = socket.id === p1Id ? p2Id : p1Id;
+
+        io.to(opponentId).emit('minigame_quit_by_opponent', {
+          message: `${quitterName} a quitté la partie.`
+        });
+        io.to(socket.id).emit('minigame_quit_by_opponent', {
+          message: 'Vous avez quitté la partie.'
+        });
+        activeMiniGames.delete(gameId);
       }
     });
 

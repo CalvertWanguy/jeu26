@@ -1,116 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import { Lock, CheckCircle2, X, HelpCircle, ArrowRight, Building2, Sparkles, AlertCircle, Trophy, RotateCcw } from 'lucide-react';
-
-// Banque de devinettes variées pour une rejouabilité infinie
-export const RIDDLE_BANKS = {
-  1: [
-    {
-      riddle: "Qu'est-ce qui possède des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      options: ["Un Piano", "Une Voiture", "Un Coffre-fort", "Un Téléphone"],
-      correctIndex: 0,
-      hint: "Pensez à un instrument de musique à cordes frappées !"
-    },
-    {
-      riddle: "Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      options: ["Une Table", "L'Homme", "Un Chien", "Une Chaise"],
-      correctIndex: 1,
-      hint: "C'est l'énigme classique du Sphinx sur la vie !"
-    },
-    {
-      riddle: "Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer ?",
-      options: ["L'Ombre", "Le Téléphone", "L'Argent", "Les Clés"],
-      correctIndex: 0,
-      hint: "Elle vous suit partout au soleil !"
-    }
-  ],
-  2: [
-    {
-      riddle: "Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      options: ["La Lumière", "L'Obscurité", "La Glace", "Le Vent"],
-      correctIndex: 1,
-      hint: "Elle survient quand le soleil se couche !"
-    },
-    {
-      riddle: "Qu'est-ce qui monte et ne descend jamais ?",
-      options: ["Votre Âge", "La Montagne", "Un Ballon", "La Pluie"],
-      correctIndex: 0,
-      hint: "Chaque anniversaire en rajoute un !"
-    },
-    {
-      riddle: "Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      options: ["Le Soleil", "La Pluie", "Le Feu", "La Neige"],
-      correctIndex: 1,
-      hint: "Elle vient des nuages !"
-    }
-  ],
-  3: [
-    {
-      riddle: "Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      options: ["Le Passé", "Le Présent", "L'Avenir / Le Futur", "Le Sommeil"],
-      correctIndex: 2,
-      hint: "C'est ce qui se passera demain !"
-    },
-    {
-      riddle: "Qu'est-ce qui s'allonge quand on le coupe et s'accourcit quand on le laisse ?",
-      options: ["Un Puits", "Un Chemin", "Une Bougie", "Un Arbre"],
-      correctIndex: 0,
-      hint: "On le creuse dans la terre pour chercher de l'eau !"
-    },
-    {
-      riddle: "Si vous me nommez, vous me brisez. Que suis-je ?",
-      options: ["Le Silence", "Le Verre", "Le Miroir", "Le Secret"],
-      correctIndex: 0,
-      hint: "Parler l'interrompt immédiatement !"
-    }
-  ],
-  4: [
-    {
-      riddle: "Qu'est-ce qui vous appartient personnellement, mais que les autres utilisent beaucoup plus que vous-même ?",
-      options: ["Votre Maison", "Votre Prénom / Nom", "Votre Téléphone", "Vos Clés"],
-      correctIndex: 1,
-      hint: "Les gens l'appellent pour vous parler !"
-    },
-    {
-      riddle: "Qu'est-ce qui a des villes mais pas de maisons, des forêts mais pas d'arbres, et de l'eau mais pas de poissons ?",
-      options: ["Une Carte Géographique", "Un Livre", "Un Film", "Un Rêve"],
-      correctIndex: 0,
-      hint: "Elle sert à se repérer en voyage !"
-    },
-    {
-      riddle: "Je parle toutes les langues sans avoir appris un seul mot. Que suis-je ?",
-      options: ["Un Écho", "Un Radio", "Un Livre", "Un Traducteur"],
-      correctIndex: 0,
-      hint: "Je répète votre voix dans les montagnes !"
-    }
-  ],
-  5: [
-    {
-      riddle: "Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      options: ["Une Boussole", "Un Timbre Postal", "Un Oiseau", "Un Avion"],
-      correctIndex: 1,
-      hint: "On me colle sur une enveloppe !"
-    },
-    {
-      riddle: "Plus je sèche, plus je deviens mouillé. Que suis-je ?",
-      options: ["Une Éponge", "Une Serviette de bain", "La Mer", "Le Vent"],
-      correctIndex: 1,
-      hint: "Vous l'utilisez en sortant de la douche !"
-    },
-    {
-      riddle: "Je n'ai pas de poumons, mais j'ai besoin d'air. Je n'ai pas de bouche, mais l'eau me tue. Que suis-je ?",
-      options: ["Le Feu", "Le Vent", "La Glace", "La Terre"],
-      correctIndex: 0,
-      hint: "Il brûle les bûches dans la cheminée !"
-    }
-  ]
-};
+import { getRiddle } from '../data/riddlesData';
 
 export default function HouseRiddleModal({ house, unlockedLevel, cycle = 1, onSolveRiddle, onClose }) {
-  // Sélection dynamique de l'énigme selon le cycle
-  const bank = RIDDLE_BANKS[house.level] || RIDDLE_BANKS[1];
-  const riddleIndex = (cycle - 1) % bank.length;
-  const riddleInfo = bank[riddleIndex];
+  // Sélection précise de la devinette selon le Cycle actuel (1 à 50) et la Maison (1 à 5)
+  const riddleInfo = getRiddle(cycle, house.level);
 
   const isUnlocked = house.level <= unlockedLevel;
   const isAlreadySolved = house.level < unlockedLevel;
@@ -145,7 +40,7 @@ export default function HouseRiddleModal({ house, unlockedLevel, cycle = 1, onSo
             <div>
               <h2 className="text-sm sm:text-base font-extrabold text-white">{house.name}</h2>
               <p className="text-[11px] sm:text-xs text-indigo-300 font-semibold">
-                Niveau {house.level} / 5 <span className="text-slate-400">• Cycle {cycle}</span>
+                Niveau {house.level} / 5 <span className="text-slate-400">• Cycle {cycle} ({riddleInfo.difficulty})</span>
               </p>
             </div>
           </div>
