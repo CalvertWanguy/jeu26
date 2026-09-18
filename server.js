@@ -503,12 +503,24 @@ app.prepare().then(() => {
           }
         }
 
+        // Notification d'abandon / déconnexion en chat privé
         const partnerId = activePrivateChats.get(socketId);
         if (partnerId) {
           activePrivateChats.delete(partnerId);
-          io.to(partnerId).emit('private_chat_ended', { reason: 'Le joueur a quitté le village.' });
+          io.to(partnerId).emit('private_chat_ended', { reason: `${player.nickname} a quitté la conversation.` });
         }
         activePrivateChats.delete(socketId);
+
+        // Notification d'abandon / déconnexion en mini-jeu
+        for (const [gId, session] of activeMiniGames.entries()) {
+          if (session.p1.id === socketId || session.p2.id === socketId) {
+            const opponentId = session.p1.id === socketId ? session.p2.id : session.p1.id;
+            io.to(opponentId).emit('minigame_quit_by_opponent', {
+              message: `${player.nickname} a quitté la partie.`
+            });
+            activeMiniGames.delete(gId);
+          }
+        }
 
         players.delete(socketId);
         io.to(roomName).emit('player_left', socketId);

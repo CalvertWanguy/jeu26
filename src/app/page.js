@@ -240,7 +240,12 @@ export default function HomePage() {
       newSocket.on('private_chat_ended', ({ reason }) => {
         setActivePrivatePartner(null);
         setPrivateMessages([]);
-        addToast(reason, 'info');
+        addToast(reason || "Votre interlocuteur a quitté la conversation.", 'warning', 4500);
+      });
+
+      newSocket.on('minigame_quit_by_opponent', ({ message }) => {
+        setActiveMiniGame(null);
+        addToast(message || "Votre adversaire a quitté la partie.", 'warning', 4500);
       });
 
       newSocket.on('received_game_challenge', (challengeData) => {
