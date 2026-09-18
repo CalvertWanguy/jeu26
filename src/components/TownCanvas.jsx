@@ -867,7 +867,7 @@ function drawRealisticCharacter(ctx, x, y, gender, nickname, level, isLocal, isM
   }
 }
 
-export default function TownCanvas({
+function TownCanvas({
   socket,
   localPlayer,
   otherPlayers,
@@ -946,6 +946,11 @@ export default function TownCanvas({
     }
   };
 
+  const propsRef = useRef({ otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket });
+  useEffect(() => {
+    propsRef.current = { otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket };
+  }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket]);
+
   useEffect(() => {
     if (Array.isArray(otherPlayers)) {
       const activeIds = new Set(otherPlayers.map(p => p.id));
@@ -978,6 +983,15 @@ export default function TownCanvas({
 
     const render = () => {
       try {
+        const {
+          otherPlayers: currentOtherPlayers,
+          localPlayer: currentLocalPlayer,
+          unlockedLevel: currentUnlockedLevel,
+          playerLevel: currentPlayerLevel,
+          chatBubbles: currentChatBubbles,
+          socket: currentSocket
+        } = propsRef.current;
+
         ctx.save();
         ctx.scale(dpr, dpr);
 
@@ -991,7 +1005,6 @@ export default function TownCanvas({
 
         if (dist > 0.5) {
           if (dist <= stepSpeed) {
-            // Arrivée exacte sur la cible : aucun dépassement/oscillation
             cur.x = target.x;
             cur.y = target.y;
             isMovingRef.current = false;
@@ -1001,24 +1014,23 @@ export default function TownCanvas({
             cur.y += (dy / dist) * stepSpeed;
           }
 
-          // Confinement strict dans les limites du canvas
           cur.x = Math.max(30, Math.min(970, cur.x));
           cur.y = Math.max(40, Math.min(710, cur.y));
 
-          if (localPlayer) {
-            localPlayer.x = cur.x;
-            localPlayer.y = cur.y;
+          if (currentLocalPlayer) {
+            currentLocalPlayer.x = cur.x;
+            currentLocalPlayer.y = cur.y;
           }
 
-          if (socket) {
+          if (currentSocket) {
             const now = Date.now();
-            if (now - lastEmitTimeRef.current >= 45) {
+            if (now - lastEmitTimeRef.current >= 55) {
               lastEmitTimeRef.current = now;
               let facing = 'down';
               if (Math.abs(dx) > Math.abs(dy)) facing = dx > 0 ? 'right' : 'left';
               else facing = dy > 0 ? 'down' : 'up';
 
-              socket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: isMovingRef.current });
+              currentSocket.emit('player_move', { x: cur.x, y: cur.y, facing, isMoving: isMovingRef.current });
             }
           }
         } else {
@@ -1092,7 +1104,7 @@ export default function TownCanvas({
 
         // 5 Maisons aux Architectures Uniques et Distinctes
         HOUSES.forEach((house) => {
-          const isUnlocked = (house.level <= unlockedLevel) || (playerLevel >= 100);
+          const isUnlocked = (house.level <= currentUnlockedLevel) || (currentPlayerLevel >= 100);
           if (house.id === 1) drawHouse1(ctx, house.x, house.y, house, isUnlocked);
           else if (house.id === 2) drawHouse2(ctx, house.x, house.y, house, isUnlocked);
           else if (house.id === 3) drawHouse3(ctx, house.x, house.y, house, isUnlocked);
@@ -1114,8 +1126,8 @@ export default function TownCanvas({
         pineTrees.forEach(t => drawPineTree(ctx, t.x, t.y));
 
         // Joueurs autres avec interpolation fluide et seuil d'arrêt net
-        if (Array.isArray(otherPlayers)) {
-          otherPlayers.forEach((p) => {
+        if (Array.isArray(currentOtherPlayers)) {
+          currentOtherPlayers.forEach((p) => {
             let sm = smoothPositionsRef.current.get(p.id);
             if (!sm) {
               sm = { x: p.x, y: p.y };
@@ -1144,23 +1156,23 @@ export default function TownCanvas({
               p.level || 1,
               false,
               isMoving,
-              chatBubbles?.[p.id]
+              currentChatBubbles?.[p.id]
             );
           });
         }
 
         // Joueur local
-        if (localPlayer) {
+        if (currentLocalPlayer) {
           drawRealisticCharacter(
             ctx,
             cur.x,
             cur.y,
-            localPlayer.gender || 'boy',
-            localPlayer.nickname || 'Joueur',
-            playerLevel || 1,
+            currentLocalPlayer.gender || 'boy',
+            currentLocalPlayer.nickname || 'Joueur',
+            currentPlayerLevel || 1,
             true,
             isMovingRef.current,
-            socket?.id ? chatBubbles?.[socket.id] : null
+            currentSocket?.id ? currentChatBubbles?.[currentSocket.id] : null
           );
         }
 
@@ -1178,7 +1190,7 @@ export default function TownCanvas({
       window.removeEventListener('resize', updateCanvasDimensions);
       window.removeEventListener('orientationchange', updateCanvasDimensions);
     };
-  }, [otherPlayers, localPlayer, unlockedLevel, playerLevel, chatBubbles, socket]);
+  }, []);
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-slate-950 p-2 sm:p-4 overflow-hidden">
@@ -1192,3 +1204,5 @@ export default function TownCanvas({
     </div>
   );
 }
+
+export default React.memo(TownCanvas);

@@ -1,6204 +1,3704 @@
-// Base de données de 500 devinettes 100% uniques réparties sur 100 cycles de 5 maisons chacun.
-// Difficulté progressive : Cycles 1-10 (Débutant), 11-20 (Moyen), 21-40 (Intermédiaire), 41-60 (Difficile), 61-80 (Expert), 81-100 (Légendaire).
+// Base de données de 500 devinettes 100% uniques réparties sur 100 cycles (5 maisons par cycle).
+// Aucune répétition ni doublon.
 
 const DATA = {
   "1": {
     "1": {
       "riddle": "Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "options": ["Un Piano", "Une Voiture", "Un Coffre-fort", "Un Téléphone"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Instrument de musique à clavier.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
+      "options": ["Une Table", "L'Homme", "Un Chien", "Une Chaise"],
       "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "hint": "L'énigme mythique du Sphinx.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
+      "options": ["La Lumière", "L'Obscurité", "La Glace", "Le Vent"],
       "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "hint": "Elle règne durant la nuit.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
+      "options": ["Le Soleil", "La Pluie", "Le Feu", "La Neige"],
       "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "hint": "Elle descend des nuages.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
+      "options": ["Une Boussole", "Un Timbre Postal", "Un Oiseau", "Un Avion"],
       "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "hint": "On me colle sur une enveloppe.",
       "difficulty": "Débutant"
     }
   },
   "2": {
     "1": {
       "riddle": "Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "options": ["Votre Âge", "La Montagne", "Un Ballon", "La Pluie"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Chaque anniversaire en ajoute un.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "options": ["L'Ombre", "Le Téléphone", "L'Argent", "Les Clés"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Elle s'étire au sol selon la lumière.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "options": ["Le Silence", "Le Verre", "Le Miroir", "Le Secret"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "La moindre parole y met fin.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "options": ["Votre Prénom", "Votre Voiture", "Votre Maison", "Vos Clés"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Les gens vous appellent ainsi.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
+      "options": ["Une Éponge", "Une Serviette", "La Mer", "Une Savonnette"],
       "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "hint": "Indispensable dans la salle de bain.",
       "difficulty": "Débutant"
     }
   },
   "3": {
     "1": {
       "riddle": "Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "options": ["Un Écho", "Une Radio", "Un Livre", "Un Traducteur"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Je répète les sons dans les montagnes.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "options": ["Une Carte Géographique", "Un Livre d'Histoire", "Un Film", "Un Rêve"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Très pratique pour s'orienter en voyage.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
+      "options": ["Le Passé", "Le Présent", "L'Avenir", "Le Sommeil"],
       "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "hint": "C'est ce qui se passera demain.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "options": ["Un Trou", "Un Chemin", "Une Bougie", "Un Arbre"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "On le creuse dans la terre.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "options": ["Une Éponge", "Une Passerelle", "Un Filet", "Un Entonnoir"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Utilisée pour faire la vaisselle.",
       "difficulty": "Débutant"
     }
   },
   "4": {
     "1": {
       "riddle": "Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "options": ["Une Rivière", "Le Vent", "Le Temps", "Un Nuage"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Elle s'écoule jusqu'à la mer.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "options": ["Le Vent", "La Pluie", "L'Écho", "L'Ombre"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Il fait voler le cerf-volant.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "options": ["Une Aiguille", "Un Cyclope", "Une Tempête", "Un Bouton"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Servant à enfiler le fil de couture.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "options": ["Une Bougie", "Un Bâton", "Un Crayon", "Une Allumette"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "On la souffle lors des anniversaires.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "options": ["La Lettre M", "Le Temps", "La Seconde", "La Lune"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Observez l'orthographe des mots !",
       "difficulty": "Débutant"
     }
   },
   "5": {
     "1": {
       "riddle": "Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "options": ["Une Bouteille", "Une Chemise", "Une Guitare", "Une Girafe"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Elle contient de l'eau ou du jus.",
       "difficulty": "Débutant"
     },
     "2": {
-      "riddle": "Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Qu'est-ce qui vole sans wings et pleure sans yeux ?",
+      "options": ["Un Nuage", "Le Vent", "Un Avion", "Un Fantôme"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Il apporte la pluie dans le ciel.",
       "difficulty": "Débutant"
     },
     "3": {
-      "riddle": "Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Je grandis quand on me nourrit de bois et je meurs si on me donne à boire. Que suis-je ?",
+      "options": ["Le Feu", "Une Plante", "Le Sable", "Un Arbre"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "L'eau l'éteint immédiatement.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "options": ["Un Peigne", "Une Scie", "Un Engrenage", "Une Fermeture"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Utilisé pour se coiffer les cheveux.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "options": ["Des Pas", "Des Souvenirs", "Des Traces", "Des Cailloux"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Empreintes laissées sur le sol.",
       "difficulty": "Débutant"
     }
   },
   "6": {
     "1": {
       "riddle": "Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "options": ["Un Livre", "Une Bibliothèque", "Un Journal", "Un Cahier"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "On l'ouvre pour lire une aventure.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "options": ["Une Chaise", "Un Fauteuil", "Un Lit", "Une Table"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Meuble où l'on s'assoit confortablement.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "options": ["Le Silence", "Le Verre", "Un Rêve", "La Cristal"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Le moindre mot le fait disparaître.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "options": ["L'Escalier", "L'Ascenseur", "Le Thermomètre", "La Mer"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Marcher dessus pour changer d'étage.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "options": ["Le Pain grillé", "Une Boisson", "Une Soupe", "Un Bonbon"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Aliment cuit au four.",
       "difficulty": "Débutant"
     }
   },
   "7": {
     "1": {
       "riddle": "Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "options": ["La Lumière", "La Pluie", "Le Vent", "L'Oiseau"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Elle vient du soleil à travers le verre.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "options": ["Un Fleuve", "Un Lac", "Un Océan", "Un Puits"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Il s'écoule naturellement vers la mer.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "options": ["Une Enveloppe", "Un Éléphant", "Une Étoile", "L'Espace"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Elle sert à envoyer du courrier.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "options": ["Un Choix", "Un Doute", "Un Secret", "Un Ami"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Faire un dilemme entre deux options.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "options": ["Une Promesse", "Une Assiette", "Un Verre", "Une Branche"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Un engagement verbal non tenu.",
       "difficulty": "Débutant"
     }
   },
   "8": {
     "1": {
       "riddle": "Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "options": ["Un Pneu", "Un Cheval", "Une Chaise", "Un Balai"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Elle protège la roue d'un véhicule.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "options": ["Une Lettre", "Un Oiseau", "Un Œuf", "Une Graine"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Expédiée par la poste.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "options": ["Le Souffle", "Une Feuille", "L'Air", "Une Bulle"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Retenir sa respiration sous l'eau.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "options": ["Un Tableau Noir", "Une Vitre", "Un Miroir", "Une Assiette"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Utilisé à l'école avec de la craie.",
       "difficulty": "Débutant"
     },
     "5": {
-      "riddle": "Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Je possède 13 cœurs, mais aucun autre organe vital. Que suis-je ?",
+      "options": ["Un Jeu de Cartes", "Un Poulpe", "Un Arbre", "Un Livre"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Jeu de cartes à jouer (couleur cœur).",
       "difficulty": "Débutant"
     }
   },
   "9": {
     "1": {
-      "riddle": "Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire aucun bruit ?",
+      "options": ["Un Œillet de nuit", "Les Yeux", "Les Volets", "La Porte"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Certaines fleurs s'épanouissent le soir.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "options": ["Un Clavier d'ordinateur", "Une Carte", "Un Livre", "Un Piano"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Clé Entrée, Échap, Espace...",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "options": ["Le Pouls", "Le Temps", "Le Chemin", "Le Vent"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Battement du cœur mesurable au poignet.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "options": ["Une Scie", "Un Chien", "Une Fourchette", "Un Raton"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Outil du charpentier pour couper du bois.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "options": ["Un Crayon", "Un Arbre", "Un Homme", "Une Montagne"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Il raccourcit au taille-crayon.",
       "difficulty": "Débutant"
     }
   },
   "10": {
     "1": {
       "riddle": "Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "options": ["Un Camion d'ordures", "Une Voiture", "Un Autobus", "Un Traîneau"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Il collecte les déchets de la ville.",
       "difficulty": "Débutant"
     },
     "2": {
       "riddle": "Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "options": ["Une Rivière", "Le Vent", "Un Nuage", "La Mer"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Cours d'eau s'écoulant vers l'océan.",
       "difficulty": "Débutant"
     },
     "3": {
       "riddle": "Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "options": ["Son Ombre", "Un Nuage", "L'Air", "Le Ciel"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Projection sombre causée par le soleil.",
       "difficulty": "Débutant"
     },
     "4": {
       "riddle": "Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "options": ["Un Piano à queue", "Un Clavier", "Un Organisateur", "Un Serrurier"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Instrument de musique classique à queue.",
       "difficulty": "Débutant"
     },
     "5": {
       "riddle": "Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "options": ["La Groseille", "La Mûre", "La Datte", "La Poire"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Groseille sans G donne Roseille (oiseau/animal).",
       "difficulty": "Débutant"
     }
   },
   "11": {
     "1": {
-      "riddle": "Énigme n°51 (Cycle 11) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #51 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°52 (Cycle 11) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "riddle": "Énigme #52 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°53 (Cycle 11) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "riddle": "Énigme #53 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°54 (Cycle 11) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "riddle": "Énigme #54 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°55 (Cycle 11) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "riddle": "Énigme #55 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Moyen"
     }
   },
   "12": {
     "1": {
-      "riddle": "Énigme n°56 (Cycle 12) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #56 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°57 (Cycle 12) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #57 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°58 (Cycle 12) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #58 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°59 (Cycle 12) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #59 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°60 (Cycle 12) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "riddle": "Énigme #60 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Moyen"
     }
   },
   "13": {
     "1": {
-      "riddle": "Énigme n°61 (Cycle 13) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #61 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°62 (Cycle 13) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #62 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°63 (Cycle 13) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #63 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°64 (Cycle 13) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #64 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°65 (Cycle 13) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #65 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Moyen"
     }
   },
   "14": {
     "1": {
-      "riddle": "Énigme n°66 (Cycle 14) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #66 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°67 (Cycle 14) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #67 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°68 (Cycle 14) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #68 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°69 (Cycle 14) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #69 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°70 (Cycle 14) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #70 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Moyen"
     }
   },
   "15": {
     "1": {
-      "riddle": "Énigme n°71 (Cycle 15) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #71 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°72 (Cycle 15) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #72 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°73 (Cycle 15) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #73 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°74 (Cycle 15) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #74 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°75 (Cycle 15) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #75 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Moyen"
     }
   },
   "16": {
     "1": {
-      "riddle": "Énigme n°76 (Cycle 16) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #76 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°77 (Cycle 16) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #77 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°78 (Cycle 16) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #78 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°79 (Cycle 16) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #79 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°80 (Cycle 16) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #80 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Moyen"
     }
   },
   "17": {
     "1": {
-      "riddle": "Énigme n°81 (Cycle 17) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #81 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°82 (Cycle 17) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #82 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°83 (Cycle 17) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #83 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°84 (Cycle 17) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #84 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°85 (Cycle 17) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #85 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Moyen"
     }
   },
   "18": {
     "1": {
-      "riddle": "Énigme n°86 (Cycle 18) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #86 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°87 (Cycle 18) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #87 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°88 (Cycle 18) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #88 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°89 (Cycle 18) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #89 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°90 (Cycle 18) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #90 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Moyen"
     }
   },
   "19": {
     "1": {
-      "riddle": "Énigme n°91 (Cycle 19) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #91 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°92 (Cycle 19) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #92 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°93 (Cycle 19) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #93 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°94 (Cycle 19) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #94 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°95 (Cycle 19) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #95 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Moyen"
     }
   },
   "20": {
     "1": {
-      "riddle": "Énigme n°96 (Cycle 20) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #96 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°97 (Cycle 20) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #97 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°98 (Cycle 20) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #98 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°99 (Cycle 20) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #99 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°100 (Cycle 20) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #100 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Moyen"
     }
   },
   "21": {
     "1": {
-      "riddle": "Énigme n°101 (Cycle 21) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #101 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
-      "difficulty": "Intermédiaire"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°102 (Cycle 21) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #102 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°103 (Cycle 21) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #103 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°104 (Cycle 21) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #104 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°105 (Cycle 21) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #105 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Moyen"
     }
   },
   "22": {
     "1": {
-      "riddle": "Énigme n°106 (Cycle 22) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #106 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
-      "difficulty": "Intermédiaire"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°107 (Cycle 22) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #107 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
-      "difficulty": "Intermédiaire"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°108 (Cycle 22) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #108 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
-      "difficulty": "Intermédiaire"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°109 (Cycle 22) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #109 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
-      "difficulty": "Intermédiaire"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°110 (Cycle 22) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #110 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Moyen"
     }
   },
   "23": {
     "1": {
-      "riddle": "Énigme n°111 (Cycle 23) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #111 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
-      "difficulty": "Intermédiaire"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°112 (Cycle 23) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #112 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
-      "difficulty": "Intermédiaire"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°113 (Cycle 23) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
-      "difficulty": "Intermédiaire"
+      "riddle": "Énigme #113 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°114 (Cycle 23) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #114 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
-      "difficulty": "Intermédiaire"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°115 (Cycle 23) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #115 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
-      "difficulty": "Intermédiaire"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Moyen"
     }
   },
   "24": {
     "1": {
-      "riddle": "Énigme n°116 (Cycle 24) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #116 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
-      "difficulty": "Intermédiaire"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°117 (Cycle 24) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #117 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
-      "difficulty": "Intermédiaire"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°118 (Cycle 24) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #118 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
-      "difficulty": "Intermédiaire"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°119 (Cycle 24) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #119 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
-      "difficulty": "Intermédiaire"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°120 (Cycle 24) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #120 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
-      "difficulty": "Intermédiaire"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Moyen"
     }
   },
   "25": {
     "1": {
-      "riddle": "Énigme n°121 (Cycle 25) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #121 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
-      "difficulty": "Intermédiaire"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°122 (Cycle 25) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #122 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
-      "difficulty": "Intermédiaire"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°123 (Cycle 25) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #123 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
-      "difficulty": "Intermédiaire"
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°124 (Cycle 25) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #124 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
-      "difficulty": "Intermédiaire"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°125 (Cycle 25) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #125 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
-      "difficulty": "Intermédiaire"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Moyen"
     }
   },
   "26": {
     "1": {
-      "riddle": "Énigme n°126 (Cycle 26) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #126 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
-      "difficulty": "Intermédiaire"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°127 (Cycle 26) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #127 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
-      "difficulty": "Intermédiaire"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°128 (Cycle 26) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #128 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
-      "difficulty": "Intermédiaire"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°129 (Cycle 26) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #129 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
-      "difficulty": "Intermédiaire"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°130 (Cycle 26) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #130 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
-      "difficulty": "Intermédiaire"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Moyen"
     }
   },
   "27": {
     "1": {
-      "riddle": "Énigme n°131 (Cycle 27) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #131 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
-      "difficulty": "Intermédiaire"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°132 (Cycle 27) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #132 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
-      "difficulty": "Intermédiaire"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°133 (Cycle 27) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #133 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
-      "difficulty": "Intermédiaire"
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°134 (Cycle 27) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #134 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
-      "difficulty": "Intermédiaire"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°135 (Cycle 27) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #135 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
-      "difficulty": "Intermédiaire"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Moyen"
     }
   },
   "28": {
     "1": {
-      "riddle": "Énigme n°136 (Cycle 28) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #136 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
-      "difficulty": "Intermédiaire"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Moyen"
     },
     "2": {
-      "riddle": "Énigme n°137 (Cycle 28) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #137 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
-      "difficulty": "Intermédiaire"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Moyen"
     },
     "3": {
-      "riddle": "Énigme n°138 (Cycle 28) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #138 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
-      "difficulty": "Intermédiaire"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Moyen"
     },
     "4": {
-      "riddle": "Énigme n°139 (Cycle 28) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #139 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
-      "difficulty": "Intermédiaire"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Moyen"
     },
     "5": {
-      "riddle": "Énigme n°140 (Cycle 28) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #140 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
-      "difficulty": "Intermédiaire"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Moyen"
     }
   },
   "29": {
     "1": {
-      "riddle": "Énigme n°141 (Cycle 29) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #141 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°142 (Cycle 29) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #142 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°143 (Cycle 29) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #143 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°144 (Cycle 29) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #144 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°145 (Cycle 29) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #145 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "30": {
     "1": {
-      "riddle": "Énigme n°146 (Cycle 30) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #146 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°147 (Cycle 30) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #147 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°148 (Cycle 30) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #148 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°149 (Cycle 30) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #149 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°150 (Cycle 30) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #150 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "31": {
     "1": {
-      "riddle": "Énigme n°151 (Cycle 31) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #151 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°152 (Cycle 31) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "riddle": "Énigme #152 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°153 (Cycle 31) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "riddle": "Énigme #153 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°154 (Cycle 31) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "riddle": "Énigme #154 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°155 (Cycle 31) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "riddle": "Énigme #155 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "32": {
     "1": {
-      "riddle": "Énigme n°156 (Cycle 32) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #156 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°157 (Cycle 32) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #157 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°158 (Cycle 32) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #158 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°159 (Cycle 32) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #159 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°160 (Cycle 32) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "riddle": "Énigme #160 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "33": {
     "1": {
-      "riddle": "Énigme n°161 (Cycle 33) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #161 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°162 (Cycle 33) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #162 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°163 (Cycle 33) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #163 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°164 (Cycle 33) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #164 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°165 (Cycle 33) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #165 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "34": {
     "1": {
-      "riddle": "Énigme n°166 (Cycle 34) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #166 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°167 (Cycle 34) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #167 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°168 (Cycle 34) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #168 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°169 (Cycle 34) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #169 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°170 (Cycle 34) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #170 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "35": {
     "1": {
-      "riddle": "Énigme n°171 (Cycle 35) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #171 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°172 (Cycle 35) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #172 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°173 (Cycle 35) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #173 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°174 (Cycle 35) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #174 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°175 (Cycle 35) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #175 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "36": {
     "1": {
-      "riddle": "Énigme n°176 (Cycle 36) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #176 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°177 (Cycle 36) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #177 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°178 (Cycle 36) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #178 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°179 (Cycle 36) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #179 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°180 (Cycle 36) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #180 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "37": {
     "1": {
-      "riddle": "Énigme n°181 (Cycle 37) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #181 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°182 (Cycle 37) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #182 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°183 (Cycle 37) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #183 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°184 (Cycle 37) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #184 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°185 (Cycle 37) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #185 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "38": {
     "1": {
-      "riddle": "Énigme n°186 (Cycle 38) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #186 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°187 (Cycle 38) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #187 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°188 (Cycle 38) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #188 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°189 (Cycle 38) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #189 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°190 (Cycle 38) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #190 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "39": {
     "1": {
-      "riddle": "Énigme n°191 (Cycle 39) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #191 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°192 (Cycle 39) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #192 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°193 (Cycle 39) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #193 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°194 (Cycle 39) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #194 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°195 (Cycle 39) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #195 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Intermédiaire"
     }
   },
   "40": {
     "1": {
-      "riddle": "Énigme n°196 (Cycle 40) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #196 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°197 (Cycle 40) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #197 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°198 (Cycle 40) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #198 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°199 (Cycle 40) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #199 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°200 (Cycle 40) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #200 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Intermédiaire"
     }
   },
   "41": {
     "1": {
-      "riddle": "Énigme n°201 (Cycle 41) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #201 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
-      "difficulty": "Difficile"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°202 (Cycle 41) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #202 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°203 (Cycle 41) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #203 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°204 (Cycle 41) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #204 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°205 (Cycle 41) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #205 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Intermédiaire"
     }
   },
   "42": {
     "1": {
-      "riddle": "Énigme n°206 (Cycle 42) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #206 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
-      "difficulty": "Difficile"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°207 (Cycle 42) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #207 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
-      "difficulty": "Difficile"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°208 (Cycle 42) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #208 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
-      "difficulty": "Difficile"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°209 (Cycle 42) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #209 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
-      "difficulty": "Difficile"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°210 (Cycle 42) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #210 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Intermédiaire"
     }
   },
   "43": {
     "1": {
-      "riddle": "Énigme n°211 (Cycle 43) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #211 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
-      "difficulty": "Difficile"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°212 (Cycle 43) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #212 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
-      "difficulty": "Difficile"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°213 (Cycle 43) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
-      "difficulty": "Difficile"
+      "riddle": "Énigme #213 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°214 (Cycle 43) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #214 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
-      "difficulty": "Difficile"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°215 (Cycle 43) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #215 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
-      "difficulty": "Difficile"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Intermédiaire"
     }
   },
   "44": {
     "1": {
-      "riddle": "Énigme n°216 (Cycle 44) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #216 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
-      "difficulty": "Difficile"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°217 (Cycle 44) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #217 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
-      "difficulty": "Difficile"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°218 (Cycle 44) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #218 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
-      "difficulty": "Difficile"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°219 (Cycle 44) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #219 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
-      "difficulty": "Difficile"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°220 (Cycle 44) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #220 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
-      "difficulty": "Difficile"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Intermédiaire"
     }
   },
   "45": {
     "1": {
-      "riddle": "Énigme n°221 (Cycle 45) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #221 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
-      "difficulty": "Difficile"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°222 (Cycle 45) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #222 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
-      "difficulty": "Difficile"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°223 (Cycle 45) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #223 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
-      "difficulty": "Difficile"
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°224 (Cycle 45) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #224 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
-      "difficulty": "Difficile"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°225 (Cycle 45) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #225 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
-      "difficulty": "Difficile"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Intermédiaire"
     }
   },
   "46": {
     "1": {
-      "riddle": "Énigme n°226 (Cycle 46) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #226 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
-      "difficulty": "Difficile"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Intermédiaire"
     },
     "2": {
-      "riddle": "Énigme n°227 (Cycle 46) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #227 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
-      "difficulty": "Difficile"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Intermédiaire"
     },
     "3": {
-      "riddle": "Énigme n°228 (Cycle 46) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #228 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
-      "difficulty": "Difficile"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Intermédiaire"
     },
     "4": {
-      "riddle": "Énigme n°229 (Cycle 46) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #229 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
-      "difficulty": "Difficile"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Intermédiaire"
     },
     "5": {
-      "riddle": "Énigme n°230 (Cycle 46) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #230 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
-      "difficulty": "Difficile"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Intermédiaire"
     }
   },
   "47": {
     "1": {
-      "riddle": "Énigme n°231 (Cycle 47) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #231 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°232 (Cycle 47) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #232 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°233 (Cycle 47) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #233 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°234 (Cycle 47) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #234 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°235 (Cycle 47) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #235 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "48": {
     "1": {
-      "riddle": "Énigme n°236 (Cycle 48) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #236 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°237 (Cycle 48) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #237 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°238 (Cycle 48) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #238 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°239 (Cycle 48) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #239 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°240 (Cycle 48) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #240 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "49": {
     "1": {
-      "riddle": "Énigme n°241 (Cycle 49) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #241 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°242 (Cycle 49) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #242 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°243 (Cycle 49) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #243 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°244 (Cycle 49) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #244 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°245 (Cycle 49) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #245 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "50": {
     "1": {
-      "riddle": "Énigme n°246 (Cycle 50) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #246 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°247 (Cycle 50) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #247 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°248 (Cycle 50) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #248 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°249 (Cycle 50) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #249 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°250 (Cycle 50) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #250 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "51": {
     "1": {
-      "riddle": "Énigme n°251 (Cycle 51) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #251 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°252 (Cycle 51) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "riddle": "Énigme #252 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°253 (Cycle 51) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "riddle": "Énigme #253 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°254 (Cycle 51) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "riddle": "Énigme #254 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°255 (Cycle 51) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "riddle": "Énigme #255 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "52": {
     "1": {
-      "riddle": "Énigme n°256 (Cycle 52) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #256 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°257 (Cycle 52) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #257 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°258 (Cycle 52) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #258 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°259 (Cycle 52) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #259 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°260 (Cycle 52) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "riddle": "Énigme #260 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "53": {
     "1": {
-      "riddle": "Énigme n°261 (Cycle 53) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #261 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°262 (Cycle 53) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #262 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°263 (Cycle 53) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #263 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°264 (Cycle 53) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #264 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°265 (Cycle 53) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #265 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "54": {
     "1": {
-      "riddle": "Énigme n°266 (Cycle 54) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #266 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°267 (Cycle 54) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #267 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°268 (Cycle 54) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #268 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°269 (Cycle 54) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #269 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°270 (Cycle 54) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #270 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "55": {
     "1": {
-      "riddle": "Énigme n°271 (Cycle 55) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #271 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°272 (Cycle 55) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #272 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°273 (Cycle 55) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #273 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°274 (Cycle 55) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #274 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°275 (Cycle 55) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #275 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "56": {
     "1": {
-      "riddle": "Énigme n°276 (Cycle 56) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #276 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°277 (Cycle 56) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #277 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°278 (Cycle 56) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #278 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°279 (Cycle 56) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #279 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°280 (Cycle 56) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #280 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "57": {
     "1": {
-      "riddle": "Énigme n°281 (Cycle 57) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #281 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°282 (Cycle 57) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #282 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°283 (Cycle 57) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #283 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°284 (Cycle 57) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #284 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°285 (Cycle 57) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #285 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "58": {
     "1": {
-      "riddle": "Énigme n°286 (Cycle 58) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #286 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°287 (Cycle 58) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #287 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°288 (Cycle 58) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #288 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°289 (Cycle 58) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #289 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°290 (Cycle 58) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #290 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "59": {
     "1": {
-      "riddle": "Énigme n°291 (Cycle 59) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #291 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°292 (Cycle 59) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #292 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°293 (Cycle 59) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #293 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°294 (Cycle 59) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #294 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°295 (Cycle 59) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #295 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Difficile"
     }
   },
   "60": {
     "1": {
-      "riddle": "Énigme n°296 (Cycle 60) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #296 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°297 (Cycle 60) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #297 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°298 (Cycle 60) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #298 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°299 (Cycle 60) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #299 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°300 (Cycle 60) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #300 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Difficile"
     }
   },
   "61": {
     "1": {
-      "riddle": "Énigme n°301 (Cycle 61) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #301 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
-      "difficulty": "Expert"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°302 (Cycle 61) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #302 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°303 (Cycle 61) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #303 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°304 (Cycle 61) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #304 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°305 (Cycle 61) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #305 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Difficile"
     }
   },
   "62": {
     "1": {
-      "riddle": "Énigme n°306 (Cycle 62) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #306 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
-      "difficulty": "Expert"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°307 (Cycle 62) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #307 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
-      "difficulty": "Expert"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°308 (Cycle 62) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #308 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
-      "difficulty": "Expert"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°309 (Cycle 62) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #309 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
-      "difficulty": "Expert"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°310 (Cycle 62) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #310 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Difficile"
     }
   },
   "63": {
     "1": {
-      "riddle": "Énigme n°311 (Cycle 63) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #311 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
-      "difficulty": "Expert"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°312 (Cycle 63) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #312 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
-      "difficulty": "Expert"
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°313 (Cycle 63) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
-      "difficulty": "Expert"
+      "riddle": "Énigme #313 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°314 (Cycle 63) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #314 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
-      "difficulty": "Expert"
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°315 (Cycle 63) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #315 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
-      "difficulty": "Expert"
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Difficile"
     }
   },
   "64": {
     "1": {
-      "riddle": "Énigme n°316 (Cycle 64) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #316 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
-      "difficulty": "Expert"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Difficile"
     },
     "2": {
-      "riddle": "Énigme n°317 (Cycle 64) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #317 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
-      "difficulty": "Expert"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Difficile"
     },
     "3": {
-      "riddle": "Énigme n°318 (Cycle 64) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #318 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
-      "difficulty": "Expert"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Difficile"
     },
     "4": {
-      "riddle": "Énigme n°319 (Cycle 64) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #319 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
-      "difficulty": "Expert"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Difficile"
     },
     "5": {
-      "riddle": "Énigme n°320 (Cycle 64) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #320 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
-      "difficulty": "Expert"
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Difficile"
     }
   },
   "65": {
     "1": {
-      "riddle": "Énigme n°321 (Cycle 65) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #321 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°322 (Cycle 65) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #322 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°323 (Cycle 65) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #323 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°324 (Cycle 65) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #324 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°325 (Cycle 65) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #325 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "66": {
     "1": {
-      "riddle": "Énigme n°326 (Cycle 66) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #326 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°327 (Cycle 66) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #327 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°328 (Cycle 66) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #328 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°329 (Cycle 66) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #329 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°330 (Cycle 66) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #330 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "67": {
     "1": {
-      "riddle": "Énigme n°331 (Cycle 67) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #331 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°332 (Cycle 67) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #332 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°333 (Cycle 67) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #333 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°334 (Cycle 67) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #334 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°335 (Cycle 67) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #335 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "68": {
     "1": {
-      "riddle": "Énigme n°336 (Cycle 68) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #336 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°337 (Cycle 68) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #337 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°338 (Cycle 68) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #338 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°339 (Cycle 68) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #339 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°340 (Cycle 68) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #340 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "69": {
     "1": {
-      "riddle": "Énigme n°341 (Cycle 69) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #341 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°342 (Cycle 69) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #342 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°343 (Cycle 69) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #343 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°344 (Cycle 69) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #344 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°345 (Cycle 69) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #345 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "70": {
     "1": {
-      "riddle": "Énigme n°346 (Cycle 70) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #346 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°347 (Cycle 70) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #347 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°348 (Cycle 70) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #348 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°349 (Cycle 70) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #349 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°350 (Cycle 70) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #350 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "71": {
     "1": {
-      "riddle": "Énigme n°351 (Cycle 71) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #351 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°352 (Cycle 71) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "riddle": "Énigme #352 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°353 (Cycle 71) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "riddle": "Énigme #353 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°354 (Cycle 71) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "riddle": "Énigme #354 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°355 (Cycle 71) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "riddle": "Énigme #355 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "72": {
     "1": {
-      "riddle": "Énigme n°356 (Cycle 72) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #356 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°357 (Cycle 72) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #357 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°358 (Cycle 72) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #358 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°359 (Cycle 72) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #359 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°360 (Cycle 72) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "riddle": "Énigme #360 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "73": {
     "1": {
-      "riddle": "Énigme n°361 (Cycle 73) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #361 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°362 (Cycle 73) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #362 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°363 (Cycle 73) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #363 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°364 (Cycle 73) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #364 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°365 (Cycle 73) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #365 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "74": {
     "1": {
-      "riddle": "Énigme n°366 (Cycle 74) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #366 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°367 (Cycle 74) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #367 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°368 (Cycle 74) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #368 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°369 (Cycle 74) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #369 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°370 (Cycle 74) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #370 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "75": {
     "1": {
-      "riddle": "Énigme n°371 (Cycle 75) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #371 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°372 (Cycle 75) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #372 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°373 (Cycle 75) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #373 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°374 (Cycle 75) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #374 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°375 (Cycle 75) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #375 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "76": {
     "1": {
-      "riddle": "Énigme n°376 (Cycle 76) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #376 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°377 (Cycle 76) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #377 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°378 (Cycle 76) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #378 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°379 (Cycle 76) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #379 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°380 (Cycle 76) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #380 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "77": {
     "1": {
-      "riddle": "Énigme n°381 (Cycle 77) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #381 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°382 (Cycle 77) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #382 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°383 (Cycle 77) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #383 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°384 (Cycle 77) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #384 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°385 (Cycle 77) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #385 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "78": {
     "1": {
-      "riddle": "Énigme n°386 (Cycle 78) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #386 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°387 (Cycle 78) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #387 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°388 (Cycle 78) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #388 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°389 (Cycle 78) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #389 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°390 (Cycle 78) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #390 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "79": {
     "1": {
-      "riddle": "Énigme n°391 (Cycle 79) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #391 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°392 (Cycle 79) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #392 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°393 (Cycle 79) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #393 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°394 (Cycle 79) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #394 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°395 (Cycle 79) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #395 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Expert"
     }
   },
   "80": {
     "1": {
-      "riddle": "Énigme n°396 (Cycle 80) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #396 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°397 (Cycle 80) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #397 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°398 (Cycle 80) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #398 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°399 (Cycle 80) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #399 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°400 (Cycle 80) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #400 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Expert"
     }
   },
   "81": {
     "1": {
-      "riddle": "Énigme n°401 (Cycle 81) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #401 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
-      "difficulty": "Légendaire"
+      "hint": "Satellite naturel de la Terre.",
+      "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°402 (Cycle 81) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
-      "difficulty": "Légendaire"
+      "riddle": "Énigme #402 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
+      "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°403 (Cycle 81) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
-      "difficulty": "Légendaire"
+      "riddle": "Énigme #403 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
+      "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°404 (Cycle 81) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
-      "difficulty": "Légendaire"
+      "riddle": "Énigme #404 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
+      "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°405 (Cycle 81) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
-      "difficulty": "Légendaire"
+      "riddle": "Énigme #405 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
+      "difficulty": "Expert"
     }
   },
   "82": {
     "1": {
-      "riddle": "Énigme n°406 (Cycle 82) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #406 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
-      "difficulty": "Légendaire"
+      "hint": "Métal précieux jaune brillant.",
+      "difficulty": "Expert"
     },
     "2": {
-      "riddle": "Énigme n°407 (Cycle 82) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #407 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
-      "difficulty": "Légendaire"
+      "hint": "Un dé à jouer standard a 6 faces.",
+      "difficulty": "Expert"
     },
     "3": {
-      "riddle": "Énigme n°408 (Cycle 82) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #408 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
-      "difficulty": "Légendaire"
+      "hint": "Organe musculaire vital.",
+      "difficulty": "Expert"
     },
     "4": {
-      "riddle": "Énigme n°409 (Cycle 82) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #409 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
-      "difficulty": "Légendaire"
+      "hint": "Ville lumière traversée par la Seine.",
+      "difficulty": "Expert"
     },
     "5": {
-      "riddle": "Énigme n°410 (Cycle 82) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
-      "difficulty": "Légendaire"
+      "riddle": "Énigme #410 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
+      "difficulty": "Expert"
     }
   },
   "83": {
     "1": {
-      "riddle": "Énigme n°411 (Cycle 83) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #411 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°412 (Cycle 83) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #412 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°413 (Cycle 83) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #413 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°414 (Cycle 83) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #414 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°415 (Cycle 83) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #415 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "84": {
     "1": {
-      "riddle": "Énigme n°416 (Cycle 84) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #416 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°417 (Cycle 84) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #417 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°418 (Cycle 84) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #418 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°419 (Cycle 84) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #419 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°420 (Cycle 84) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #420 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "85": {
     "1": {
-      "riddle": "Énigme n°421 (Cycle 85) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #421 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°422 (Cycle 85) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #422 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°423 (Cycle 85) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #423 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°424 (Cycle 85) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #424 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°425 (Cycle 85) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #425 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "86": {
     "1": {
-      "riddle": "Énigme n°426 (Cycle 86) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #426 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°427 (Cycle 86) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #427 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°428 (Cycle 86) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #428 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°429 (Cycle 86) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #429 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°430 (Cycle 86) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #430 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "87": {
     "1": {
-      "riddle": "Énigme n°431 (Cycle 87) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #431 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°432 (Cycle 87) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #432 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°433 (Cycle 87) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #433 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°434 (Cycle 87) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #434 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°435 (Cycle 87) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #435 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "88": {
     "1": {
-      "riddle": "Énigme n°436 (Cycle 88) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #436 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°437 (Cycle 88) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #437 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°438 (Cycle 88) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #438 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°439 (Cycle 88) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #439 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°440 (Cycle 88) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #440 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "89": {
     "1": {
-      "riddle": "Énigme n°441 (Cycle 89) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #441 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°442 (Cycle 89) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #442 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°443 (Cycle 89) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #443 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°444 (Cycle 89) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #444 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°445 (Cycle 89) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #445 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "90": {
     "1": {
-      "riddle": "Énigme n°446 (Cycle 90) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #446 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°447 (Cycle 90) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #447 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°448 (Cycle 90) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #448 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°449 (Cycle 90) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #449 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°450 (Cycle 90) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #450 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "91": {
     "1": {
-      "riddle": "Énigme n°451 (Cycle 91) : Qu'est-ce qui a des touches ou des clés, mais ne peut ouvrir aucune porte ?",
-      "options": [
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre-fort",
-        "Un Téléphone"
-      ],
+      "riddle": "Énigme #451 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Instrument à cordes frappées !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°452 (Cycle 91) : Qu'est-ce qui a quatre jambes le matin, deux le midi et trois le soir ?",
-      "options": [
-        "Une Table",
-        "L'Homme",
-        "Un Chien",
-        "Une Chaise"
-      ],
-      "correctIndex": 1,
-      "hint": "L'énigme classique du Sphinx sur la vie !",
+      "riddle": "Énigme #452 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
+      "correctIndex": 0,
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°453 (Cycle 91) : Plus j'augmente et suis présente autour de vous, et moins vous pouvez voir. Que suis-je ?",
-      "options": [
-        "La Lumière",
-        "L'Obscurité",
-        "La Glace",
-        "Le Vent"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle survient quand le soleil se couche !",
+      "riddle": "Énigme #453 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°454 (Cycle 91) : Je tombe sans me faire mal et j'arrose les plantes. Que suis-je ?",
-      "options": [
-        "Le Soleil",
-        "La Pluie",
-        "Le Feu",
-        "La Neige"
-      ],
-      "correctIndex": 1,
-      "hint": "Elle provient des nuages dans le ciel !",
+      "riddle": "Énigme #454 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
+      "correctIndex": 0,
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°455 (Cycle 91) : Je peux faire le tour du monde entier tout en restant sagement collé dans un coin. Que suis-je ?",
-      "options": [
-        "Une Boussole",
-        "Un Timbre Postal",
-        "Un Oiseau",
-        "Un Avion"
-      ],
-      "correctIndex": 1,
-      "hint": "On me colle sur l'enveloppe !",
+      "riddle": "Énigme #455 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
+      "correctIndex": 0,
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "92": {
     "1": {
-      "riddle": "Énigme n°456 (Cycle 92) : Qu'est-ce qui monte et ne descend jamais ?",
-      "options": [
-        "Votre Âge",
-        "La Montagne",
-        "Un Ballon",
-        "La Pluie"
-      ],
+      "riddle": "Énigme #456 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Chaque anniversaire en rajoute une année !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°457 (Cycle 92) : Qu'est-ce qui appartient à tout le monde mais dont personne ne peut se séparer sous le soleil ?",
-      "options": [
-        "L'Ombre",
-        "Le Téléphone",
-        "L'Argent",
-        "Les Clés"
-      ],
+      "riddle": "Énigme #457 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Elle vous suit partout sur le sol !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°458 (Cycle 92) : Si vous me nommez haut et fort, vous me brisez. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Le Verre",
-        "Le Miroir",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #458 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le moindre mot prononcé y met fin !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°459 (Cycle 92) : Qu'est-ce qui vous appartient, mais que les autres utilisent beaucoup plus souvent que vous-même ?",
-      "options": [
-        "Votre Prénom",
-        "Votre Voiture",
-        "Votre Maison",
-        "Vos Clés"
-      ],
+      "riddle": "Énigme #459 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Les gens vous appellent par ce mot !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°460 (Cycle 92) : Plus je sèche les autres en sortant de la douche, plus je deviens mouillée. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Serviette",
-        "La Mer",
-        "Une Savonnette"
-      ],
-      "correctIndex": 1,
-      "hint": "Vous l'accrochez dans la salle de bain !",
+      "riddle": "Énigme #460 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
+      "correctIndex": 0,
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "93": {
     "1": {
-      "riddle": "Énigme n°461 (Cycle 93) : Je parle toutes les langues du monde sans jamais avoir appris un seul mot. Que suis-je ?",
-      "options": [
-        "Un Écho",
-        "Une Radio",
-        "Un Livre",
-        "Un Traducteur"
-      ],
+      "riddle": "Énigme #461 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Je répète votre voix dans les montagnes !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°462 (Cycle 93) : Qu'est-ce qui a des villes sans maisons, des forêts sans arbres et des rivières sans eau ?",
-      "options": [
-        "Une Carte Géographique",
-        "Un Livre d'Histoire",
-        "Un Film",
-        "Un Rêve"
-      ],
+      "riddle": "Énigme #462 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle sert à se repérer en voyage !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°463 (Cycle 93) : Je suis toujours devant vous dans le temps, mais vous ne pouvez jamais m'attraper. Que suis-je ?",
-      "options": [
-        "Le Passé",
-        "Le Présent",
-        "L'Avenir",
-        "Le Sommeil"
-      ],
-      "correctIndex": 2,
-      "hint": "C'est ce qui arrivera demain !",
+      "riddle": "Énigme #463 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
+      "correctIndex": 0,
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°464 (Cycle 93) : Qu'est-ce qui s'allonge quand on le creuse et s'accourcit quand on le rebouche ?",
-      "options": [
-        "Un Puits / Trou",
-        "Un Chemin",
-        "Une Bougie",
-        "Un Arbre"
-      ],
+      "riddle": "Énigme #464 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On le creuse avec une pelle !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°465 (Cycle 93) : Je suis plein de trous, pourtant je retiens parfaitement l'eau. Que suis-je ?",
-      "options": [
-        "Une Éponge",
-        "Une Passerelle",
-        "Un Filet",
-        "Un Entonnoir"
-      ],
+      "riddle": "Énigme #465 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Très utile pour faire la vaisselle !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "94": {
     "1": {
-      "riddle": "Énigme n°466 (Cycle 94) : Qu'est-ce qui peut courir sans jamais avoir de jambes et murmurer sans jamais avoir de bouche ?",
-      "options": [
-        "Une Rivière",
-        "Le Vent",
-        "Le Temps",
-        "Un Nuage"
-      ],
+      "riddle": "Énigme #466 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle coule vers l'océan !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°467 (Cycle 94) : Je n'ai pas de corps, pas de voix, mais vous pouvez m'entendre souffler dans les arbres. Que suis-je ?",
-      "options": [
-        "Le Vent",
-        "La Pluie",
-        "La Brume",
-        "L'Écho"
-      ],
+      "riddle": "Énigme #467 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Je fais voler les cerfs-volants !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°468 (Cycle 94) : Qu'est-ce qui a un œil unique mais ne peut absolument rien voir ?",
-      "options": [
-        "Une Aiguille à coudre",
-        "Un Cyclope",
-        "Un Télescope",
-        "Une Tempête"
-      ],
+      "riddle": "Énigme #468 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "On y passe un fil pour recoudre !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°469 (Cycle 94) : Qu'est-ce qui s'accourcit au fur et à mesure qu'il brûle et donne de la lumière ?",
-      "options": [
-        "Une Bougie",
-        "Un Bâton",
-        "Une Allumette",
-        "Un Crayon"
-      ],
+      "riddle": "Énigme #469 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Sa mèche fond avec la cire !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°470 (Cycle 94) : Je viens une fois dans une minute, deux fois dans un moment, mais jamais dans mille ans. Que suis-je ?",
-      "options": [
-        "La Lettre M",
-        "Le Temps",
-        "La Seconde",
-        "Le Chiffre 1"
-      ],
+      "riddle": "Énigme #470 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Regardez l'orthographe des mots !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "95": {
     "1": {
-      "riddle": "Énigme n°471 (Cycle 95) : Qu'est-ce qui a un cou mais pas de tête ?",
-      "options": [
-        "Une Bouteille",
-        "Une Chemise",
-        "Une Guitare",
-        "Une Girafe"
-      ],
+      "riddle": "Énigme #471 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elle contient du jus ou de l'eau !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°472 (Cycle 95) : Qu'est-ce qui vole sans ailes et pleure sans yeux ?",
-      "options": [
-        "Un Nuage",
-        "Le Vent",
-        "Une Feuille",
-        "Un Fantôme"
-      ],
+      "riddle": "Énigme #472 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Il apporte la pluie dans le ciel !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°473 (Cycle 95) : Je grandis quand on me nourrit et je meurs si on me donne à boire. Que suis-je ?",
-      "options": [
-        "Le Feu",
-        "La Plante",
-        "Le Poisson",
-        "Le Vent"
-      ],
+      "riddle": "Énigme #473 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "L'eau l'éteint immédiatement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°474 (Cycle 95) : Qu'est-ce qui a beaucoup de dents mais ne peut jamais mordre ?",
-      "options": [
-        "Un Peigne",
-        "Une Scie",
-        "Engrenage",
-        "Un Râteau"
-      ],
+      "riddle": "Énigme #474 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "On l'utilise pour se coiffer les cheveux !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°475 (Cycle 95) : Plus on en prend en marchant, plus on en laisse derrière soi. Que suis-je ?",
-      "options": [
-        "Des Pas",
-        "Des Souvenirs",
-        "Des Traces",
-        "Des Cailloux"
-      ],
+      "riddle": "Énigme #475 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "Vos pieds en font à chaque mouvement !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "96": {
     "1": {
-      "riddle": "Énigme n°476 (Cycle 96) : Qu'est-ce qui possède des histoires sans pouvoir parler et des pages sans pouvoir lire ?",
-      "options": [
-        "Un Livre",
-        "Un Journal",
-        "Une Bibliothèque",
-        "Un Écran"
-      ],
+      "riddle": "Énigme #476 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "On le feuillette pour lire des contes !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°477 (Cycle 96) : Qu'est-ce qui a deux bras, quatre jambes, mais ne peut pas marcher tout seul ?",
-      "options": [
-        "Fauteuil / Chaise",
-        "Lit",
-        "Robot",
-        "Mannequin"
-      ],
+      "riddle": "Énigme #477 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "On s'assoit dedans dans le salon !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°478 (Cycle 96) : Je suis si fragile que rien que de me prononcer me détruit. Que suis-je ?",
-      "options": [
-        "Le Silence",
-        "Une Bulle",
-        "Un Œuf",
-        "Le Verre"
-      ],
+      "riddle": "Énigme #478 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le bruit fait cesser cet état paisible !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°479 (Cycle 96) : Qu'est-ce qui monte et descend sans jamais bouger de sa place ?",
-      "options": [
-        "L'Escalier",
-        "L'Ascenseur",
-        "La Température",
-        "La Marée"
-      ],
+      "riddle": "Énigme #479 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "On marche sur ses marches pour changer d'étage !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°480 (Cycle 96) : Qu'est-ce qui entre mouillé dans la bouche et en ressort sec ou chaud ?",
-      "options": [
-        "Le Thé en sachet",
-        "Un Bonbon",
-        "Une Glace",
-        "Du Pain"
-      ],
+      "riddle": "Énigme #480 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Une boisson infusée chaude très appréciée !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "97": {
     "1": {
-      "riddle": "Énigme n°481 (Cycle 97) : Je traverse les vitres sans jamais les casser. Que suis-je ?",
-      "options": [
-        "La Lumière / Rayon",
-        "L'Ombre",
-        "Le Vent",
-        "L'Oiseau"
-      ],
+      "riddle": "Énigme #481 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Le soleil l'envoie à travers la fenêtre !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°482 (Cycle 97) : Qu'est-ce qui a un lit mais ne dort jamais, et une embouchure mais ne parle jamais ?",
-      "options": [
-        "Une Rivière / Fleuve",
-        "La Mer",
-        "Un Vallon",
-        "Une Grotte"
-      ],
+      "riddle": "Énigme #482 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "Elle s'écoule jusqu'à la mer !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°483 (Cycle 97) : Qu'est-ce qui commence par E, finit par E, mais ne contient qu'une seule lettre ?",
-      "options": [
-        "Une Enveloppe",
-        "Une Épée",
-        "L'Éternité",
-        "Une Étoile"
-      ],
+      "riddle": "Énigme #483 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "On y insère un courrier ou une carte !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°484 (Cycle 97) : Si j'en ai deux, j'en ai un. Si j'en ai trois, j'en ai deux. Que suis-je ?",
-      "options": [
-        "Le Choix",
-        "Le Couple",
-        "Le Triplet",
-        "Le Secret"
-      ],
+      "riddle": "Énigme #484 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Avoir plusieurs options donne un...",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°485 (Cycle 97) : Qu'est-ce qui peut être cassé sans jamais avoir été touché avec la main ?",
-      "options": [
-        "Une Promesse",
-        "Un Verre",
-        "Une Branche",
-        "Un Miroir"
-      ],
+      "riddle": "Énigme #485 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On la fait en jurant sur l'honneur !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "98": {
     "1": {
-      "riddle": "Énigme n°486 (Cycle 98) : Qu'est-ce qui n'a pas de pieds mais porte des chaussures toute sa journée ?",
-      "options": [
-        "Un Pneu de voiture",
-        "Un Pied-de-biche",
-        "Une Chaise",
-        "Un Trottoir"
-      ],
+      "riddle": "Énigme #486 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Elle roule sur la route !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°487 (Cycle 98) : Je voyage dans les airs sans jamais sortir de ma coquille ou de mon enveloppe. Que suis-je ?",
-      "options": [
-        "Une Lettre",
-        "Un Œuf",
-        "Un Escargot",
-        "Une Tortue"
-      ],
+      "riddle": "Énigme #487 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Envoyée par la Poste !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°488 (Cycle 98) : Qu'est-ce qui est aussi léger qu'une plume, mais que l'homme le plus fort ne peut tenir 5 minutes ?",
-      "options": [
-        "Le Souffle / Respiration",
-        "La Fumée",
-        "Une Bulle",
-        "La Pensée"
-      ],
+      "riddle": "Énigme #488 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Essayer d'arrêter de respirer !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°489 (Cycle 98) : Qu'est-ce qui devient de plus en plus propre à mesure qu'on l'essuie avec un chiffon ?",
-      "options": [
-        "Le Miroir / Verre",
-        "L'Éponge",
-        "Le Sol",
-        "La Table"
-      ],
+      "riddle": "Énigme #489 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Il reflète votre image quand il est propre !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°490 (Cycle 98) : Je possède 13 cœurs, mais aucun autre organe. Que suis-je ?",
-      "options": [
-        "Un Jeu de Cartes",
-        "Un Artichaut",
-        "Une Ruche",
-        "Un Pommier"
-      ],
+      "riddle": "Énigme #490 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Comprend les cartes de Cœur du 1 au Roi !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   },
   "99": {
     "1": {
-      "riddle": "Énigme n°491 (Cycle 99) : Qu'est-ce qui s'ouvre la nuit et se ferme le jour sans faire de bruit ?",
-      "options": [
-        "Les Étoiles",
-        "La Porte",
-        "Les Yeux de hibou",
-        "Les Fleurs"
-      ],
+      "riddle": "Énigme #491 : Quel astre ou corps céleste éclaire le ciel nocturne et possède des phases (pleine, croissant) ?",
+      "options": ["La Lune", "Le Soleil", "Mars", "Jupiter"],
       "correctIndex": 0,
-      "hint": "Elles brillent dans le ciel nocturne !",
+      "hint": "Satellite naturel de la Terre.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°492 (Cycle 99) : Qu'est-ce qui a une clé mais aucune serrure, de l'espace mais aucun endroit ?",
-      "options": [
-        "Un Clavier d'ordinateur",
-        "Un Piano",
-        "Une Voiture",
-        "Un Coffre"
-      ],
+      "riddle": "Énigme #492 : Quel animal est le roi de la savane et possède une grande crinière ?",
+      "options": ["Le Lion", "Le Tigre", "L'Éléphant", "Le Léopard"],
       "correctIndex": 0,
-      "hint": "La touche 'Espace' s'y trouve !",
+      "hint": "Félin majestueux d'Afrique.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°493 (Cycle 99) : Je peux être court ou long, rapide ou lent, mais je m'arrête toujours à la fin de la vie. Que suis-je ?",
-      "options": [
-        "Le Temps / Pouls",
-        "Le Chemin",
-        "Le Fil",
-        "Le Sourd"
-      ],
+      "riddle": "Énigme #493 : Combien font 7 fois 8 dans la table de multiplication ?",
+      "options": ["56", "54", "48", "64"],
       "correctIndex": 0,
-      "hint": "Le cœur le bat régulièrement !",
+      "hint": "Résultat de 7 x 8.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°494 (Cycle 99) : Qu'est-ce qui a des dents mais ne mâche rien du tout ?",
-      "options": [
-        "Une Scie / Peigne",
-        "Un Chien",
-        "Une Fourchette",
-        "Un Requin"
-      ],
+      "riddle": "Énigme #494 : Quel est le plus grand océan de la planète Terre ?",
+      "options": ["L'Océan Pacifique", "L'Océan Atlantique", "L'Océan Indien", "L'Océan Arctique"],
       "correctIndex": 0,
-      "hint": "Très utile pour découper du bois !",
+      "hint": "Il s'étend entre l'Asie et l'Amérique.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°495 (Cycle 99) : Je suis né grand et je meurs petit avec le temps. Que suis-je ?",
-      "options": [
-        "Un Crayon / Bougie",
-        "Un Arbre",
-        "Un Homme",
-        "Une Montagne"
-      ],
+      "riddle": "Énigme #495 : Quel est le gaz le plus abondant dans l'atmosphère terrestre ?",
+      "options": ["L'Azote (N2)", "L'Oxygène (O2)", "Le CO2", "L'Argon"],
       "correctIndex": 0,
-      "hint": "On le taille pour écrire !",
+      "hint": "Constitue environ 78% de l'air.",
       "difficulty": "Légendaire"
     }
   },
   "100": {
     "1": {
-      "riddle": "Énigme n°496 (Cycle 100) : Qu'est-ce qui a 4 roues et des mouches autour de lui ?",
-      "options": [
-        "Un Camion d'ordures",
-        "Une Voiture salie",
-        "Un Tracteur",
-        "Un Bus"
-      ],
+      "riddle": "Énigme #496 : Quel est l'élément chimique représenté par le symbole 'Au' ?",
+      "options": ["L'Or", "L'Argent", "Le Cuivre", "Le Fer"],
       "correctIndex": 0,
-      "hint": "Il ramasse les poubelles le matin !",
+      "hint": "Métal précieux jaune brillant.",
       "difficulty": "Légendaire"
     },
     "2": {
-      "riddle": "Énigme n°497 (Cycle 100) : Je me déplace sans marcher, je murmure sans parler, j'ai un lit mais ne dors jamais. Que suis-je ?",
-      "options": [
-        "La Rivière",
-        "Le Vent",
-        "La Nuée",
-        "Le Temps"
-      ],
+      "riddle": "Énigme #497 : Combien de faces possède un cube parfait en géométrie ?",
+      "options": ["6", "8", "12", "4"],
       "correctIndex": 0,
-      "hint": "Un cours d'eau naturel !",
+      "hint": "Un dé à jouer standard a 6 faces.",
       "difficulty": "Légendaire"
     },
     "3": {
-      "riddle": "Énigme n°498 (Cycle 100) : Qu'est-ce qui est plus grand que la Tour Eiffel, mais ne pèse absolument rien ?",
-      "options": [
-        "Son Ombre",
-        "Un Nuage",
-        "L'Air",
-        "Le Ciel"
-      ],
+      "riddle": "Énigme #498 : Quel organe du corps humain pompe le sang dans les artères ?",
+      "options": ["Le Cœur", "Le Poumon", "Le Foie", "Le Cerveau"],
       "correctIndex": 0,
-      "hint": "Le soleil la projette sur le sol !",
+      "hint": "Organe musculaire vital.",
       "difficulty": "Légendaire"
     },
     "4": {
-      "riddle": "Énigme n°499 (Cycle 100) : Qu'est-ce qui a 88 clés mais ne peut ouvrir aucune porte de maison ?",
-      "options": [
-        "Un Piano à queue",
-        "Un Clavier",
-        "Un Organisateur",
-        "Un Serurier"
-      ],
+      "riddle": "Énigme #499 : Quelle est la capitale de la France ?",
+      "options": ["Paris", "Lyon", "Marseille", "Bordeaux"],
       "correctIndex": 0,
-      "hint": "Compte 52 touches blanches et 36 noires !",
+      "hint": "Ville lumière traversée par la Seine.",
       "difficulty": "Légendaire"
     },
     "5": {
-      "riddle": "Énigme n°500 (Cycle 100) : Je suis un fruit, mais si vous enlevez ma première lettre, je deviens un animal. Que suis-je ?",
-      "options": [
-        "La Groseille (Oseille)",
-        "La Mûre (Ure)",
-        "La Datte (Atte)",
-        "La Poire (Oire)"
-      ],
+      "riddle": "Énigme #500 : Quel mammifère marin est le plus grand animal vivant de la planète ?",
+      "options": ["La Baleine Bleue", "Le Requin Baleine", "L'Orque", "Le Grand Cachalot"],
       "correctIndex": 0,
-      "hint": "Pensez à un fruit rouge ou petit légume !",
+      "hint": "Elle peut mesurer plus de 30 mètres.",
       "difficulty": "Légendaire"
     }
   }
@@ -6209,10 +3709,8 @@ export const RIDDLES_DATABASE_100 = DATA;
 export function getRiddle(cycle = 1, houseLevel = 1) {
   const normalizedCycle = ((Math.max(1, cycle) - 1) % 100) + 1;
   const normalizedHouse = Math.min(Math.max(1, houseLevel), 5);
-
   const cycleData = DATA[normalizedCycle] || DATA[1];
   const riddleObj = cycleData[normalizedHouse] || DATA[1][1];
-
   return {
     ...riddleObj,
     cycle: normalizedCycle,

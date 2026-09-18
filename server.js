@@ -361,6 +361,7 @@ app.prepare().then(() => {
         io.to(session.p2.id).emit('ttt_game_over', payload);
       } else {
         session.currentTurn = socket.id === session.p1.id ? session.p2.id : session.p1.id;
+        const updatePayload = { gameId, board: session.board, currentTurn: session.currentTurn };
         io.to(session.p1.id).emit('ttt_update', updatePayload);
         io.to(session.p2.id).emit('ttt_update', updatePayload);
       }
